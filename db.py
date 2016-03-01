@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
+from concurrent.futures import ThreadPoolExecutor
 import re
 from pathlib import Path
 
 from bibtexparser import load, loads
 from bibtexparser.bibdatabase import BibDatabase
 from requests import get
+from requests_futures.sessions import FuturesSession
 
 
 HAL_RE = [
@@ -14,9 +16,11 @@ HAL_RE = [
     (re.compile(r'/\d\d/\d\d/\d\d/\d\d/'),
      lambda g: 'hal-%08i' % int(g.replace('/', ''))),
 ]
+HAL_URL = 'https://hal.archives-ouvertes.fr/%s/bibtex'
 HAL_KEYS = ['url', 'link', 'pdf', 'video']
 HAL_DICT = {}
 USELESS_KEYS = {'hal_local_reference', 'hal_version', 'address', 'note', 'month'}
+GEPETTO_URL = 'http://projects.laas.fr/gepetto/index.php/Publications/BibtexEntry?bibtex=%s'
 
 TEAM_NAMES = {
     'ad': ['del prete'],
@@ -54,7 +58,7 @@ def get_hal_entry(hal_id, hal_db):
     for key in hal_db.entries_dict.keys():
         if key.endswith(hal_id):
             return hal_db.entries_dict[key]
-    url = 'https://hal.archives-ouvertes.fr/%s/bibtex' % hal_id
+    url = HAL_URL % hal_id
     r = get(url)
     r.raise_for_status()
     if 'Aucun document trouvé' in r.content.decode():
@@ -107,6 +111,13 @@ if __name__ == '__main__':
     for initials, names in TEAM_NAMES.items():
         if not_in_dbs[initials]:
             header(names[0])
-            with open('diffs/%s.txt' % initials, 'w') as f:
-                for url, title in not_in_dbs[initials]:
-                    print(url, title, file=f)
+            for url, title in not_in_dbs[initials]:
+                print('IN HAL', url, title)
+    urls = [GEPETTO_URL % entry['ID'] for key in dbs.keys() for entry in dbs[key].entries]
+    session = FuturesSession(executor=ThreadPoolExecutor(max_workers=10))
+    futures = [session.get(u) for u in urls]
+    toto = None
+    for future in futures:
+        response = future.result()
+        if b'Invalid bibtex entry' in response.content:
+            print('INVALID', response.url)
