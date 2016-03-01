@@ -15,7 +15,27 @@ HAL_RE = [
      lambda g: 'hal-%08i' % int(g.replace('/', ''))),
 ]
 HAL_KEYS = ['url', 'link', 'pdf', 'video']
+HAL_DICT = {}
 USELESS_KEYS = {'hal_local_reference', 'hal_version', 'address', 'note', 'month'}
+
+TEAM_NAMES = {
+    'ad': ['del prete'],
+    'ao': ['orthey'],
+    'bt': ['tondu'],
+    'cv': ['vassallo'],
+    'fl': ['lamiraux', 'perrin', 'dalibard'],
+    'gs': ['saurel'],
+    'jpl': ['laumond'],
+    'mc': ['campana'],
+    'mt': ['taïx', 'ta{\\"i}x'],
+    'nm': ['mansard', 'ramos', 'sol{\\`a}'],
+    'or': ['roussel'],
+    'os': ['stasse'],
+    'psa': ['salaris'],
+    'ps': ['souères', 'sou{\\`e}res'],
+    'st': ['tonneau'],
+    'test': ['test'],
+}
 
 
 def parse_hal_id(entry):
@@ -49,6 +69,7 @@ def check_hal(entry, hal_db):
     hal_id = parse_hal_id(entry)
     if not hal_id:
         return
+    HAL_DICT[hal_id] = entry
     hal_entry = get_hal_entry(hal_id, hal_db)
     keys = (set(entry.keys()) | set(hal_entry.keys())) - USELESS_KEYS
     for key in keys:
@@ -56,12 +77,36 @@ def check_hal(entry, hal_db):
             print('IN HAL for %s: %s = {%s},' % (entry['ID'], key, hal_entry[key]))
 
 
+def header(title, lvl=1):
+    c = '=' if lvl == 1 else '*' if lvl == 2 else '-'
+    print(c * 20 ,'{:^20}'.format(title), c * 20)
+
+
 if __name__ == '__main__':
     with open('hal.bib') as hal_file:
         hal_db = load(hal_file)
+    dbs = {}
+    not_in_dbs = {key: [] for key in TEAM_NAMES.keys()}
     for path in Path('bib').glob('*.bib'):
-        print('==== {:^15} ===='.format(path.name))
+        header(path.name)
         with path.open() as f:
-            db = load(f)
-        for entry in db.entries:
+            dbs[path.stem] = load(f)
+        for entry in dbs[path.stem].entries:
             check_hal(entry, hal_db)
+    with open('gepetto.bib') as gepetto_file:
+        gepetto_db = load(gepetto_file)
+    for entry in hal_db.entries:
+        if entry['hal_id'] in HAL_DICT:
+            continue
+        for initials, names in TEAM_NAMES.items():
+            if any(name in entry['author'].lower() for name in names):
+                not_in_dbs[initials].append((entry['link'], entry['title']))
+                break
+        else:
+            print('IN HAL ??:', entry['hal_id'], entry['author'])
+    for initials, names in TEAM_NAMES.items():
+        if not_in_dbs[initials]:
+            header(names[0])
+            with open('diffs/%s.txt' % initials, 'w') as f:
+                for url, title in not_in_dbs[initials]:
+                    print(url, title, file=f)
