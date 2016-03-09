@@ -1,6 +1,6 @@
 # Tools for Gepetto's website
 
-## Bibtex
+## Bibtex Databases
 
 `db.py` is a little script that will check the bibtex databases in `projects:/www/html/projects/gepetto/bib` are up
 to date.
