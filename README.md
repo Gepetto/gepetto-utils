@@ -5,14 +5,14 @@
 `db.py` is a little script that will check the bibtex databases in `projects:/www/html/projects/gepetto/bib` are up
 to date.
 
-For now, it will compare it to HAL's one.
+For now, it will compare them to HAL's one.
 
 ### Get dependencies
 
 Using of [virtualenvwrapper](https://virtualenvwrapper.readthedocs.org/en/latest/) on bash or zsh, or
-[virtualfish](http://virtualfish.readthedocs.org/en/latest/index.html) is strongly recommended. Do not forget that this
-project uses Python3 (→ `mkvirtualenv -p $(which python3) gepetto_website_tools_venv` / `vf new -p (which python3)
-gepetto_website_tools_venv`)
+[virtualfish](http://virtualfish.readthedocs.org/en/latest/index.html) on [fish](https://fishshell.com/) is strongly
+recommended. Do not forget that this project uses Python3 (→ `mkvirtualenv -p $(which python3)
+gepetto_website_tools_venv` / `vf new -p (which python3) gepetto_website_tools_venv`)
 
 Then, if you have [pip-tools](https://github.com/nvie/pip-tools):
 
