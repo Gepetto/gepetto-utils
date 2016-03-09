@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-from concurrent.futures import ThreadPoolExecutor
 import re
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from bibtexparser import load, loads
 from requests import get
 from requests_futures.sessions import FuturesSession
-
 
 HAL_RE = [
     (re.compile(r'(hal|tel|inria|lirmm)-\d{8}?', re.I),
