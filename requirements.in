@@ -1,0 +1,12 @@
+# Mandatory
+bibtexparser
+pathlib
+requests
+requests-futures
+
+# Advisory
+flake8
+IPython
+isort
+pep8-naming
+pip-tools

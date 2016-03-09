@@ -130,4 +130,4 @@ if __name__ == '__main__':
                 else:
                     print('ONLY IN HAL {:^30} {}'.format(hal_id, title))
     entries = [entry for key in dbs.keys() for entry in dbs[key].entries]
-    # check_on_site(entries)
+    check_on_site(entries)
