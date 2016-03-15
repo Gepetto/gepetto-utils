@@ -4,6 +4,7 @@
 #
 #    pip-compile requirements.in
 #
+beautifulsoup4==4.4.1
 bibtexparser==0.6.2
 click==6.3                # via pip-tools
 decorator==4.0.9          # via ipython, traitlets

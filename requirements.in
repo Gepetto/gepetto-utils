@@ -3,6 +3,7 @@ bibtexparser
 pathlib
 requests
 requests-futures
+beautifulsoup4
 
 # Advisory
 flake8
