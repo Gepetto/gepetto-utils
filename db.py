@@ -40,6 +40,18 @@ TEAM_NAMES = {
 }
 
 
+def same_entries(a, b):
+    """ checks if entries a and b represent the same publication """
+    for key in ['ID', 'doi', 'hal_id', 'title', 'chapter']:
+        if key in a and key in b and a[key].lower() == b[key].lower():
+            return True
+    if 'title' in a and 'chapter' in b and a['title'].lower() == b['chapter'].lower():
+        return True
+    if 'title' in b and 'chapter' in a and b['title'].lower() == a['chapter'].lower():
+        return True
+    return False
+
+
 def parse_hal_id(entry, hal_db):
     """ Tries to find HAL_ID in an entry"""
     if 'hal_id' in entry:
@@ -54,6 +66,9 @@ def parse_hal_id(entry, hal_db):
                 match = regex.search(entry[key])
                 if match:
                     return ret(match.group())
+    for hal_entry in hal_db.entries:
+        if same_entries(entry, hal_entry):
+            return hal_entry['hal_id']
 
 
 def get_hal_entry(hal_id, hal_db):
@@ -84,6 +99,14 @@ def check_hal(entry, hal_db):
             print('IN HAL for %s: %s = {%s},' % (entry['ID'], key, hal_entry[key]))
 
 
+def compare_scholar_entries(entry, scholar_entry, initials):
+    """ Compare our entry and a Google Scholar entry """
+    keys = (set(entry.keys()) | set(scholar_entry.keys())) - USELESS_KEYS
+    for key in keys:
+        if key not in entry:
+            print('IN SCHOLAR for %s.bib/%s: %s = {%s},' % (initials, entry['ID'], key, scholar_entry[key]))
+
+
 def check_on_site(entries):
     """ Checks those entries on gepetto's website """
     session = FuturesSession(executor=ThreadPoolExecutor(max_workers=40))
@@ -101,14 +124,22 @@ def header(title, lvl=1):
 if __name__ == '__main__':
     with open('hal.bib') as hal_file:
         hal_db = load(hal_file)
+    with open('scholar.bib') as scholar_file:
+        scholar_db = load(scholar_file)
     dbs = {}
     not_in_dbs = {key: [] for key in TEAM_NAMES.keys()}
+
+    # Check our entries against HAL
+    header("us → HAL")
     for path in Path('bib').glob('*.bib'):
-        header(path.name)
+        header(path.name, 2)
         with path.open() as f:
             dbs[path.stem] = load(f)
         for entry in dbs[path.stem].entries:
             check_hal(entry, hal_db)
+
+    # Check that HAL entries are in our DB
+    header("HAL → us")
     for entry in hal_db.entries:
         if entry['hal_id'] in HAL_DICT:
             continue
@@ -120,7 +151,7 @@ if __name__ == '__main__':
             print('IN HAL ??:', entry['hal_id'], entry['author'])
     for initials, names in TEAM_NAMES.items():
         if not_in_dbs[initials]:
-            header(names[0])
+            header(names[0], 2)
             for hal_id, url, title in not_in_dbs[initials]:
                 for entry in dbs[initials].entries:
                     if 'title' in entry and entry['title'] == title:
@@ -128,5 +159,27 @@ if __name__ == '__main__':
                         break
                 else:
                     print('ONLY IN HAL {:^30} {}'.format(hal_id, title))
+
+    # Checks that Scholar entries are in our DB
+    header("scholar → us")
+    for scholar_entry in scholar_db.entries:
+        if 'author' not in scholar_entry:
+            print('SCHOLAR W/O AUTHOR:', scholar_entry['ID'])
+            continue
+        for initials, names in TEAM_NAMES.items():
+            if any(name in scholar_entry['author'].lower() for name in names):
+                for entry in dbs[initials].entries:
+                    if same_entries(entry, scholar_entry):
+                        compare_scholar_entries(entry, scholar_entry, initials)
+                        break
+                else:
+                    continue
+                break
+        else:
+            print('IN SCHOLAR ??:', scholar_entry['ID'])
+
+
+    # Checks our entries work on our website
+    header("us → our website")
     entries = [entry for key in dbs.keys() for entry in dbs[key].entries]
-    check_on_site(entries)
+    # check_on_site(entries)
