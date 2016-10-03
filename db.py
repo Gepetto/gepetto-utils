@@ -4,7 +4,7 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from bibtexparser import load, loads
+from bibtexparser import loads
 from requests import get
 from requests_futures.sessions import FuturesSession
 
@@ -38,6 +38,10 @@ TEAM_NAMES = {
     'st': ['tonneau'],
     'test': ['test'],
 }
+
+
+def load(f):
+    return loads(re.sub('@String\((.*)\)', '@String{\\1}', f.read()))
 
 
 def same_entries(a, b):
