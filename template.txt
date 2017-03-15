@@ -1,0 +1,15 @@
+Welcome in Gepetto !
+
+Here's a link to the The Gepetto wiki:
+https://wiki.laas.fr/gepetto/Welcome
+
+You will find information about:
+- the mailing-list, gepetto-students@laas.fr
+- Framateam - our instant messaging tool
+- the team software and hardware guidelines
+- ...
+
+See you soon !
+
+--
+This is an automatic email from https://github.com/nim65s/GepettoStudents
