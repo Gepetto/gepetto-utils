@@ -59,6 +59,7 @@ def greet(to, sender):
     msg['Subject'] = 'Welcome in Gepetto !'
     msg['From'] = sender
     msg['To'] = to
+    msg['Bcc'] = sender
     s = SMTP('localhost')
     s.send_message(msg)
     s.quit()
