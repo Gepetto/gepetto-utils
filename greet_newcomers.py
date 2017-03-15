@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 
-from __future__ import print_function
-
+import shelve
 from email.mime.text import MIMEText
 from getpass import getuser
 from os.path import expanduser
-import shelve
 from smtplib import SMTP
 
 from ldap3 import Connection
-
 
 SHELF = expanduser('~/.cache/gepetto_newcomers')
 
@@ -28,7 +25,6 @@ def whoami(gepetto):
     Returns the LAAS username of the current user.
     The mail will be sent from this account
     """
-
     with shelve.open(SHELF) as shelf:
         me = shelf['me'] if 'me' in shelf else getuser()
 
