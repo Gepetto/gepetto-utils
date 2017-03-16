@@ -29,7 +29,7 @@ def whoami(gepetto):
         me = shelf['me'] if 'me' in shelf else getuser()
 
     while me not in gepetto:
-        print("You (%s) don's seem to be in the Gepetto group… What's your LAAS username ?" % me)
+        print("You (%s) dont's seem to be in the Gepetto group… What's your LAAS username ?" % me)
         me = input('--> ')
 
     # remember this in the cache
