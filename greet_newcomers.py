@@ -3,7 +3,7 @@
 import shelve
 from email.mime.text import MIMEText
 from getpass import getuser
-from os.path import expanduser
+from os.path import abspath, dirname, expanduser, join
 from smtplib import SMTP
 
 from ldap3 import Connection
@@ -49,7 +49,7 @@ def greet(to, sender):
     if '@' not in to:
         to = '%s@laas.fr' % to
 
-    with open('template.txt') as f:
+    with open(join(dirname(abspath(__file__)), 'template.txt')) as f:
         msg = MIMEText(f.read())
 
     msg['Subject'] = 'Welcome in Gepetto !'
