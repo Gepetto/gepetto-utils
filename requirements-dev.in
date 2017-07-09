@@ -1,0 +1,6 @@
+-r requirements.in
+flake8
+IPython
+isort
+pep8-naming
+pip-tools
