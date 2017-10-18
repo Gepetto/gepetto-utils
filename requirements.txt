@@ -8,7 +8,6 @@ beautifulsoup4==4.6.0
 bibtexparser==0.6.2
 certifi==2017.7.27.1      # via requests
 chardet==3.0.4            # via requests
-futures==3.1.1            # via requests-futures
 idna==2.6                 # via requests
 pathlib==1.0.1
 requests-futures==0.9.7
