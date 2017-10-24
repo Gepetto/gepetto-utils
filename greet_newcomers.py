@@ -65,12 +65,9 @@ def get_gepetto_ldap():
     """
     Get a new list of Gepetto members in the LDAP of the LAAS
     """
-    def dn_to_uid(dn):
-        return dn.split(',')[0].split('=')[1]
-
     conn = Connection('ldap.laas.fr', auto_bind=True)
-    conn.search('dc=laas,dc=fr', '(o=gepetto)')
-    return [dn_to_uid(entry.entry_dn) for entry in conn.entries]
+    conn.search('dc=laas,dc=fr', '(o=gepetto)', attributes=['uid'])
+    return [str(entry.uid) for entry in conn.entries]
 
 
 if __name__ == '__main__':
