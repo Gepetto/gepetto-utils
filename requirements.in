@@ -1,0 +1,3 @@
+Django
+django-autoslug
+-e git://github.com/Nim65s/ndh.git#egg=ndh
