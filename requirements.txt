@@ -8,6 +8,7 @@
 certifi==2017.11.5        # via requests
 chardet==3.0.4            # via requests
 django-autoslug==1.9.3
+django-bootstrap3==9.1.0
 django==1.11.7
 idna==2.6                 # via requests
 pytz==2017.3              # via django

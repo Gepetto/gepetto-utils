@@ -27,7 +27,7 @@ SECRET_KEY = 'c=6-%df*+_4*8vphwwqm1v4^fdv*fc+zb*13ouw-bn7u=pexei'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'bootstrap3',
     'gepetto_packages',
 ]
 
@@ -53,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = f'{PROJECT}.urls'
+ROOT_URLCONF = 'gepetto_packages.urls'
 
 TEMPLATES = [
     {

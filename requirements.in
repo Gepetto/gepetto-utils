@@ -1,4 +1,5 @@
 Django
 django-autoslug
--e git://github.com/Nim65s/ndh.git#egg=ndh
+django-bootstrap3
 requests
+-e git://github.com/Nim65s/ndh.git#egg=ndh

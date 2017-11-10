@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table">
+  <tr>
+    <th>Package</th>
+    <th>URL</th>
+    <th>Licence</th>
+  </tr>
+  {% for repo in repo_list %}
+  {% ifchanged repo.package %}
+  <tr>
+    <td>{{ repo.package }}</td>
+    <td>{% if repo.package.url %}<a href="{{ repo.package.url }}">{{ repo.package.domain }}</a>{% endif %}</td>
+    <td>{{ repo.package.license }}</td>
+  </tr>
+  {% endifchanged %}
+  <tr>
+    <td></td>
+    <td><a href="{{ repo.url }}">{{ repo.get_origin_display }}</td>
+    <td>{{ repo.license }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
