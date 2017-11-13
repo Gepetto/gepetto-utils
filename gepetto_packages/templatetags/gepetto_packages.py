@@ -6,6 +6,6 @@ register = template.Library()
 @register.filter
 def domain(url):
     if url:
-        domain_name = '.'.join(url.split('/')[2].split('.')[-2:])
+        domain_name = '.'.join(url.split('/')[2].split('.')[-3:])
         return mark_safe(f'<a href="{url}">{domain_name}</a>')
     return '?'

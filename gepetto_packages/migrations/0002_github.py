@@ -13,7 +13,7 @@ PROJECTS = (
 )
 
 
-def add_hpp_sot(apps, schema_editor):
+def github(apps, schema_editor):
     Project, License, Package, Repo = (apps.get_model('gepetto_packages', model)
                                        for model in ['Project', 'License', 'Package', 'Repo'])
     for project_name in PROJECTS:
@@ -34,5 +34,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_hpp_sot),
+        migrations.RunPython(github),
     ]
