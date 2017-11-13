@@ -23,7 +23,7 @@ class Package(NamedModel, TimeStampedModel):
         ordering = ('name',)
 
     def domain(self):
-        return '.'.join(self.url.split('/')[2].split('.')[-2:])
+        return '.'.join(self.homepage.split('/')[2].split('.')[-2:])
 
 
 class Repo(TimeStampedModel):

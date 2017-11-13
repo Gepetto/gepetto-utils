@@ -7,19 +7,19 @@
     <th>URL</th>
     <th>Licence</th>
   </tr>
-  {% for repo in repo_list %}
-  {% ifchanged repo.package %}
+  {% for package in package_list %}
   <tr>
-    <td>{{ repo.package }}</td>
-    <td>{% if repo.package.url %}<a href="{{ repo.package.url }}">{{ repo.package.domain }}</a>{% endif %}</td>
-    <td>{{ repo.package.license }}</td>
+    <td>{{ package }}</td>
+    <td>{% if package.homepage %}<a href="{{ package.homepage }}">{{ package.domain }}</a>{% endif %}</td>
+    <td>{{ package.license }}</td>
   </tr>
-  {% endifchanged %}
+  {% for repo in package.repo_set.all %}
   <tr>
     <td></td>
     <td><a href="{{ repo.url }}">{{ repo.get_origin_display }}</td>
     <td>{{ repo.license }}</td>
   </tr>
+  {% endfor %}
   {% endfor %}
 </table>
 {% endblock %}
