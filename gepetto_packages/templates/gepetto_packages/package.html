@@ -1,0 +1,17 @@
+{% load gepetto_packages %}
+<div class="package">
+  <div>{{ package }}</div>
+  <div></div>
+  <div>{{ package.homepage|domain }}</div>
+  <div></div>
+  <div></div>
+  <div>{{ package.license|default_if_none:'?' }}</div>
+  {% for repo in package.repo_set.all %}
+  <div></div>
+  <div>{{ repo.url|domain }}</div>
+  <div>{{ repo.homepage|domain }}</div>
+  <div>{{ repo.open_issues|default_if_none:'?' }}</div>
+  <div>{{ repo.open_pr|default_if_none:'?' }}</div>
+  <div>{{ repo.license|default_if_none:'?' }}</div>
+  {% endfor %}
+</div>

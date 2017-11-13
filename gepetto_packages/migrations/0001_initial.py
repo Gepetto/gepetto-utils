@@ -63,12 +63,11 @@ class Migration(migrations.Migration):
                 ('default_branch', models.CharField(max_length=50)),
                 ('open_issues', models.PositiveSmallIntegerField(blank=True, null=True)),
                 ('open_pr', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('origin', models.PositiveSmallIntegerField(choices=[(1, 'github'), (2, 'redmine'), (3, 'gitlab')])),
                 ('license', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='gepetto_packages.License')),
                 ('package', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='gepetto_packages.Package')),
             ],
             options={
-                'ordering': ('package', 'origin'),
+                'ordering': ('package', 'url'),
             },
         ),
         migrations.AddField(

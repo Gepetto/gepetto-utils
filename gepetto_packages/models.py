@@ -1,9 +1,6 @@
 from django.db import models
 
 from ndh.models import TimeStampedModel, NamedModel
-from ndh.utils import enum_to_choices
-
-from .choices import REPO_ORIGINS
 
 
 class Project(NamedModel):
@@ -22,9 +19,6 @@ class Package(NamedModel, TimeStampedModel):
     class Meta:
         ordering = ('name',)
 
-    def domain(self):
-        return '.'.join(self.homepage.split('/')[2].split('.')[-2:])
-
 
 class Repo(TimeStampedModel):
     package = models.ForeignKey(Package)
@@ -34,10 +28,9 @@ class Repo(TimeStampedModel):
     default_branch = models.CharField(max_length=50)
     open_issues = models.PositiveSmallIntegerField(blank=True, null=True)
     open_pr = models.PositiveSmallIntegerField(blank=True, null=True)
-    origin = models.PositiveSmallIntegerField(choices=enum_to_choices(REPO_ORIGINS))
 
     class Meta:
-        ordering = ('package', 'origin')
+        ordering = ('package', 'url')
 
     def __str__(self):
         return self.url

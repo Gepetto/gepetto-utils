@@ -1,25 +1,18 @@
 {% extends 'base.html' %}
 
+{% block style %}
+<style>
+.package {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr 20px 20px 100px;
+  grid-gap: 1rem;
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<table class="table">
-  <tr>
-    <th>Package</th>
-    <th>URL</th>
-    <th>Licence</th>
-  </tr>
-  {% for package in package_list %}
-  <tr>
-    <td>{{ package }}</td>
-    <td>{% if package.homepage %}<a href="{{ package.homepage }}">{{ package.domain }}</a>{% endif %}</td>
-    <td>{{ package.license }}</td>
-  </tr>
-  {% for repo in package.repo_set.all %}
-  <tr>
-    <td></td>
-    <td><a href="{{ repo.url }}">{{ repo.get_origin_display }}</td>
-    <td>{{ repo.license }}</td>
-  </tr>
-  {% endfor %}
-  {% endfor %}
-</table>
+{% for package in package_list %}
+{% include 'gepetto_packages/package.html' with package=package %}
+{% endfor %}
 {% endblock %}

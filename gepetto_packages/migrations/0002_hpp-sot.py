@@ -6,8 +6,6 @@ from django.db import migrations
 
 import requests
 
-from gepetto_packages.choices import REPO_ORIGINS
-
 GITHUB_API = 'https://api.github.com'
 PROJECTS = (
     'Humanoid Path Planner',
@@ -25,8 +23,7 @@ def add_hpp_sot(apps, schema_editor):
             package = Package(name=data['name'], project=project, homepage=data['homepage'])
             package.save()
             repo = Repo(package=package, url=data['html_url'], homepage=data['homepage'],
-                        default_branch=data['default_branch'], open_issues=data['open_issues'],
-                        origin=REPO_ORIGINS.github)
+                        default_branch=data['default_branch'], open_issues=data['open_issues'])
             # repo.open_pr = len(requests.get(f'{GITHUB_API}/repos/{project.slug}/{package.slug}/pulls').json())
             repo.save()
 
