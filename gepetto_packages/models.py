@@ -28,6 +28,7 @@ class Repo(TimeStampedModel):
     default_branch = models.CharField(max_length=50)
     open_issues = models.PositiveSmallIntegerField(blank=True, null=True)
     open_pr = models.PositiveSmallIntegerField(blank=True, null=True)
+    repo_id = models.PositiveIntegerField()
 
     class Meta:
         ordering = ('package', 'url')

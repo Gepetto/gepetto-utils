@@ -14,7 +14,7 @@ def gitlab(apps, schema_editor):
     for data in requests.get(f'{GITLAB_API}/projects', verify=False).json():
         package_qs = Package.objects.filter(name=data['name'])
         if package_qs.exists():
-            Repo.objects.create(package=package_qs.first(), url=data['web_url'])
+            Repo.objects.create(package=package_qs.first(), url=data['web_url'], repo_id=data['id'])
 
 
 class Migration(migrations.Migration):

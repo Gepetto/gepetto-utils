@@ -22,7 +22,7 @@ def github(apps, schema_editor):
         for data in requests.get(f'{GITHUB_API}/orgs/{project.slug}/repos').json():
             package = Package(name=data['name'], project=project, homepage=data['homepage'])
             package.save()
-            repo = Repo(package=package, url=data['html_url'], homepage=data['homepage'],
+            repo = Repo(package=package, url=data['html_url'], homepage=data['homepage'], repo_id=data['id'],
                         default_branch=data['default_branch'], open_issues=data['open_issues'])
             # repo.open_pr = len(requests.get(f'{GITHUB_API}/repos/{project.slug}/{package.slug}/pulls').json())
             repo.save()
