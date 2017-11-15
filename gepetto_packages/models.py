@@ -8,7 +8,12 @@ class Project(NamedModel):
 
 
 class License(NamedModel):
-    pass
+    github_key = models.CharField(max_length=50)
+    spdx_id = models.CharField(max_length=50)
+    url = models.URLField(max_length=200)
+
+    def __str__(self):
+        return self.spdx_id or self.name
 
 
 class Package(NamedModel, TimeStampedModel):
