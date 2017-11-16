@@ -29,13 +29,13 @@ def redmine(apps, schema_editor):
     for api in REDMINE_APIS:
         for data in requests.get(f'{api}/projects.json?limit=100', headers=HEADERS).json()['projects']:
             if data['name'] in PACKAGES:
-                Package.objects.get_or_create(name=data['name'], project=dummy_project)
-            package_qs = Package.objects.filter(name=data['name'])
+                Package.objects.get_or_create(name=data['identifier'], project=dummy_project)
+            package_qs = Package.objects.filter(name=data['identifier'])
             if package_qs.exists():
                 r = Repo(package=package_qs.first(), repo_id=data['id'], open_pr=0)
                 repo_data = requests.get(f'{api}/projects/{r.repo_id}.json', headers=HEADERS).json()['project']
                 r.homepage = repo_data['homepage']
-                r.url = f'{api}/projects/{repo_data["identifier"]}'
+                r.url = f'{api}/projects/{r.package.name}'
                 issues_data = requests.get(f'{api}/issues.json?project_id={r.repo_id}&status_id=open', headers=HEADERS)
                 r.open_issues = issues_data.json()['total_count']
                 r.save()
