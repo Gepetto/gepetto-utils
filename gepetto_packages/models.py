@@ -1,6 +1,7 @@
 from django.db import models
 
 from ndh.models import TimeStampedModel, NamedModel
+from ndh.utils import query_sum
 
 
 class Project(NamedModel):
@@ -23,6 +24,12 @@ class Package(NamedModel, TimeStampedModel):
 
     class Meta:
         ordering = ('name',)
+
+    def open_pr(self):
+        return query_sum(self.repo_set, 'open_pr')
+
+    def open_issues(self):
+        return query_sum(self.repo_set, 'open_issues')
 
 
 class Repo(TimeStampedModel):
