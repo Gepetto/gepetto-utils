@@ -1,9 +1,9 @@
 # Greet Newcomers
 
-## Get ready
+## Get dependencies
 
-- Get Python 3 & pip
-- `pip3 install ldap3` (you might need sudo, or --user, or a virtualenv)
+- Get Python 3
+- `pip3 install ldap3` (you might need `sudo`, or *better* `--user`, or *best* a virtualenv)
 - `mkdir -p ~/.cache`
 
 ## Go !
@@ -20,8 +20,5 @@ The template of this mail is in `template.txt`.
 To run this script everyday at 5 AM:
 
 ```bash
-crontab -l > cronfile
-echo "0 5 * * * $(which python) $(pwd)/greet_newcomers.py" >> cronfile
-crontab cronfile
-rm cronfile
+(crontab -l; echo "0 5 * * * $(which python) $(pwd)/greet_newcomers.py") | crontab -
 ```
