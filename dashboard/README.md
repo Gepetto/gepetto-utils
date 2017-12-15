@@ -8,7 +8,7 @@
 
 ### Get dependencies
 
-- Get Python 3
+- Get Python>=3.6
 - `pip3 install -U -r requirements.txt` (you might need `sudo`, or *better* `--user`, or *best* a virtualenv)
 
 ## RUN
