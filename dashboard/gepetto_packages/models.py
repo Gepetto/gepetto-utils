@@ -18,9 +18,9 @@ class License(NamedModel):
 
 
 class Package(NamedModel, TimeStampedModel):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     homepage = models.URLField(max_length=200, blank=True, null=True)
-    license = models.ForeignKey(License, blank=True, null=True)
+    license = models.ForeignKey(License, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ('name',)
@@ -33,10 +33,10 @@ class Package(NamedModel, TimeStampedModel):
 
 
 class Repo(TimeStampedModel):
-    package = models.ForeignKey(Package)
+    package = models.ForeignKey(Package, on_delete=models.CASCADE)
     url = models.URLField(max_length=200, unique=True)
     homepage = models.URLField(max_length=200, blank=True, null=True)
-    license = models.ForeignKey(License, blank=True, null=True)
+    license = models.ForeignKey(License, on_delete=models.CASCADE, blank=True, null=True)
     default_branch = models.CharField(max_length=50)
     open_issues = models.PositiveSmallIntegerField(blank=True, null=True)
     open_pr = models.PositiveSmallIntegerField(blank=True, null=True)

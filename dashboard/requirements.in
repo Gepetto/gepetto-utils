@@ -1,5 +1,6 @@
 Django
-django-autoslug
 django-bootstrap3
+psycopg2
 requests
--e git://github.com/Nim65s/ndh.git#egg=ndh
+https://github.com/nim65s/ndh/archive/master.zip#egg=ndh
+https://github.com/nim65s/django-autoslug/archive/master.zip#egg=django-autoslug
