@@ -13,3 +13,7 @@ Automatically find new gepettists, and send them a greetings mail, with some use
 ## Website
 
 Tools to maintain our main website
+
+## Scripts
+
+Set of little useful scripts
