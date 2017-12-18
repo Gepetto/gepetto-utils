@@ -12,4 +12,5 @@ You will find information about:
 See you soon !
 
 --
-This is an automatic email from https://github.com/nim65s/GepettoStudents
+This is an automatic email from https://github.com/nim65s/gepetto-utils/tree/master/newcomers
+Feel free to answer to it if you have any question !
