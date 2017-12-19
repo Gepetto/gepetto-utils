@@ -1,3 +1,6 @@
-from django.contrib import admin
+from django.contrib.admin import site
 
-# Register your models here.
+from .models import License, Package, Project, Repo
+
+for model in [License, Package, Project, Repo]:
+    site.register(model)

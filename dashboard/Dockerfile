@@ -3,7 +3,6 @@ ENV PYTHONUNBUFFERED 1
 
 RUN mkdir /app /static
 WORKDIR /app
-COPY requirements.txt .
 
 # Get Dependencies
 RUN apk update && apk add --virtual deps \
@@ -13,7 +12,8 @@ RUN apk update && apk add --virtual deps \
    musl-dev \
    postgresql-dev \
    && apk add --no-cache libpq
-RUN pip install -r requirements.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 RUN apk del deps
 
 COPY . .
@@ -23,4 +23,4 @@ ENV REDMINE_TOKEN=placeholder \
    GITHUB_TOKEN=placeholder \
    DJANGO_SECRET_KEY=placeholder \
    POSTGRES_PASSWORD=placeholder
-RUN python manage.py collectstatic
+RUN python manage.py collectstatic --noinput

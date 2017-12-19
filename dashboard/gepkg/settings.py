@@ -50,11 +50,11 @@ WSGI_APPLICATION = f'{PROJECT}.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.' + ('postgresql' if 'POSTGRES_PASSWORD' in os.environ else 'sqlite3'),
         'HOST': 'db',
         'USER': 'postgres',
-        'NAME': 'postgres',
-        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'NAME': 'postgres' if 'POSTGRES_PASSWORD' in os.environ else os.path.join(BASE_DIR, 'db.sqlite3'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', '')
     }
 }
 
@@ -84,6 +84,4 @@ STATIC_ROOT = '/static/'
 
 SITE_ID = 1
 
-REDMINE_TOKEN = os.environ['REDMINE_TOKEN']
-GITHUB_TOKEN = os.environ['GITHUB_TOKEN']
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'placeholder')

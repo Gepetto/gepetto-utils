@@ -1,7 +1,9 @@
 from django.db import models
 
-from ndh.models import TimeStampedModel, NamedModel
-from ndh.utils import query_sum
+from ndh.models import NamedModel, TimeStampedModel
+from ndh.utils import enum_to_choices, query_sum
+
+from .utils import SOURCES, api_headers, api_url
 
 
 class Project(NamedModel):
@@ -41,6 +43,9 @@ class Repo(TimeStampedModel):
     open_issues = models.PositiveSmallIntegerField(blank=True, null=True)
     open_pr = models.PositiveSmallIntegerField(blank=True, null=True)
     repo_id = models.PositiveIntegerField()
+    source_type = models.PositiveSmallIntegerField(choices=enum_to_choices(SOURCES))
+    api_url = models.CharField(max_length=100)
+    token = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         ordering = ('package', 'url')

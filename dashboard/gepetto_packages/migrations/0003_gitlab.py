@@ -6,6 +6,8 @@ from django.db import migrations
 
 import requests
 
+from gepetto_packages.utils import SOURCES
+
 GITLAB_API = 'https://eur0c.laas.fr/api/v4'
 
 def gitlab(apps, schema_editor):
@@ -14,7 +16,8 @@ def gitlab(apps, schema_editor):
     for data in requests.get(f'{GITLAB_API}/projects', verify=False).json():
         package_qs = Package.objects.filter(name=data['name'])
         if package_qs.exists():
-            Repo.objects.create(package=package_qs.first(), url=data['web_url'], repo_id=data['id'])
+            Repo.objects.create(package=package_qs.first(), url=data['web_url'], repo_id=data['id'],
+                                source_type=SOURCES.gitlab, api_url=GITLAB_API)
 
 
 class Migration(migrations.Migration):
