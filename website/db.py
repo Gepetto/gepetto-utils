@@ -19,6 +19,11 @@ HAL_KEYS = ['url', 'link', 'pdf', 'video']
 HAL_DICT = {}
 USELESS_KEYS = {'hal_local_reference', 'hal_version', 'address', 'note', 'month'}
 GEPETTO_URL = 'http://projects.laas.fr/gepetto/index.php/Publications/BibtexEntry?bibtex=%s'
+HAL_DUPS = {
+    'tel-01393217': 'tel-01589659',
+    'hal-01066574': 'hal-01113510',
+    'tel-01482297': 'tel-01547435',
+}
 
 TEAM_NAMES = {
     'ad': ['del prete'],
@@ -36,6 +41,7 @@ TEAM_NAMES = {
     'psa': ['salaris'],
     'ps': ['souères', 'sou{\\`e}res'],
     'st': ['tonneau'],
+    'bw': ['watier'],
     'test': ['test'],
 }
 
@@ -85,14 +91,22 @@ def get_hal_entry(hal_id, hal_db):
     r.raise_for_status()
     if 'Aucun document trouvé' in r.content.decode():
         print('fail on', url)
-    hal_entry = loads(r.content.decode()).entries[0]
+    content = r.content.decode()
+    hal_entry = loads(content).entries[0]
+    with open('hal_generated.bib', 'a') as f:
+        f.write(content)
     print('HAL_ENTRY for {ID} ({hal_id}) not found on local hal db. Got Online one.'.format(**hal_entry))
     return hal_entry
 
 
+def hal_dedup_id(hal_id):
+    return HAL_DUPS[hal_id] if hal_id in HAL_DUPS else hal_id
+
+
 def check_hal(entry, hal_db):
     """ Checks our DB is update with HAL """
-    hal_id = parse_hal_id(entry, hal_db)
+    hal_id = hal_dedup_id(parse_hal_id(entry, hal_db))
+    print(hal_id)
     if not hal_id:
         return
     HAL_DICT[hal_id] = entry
