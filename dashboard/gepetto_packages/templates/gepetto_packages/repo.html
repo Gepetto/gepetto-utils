@@ -1,7 +1,0 @@
-{% load gepetto_packages %}
-<div></div>
-<div class="repo-url">{{ repo.url|domain }}</div>
-<div class="repo-homepage">{{ repo.homepage|domain }}</div>
-<div class="repo-issues">{{ repo.open_issues|default_if_none:'?' }}</div>
-<div class="repo-pr">{{ repo.open_pr|default_if_none:'?' }}</div>
-<div class="repo-license">{{ repo.license|default_if_none:'?' }}</div>
