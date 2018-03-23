@@ -13,6 +13,8 @@ rm -vf *.tar* /tmp/*.tar*
 if $(grep -q "v$TAG" <<< $(git tag))
 then
     echo -e "\n!!! Ce tag existe !!!\n"
+    git checkout "v$TAG"
+    git submodule update --init
 else
     git tag -s "v$TAG" -m "Release v$TAG"
 fi
