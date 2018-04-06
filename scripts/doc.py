@@ -8,21 +8,18 @@ import requests
 
 DOC = Path('/net/cetus/data/gepetto/Doc')
 GITLAB = 'https://gepgitlab.laas.fr'
+RAINBOARD = 'http://rainboard.laas.fr'
 VERSION = '16.04'
 
-PR_NS_BR = [
-    ('pinocchio', [
-        ('gsaurel', [
-            'autodeploy-doc',
-        ]),
-    ]),
-]
 
-for project, namespaces in PR_NS_BR:
-    for namespace, branches in namespaces:
-        for branch in branches:
+if __name__ == '__main__':
+    for project, namespace, branch in requests.get(f'{RAINBOARD}/doc').json()['ret']:
+        r = requests.get(f'{GITLAB}/{namespace}/{project}/-/jobs/artifacts/{branch}/download',
+                         {'job': f'robotpkg-{project}-{VERSION}'}, stream=True)
+        try:
+            z = ZipFile(BytesIO(r.content))
             path = DOC / namespace / project / branch
             path.mkdir(parents=True, exist_ok=True)
-            r = requests.get(f'{GITLAB}/{namespace}/{project}/-/jobs/artifacts/{branch}/download',
-                             {'job': f'robotpkg-{project}-{VERSION}'}, stream=True)
-            ZipFile(BytesIO(r.content)).extractall(str(path))
+            z.extractall(str(path))
+        except:
+            continue
