@@ -5,7 +5,8 @@ import datetime
 import logging
 import re
 
-args = argparse.ArgumentParser()
+DESC = "Parse muscod's logs to get NDIS, the number of iterations & total computation time"
+args = argparse.ArgumentParser(description=DESC)
 args.add_argument('filename', type=argparse.FileType('r'))
 args.add_argument('-v', '--verbose', action='store_true')
 
@@ -14,10 +15,6 @@ logger = logging.getLogger('parse_muscod_logs')
 
 
 def parse_muscod_logs(filename, verbose):
-    """
-    Parse muscod's logs to get NDIS, the number of iterations & total computation time
-    """
-
     ndis = iterations = total = None
     logger.setLevel(logging.INFO if verbose else logging.WARNING)
 

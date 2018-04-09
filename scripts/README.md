@@ -1,11 +1,20 @@
 # Scripts for Gepetto
 
+## `doc.py` & `doc.sh`
+
+Gets the projects / namespaces / branches to process from the [Gepetto Dashboard](http://rainboard.laas.fr)
+(activate `keep_doc` on the branches you need)
+Run them in this order in a cron job to put the last generated doxygen HTML from gepgitlab on
+`/net/cetus/data/gepetto/Doc`.
+
 ## `release.sh`
 
 `./release.sh <tag> [<package name>]`
 
 Creates a signed tag named `v<tag>` and push it.
 Also creates `<package name>-<tag>.tar.gz{,.sig}` including submodules.
+
+Can be usefull if you don't have the JRL cmake submodule, otherwise just use `make release VERSION=x.y.z && make dist`
 
 ## `video.py`
 
@@ -32,4 +41,20 @@ optional arguments:
   -fs FS                font size
   --no-magic
   -c, --crop            Crop the speaker only from the video
+```
+
+## `parse_muscod_logs.py`
+
+```
+usage: parse_muscod_logs.py [-h] [-v] filename
+
+Parse muscod's logs to get NDIS, the number of iterations & total computation
+time
+
+positional arguments:
+  filename
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --verbose
 ```
