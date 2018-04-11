@@ -19,16 +19,17 @@ else
     git tag -s "v$TAG" -m "Release v$TAG"
 fi
 
-echo $TAG > .version
-
 if [[ -d cmake && -x cmake/git-archive-all.sh ]]
 then
     ./cmake/git-archive-all.sh --prefix "${SOFTAG}/" -v "${SOFTAG}.tar"
-    tar rf "${SOFTAG}.tar" --transform "s=.=${SOFTAG}/.="   .version
-    gzip "${SOFTAG}.tar"
 else
-    git archive --format=tar.gz --prefix="${SOFTAG}/" HEAD > ${SOFTAG}.tar.gz
+    git archive --format=tar --prefix="${SOFTAG}/" HEAD > ${SOFTAG}.tar
 fi
+
+echo $TAG > .version
+tar rf "${SOFTAG}.tar" --transform "s=.=${SOFTAG}/.="   .version
+gzip "${SOFTAG}.tar"
+
 gpg --armor --detach-sign "${SOFTAG}.tar.gz"
 
 echo -e "git push --tags"
