@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Removes useless folders
+
 set -e
 
 cd /net/cetus/data/gepetto/Doc
@@ -10,9 +12,11 @@ for namespace in *; do
         pushd $project
         for branch in *; do
             pushd $branch
-            [[ -d doxygen-html ]] || continue
-            cp -r doxygen-html/* .
-            rm -r doxygen-html
+            for folder in html doxygen-html; do
+                [[ -d $folder ]] || continue
+                cp -r $folder/* .
+                rm -r $folder
+            done
             popd
         done
         popd
