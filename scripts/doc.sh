@@ -10,9 +10,9 @@ for namespace in *; do
         pushd $project
         for branch in *; do
             pushd $branch
-            [[ -d doc/doxygen-html ]] || continue
-            cp -r doc/doxygen-html/* .
-            rm -r doc
+            [[ -d doxygen-html ]] || continue
+            cp -r doxygen-html/* .
+            rm -r doxygen-html
             popd
         done
         popd
