@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Removes useless folders
+# Removes useless folders, and set permissions
 
 set -e
 
@@ -23,3 +23,6 @@ for namespace in *; do
     done
     popd
 done
+
+find . -type d -exec chmod 0775 {} \;
+find . -type f -exec chmod 0664 {} \;
