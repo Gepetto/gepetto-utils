@@ -5,6 +5,7 @@ set -e
 TAG=$1
 SOFT=${2:-$(basename $(pwd))}
 SOFTAG="${SOFT}-${TAG}"
+[[ $# -gt 2 ]] && SOFTAG="${SOFTAG}r$2"
 
 echo Releasing $SOFTAG
 
