@@ -6,7 +6,7 @@ from zipfile import BadZipFile, ZipFile
 from io import BytesIO
 import requests
 
-DOC = Path('/net/cetus/data/gepetto/Doc')
+DOC = Path('/net/pongo/vol/vol_projects/partage_gepetto/Doc')
 GITLAB = 'https://gepgitlab.laas.fr'
 RAINBOARD = 'http://rainboard.laas.fr'
 VERSION = '16.04'

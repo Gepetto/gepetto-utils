@@ -4,7 +4,7 @@
 
 set -e
 
-cd /net/cetus/data/gepetto/Doc
+cd /net/pongo/vol/vol_projects/partage_gepetto/Doc
 
 for namespace in *; do
     pushd $namespace
