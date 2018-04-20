@@ -7,6 +7,7 @@ set -e
 cd /net/pongo/vol/vol_projects/partage_gepetto/Doc
 
 for namespace in *; do
+    [[ -d $namespace ]] || continue
     pushd $namespace
     for project in *; do
         pushd $project
