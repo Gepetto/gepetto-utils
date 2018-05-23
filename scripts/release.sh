@@ -34,5 +34,6 @@ gzip "${SOFTAG}.tar"
 gpg --armor --detach-sign "${SOFTAG}.tar.gz"
 
 echo -e "git push --tags"
-echo -e "git log --pretty=oneline $(git tag -l|tail -n2|sed ':a;N;$!ba;s/\n/../g') | sed 's/.\{48\}/*/'"
+TAGS=$(git tag -l|tail -n2|sed ':a;N;$!ba;s/\n/../g')
+echo -e "git log --grep='Merge pull request #' --date-order --pretty='format:- %b' $TAGS"
 echo -e "# Draft new release"
