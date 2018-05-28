@@ -20,7 +20,7 @@ if __name__ == '__main__':
             f.write(head.read())
 
     for project, namespace, branch in sorted(requests.get(f'{RAINBOARD}/doc').json()['ret']):
-        url = f'{GITLAB}/{namespace}/{project}/-/jobs/artifacts/{branch}/download'
+        url = f'{GITLAB}/{namespace}/{project}/-/jobs/artifacts/{branch}/download?job=robotpkg-{project}-16.04'
         path = DOC / namespace / project / branch
         r = requests.get(url, {'job': f'robotpkg-{project}-{VERSION}'}, stream=True)
         try:
