@@ -13,7 +13,7 @@ SOFTAG="${SOFT}-${TAG}"
 
 echo Releasing $SOFTAG
 
-rm -vf *.tar* /tmp/*.tar*
+rm -vf ${SOFTAG}.tar*
 
 if $(grep -q "v$TAG" <<< $(git tag))
 then
