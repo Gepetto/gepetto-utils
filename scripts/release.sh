@@ -24,7 +24,7 @@ if [[ -d cmake && -x cmake/git-archive-all.sh ]]
 then
     ./cmake/git-archive-all.sh --prefix "${SOFTAG}/" -v "${SOFTAG}.tar"
 else
-    git archive --format=tar --prefix="${SOFTAG}/" HEAD > ${SOFTAG}.tar
+    git archive --format=tar --prefix="${SOFTAG}/" "v$TAG" > ${SOFTAG}.tar
 fi
 
 echo $TAG > .version
