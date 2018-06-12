@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Usage: ./release.sh version [pkg_name] [revision]
+# pkg_name defaults to the name of the current working directory
+# eg.: ./release.sh 0.8.1
+
 set -e
 
 TAG=$1
@@ -13,7 +17,7 @@ rm -vf *.tar* /tmp/*.tar*
 
 if $(grep -q "v$TAG" <<< $(git tag))
 then
-    echo -e "\n!!! Ce tag existe !!!\n"
+    echo -e "\n!!! This tag exists !!!\n"
     git checkout "v$TAG"
     git submodule update --init
 else
@@ -33,7 +37,8 @@ gzip "${SOFTAG}.tar"
 
 gpg --armor --detach-sign "${SOFTAG}.tar.gz"
 
+echo -e "# Done ! Now you have to run:"
 echo -e "git push --tags"
-TAGS=$(git tag -l|tail -n2|sed ':a;N;$!ba;s/\n/../g')
+TAGS=$(git tag -l|grep '^v'|tail -n2|sed ':a;N;$!ba;s/\n/../g')
 echo -e "git log --grep='Merge pull request #' --date-order --pretty='format:- %b' $TAGS"
 echo -e "# Draft new release"
