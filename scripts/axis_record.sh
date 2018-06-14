@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# You Only Record Once
+pgrep ffmpeg > /dev/null && echo "ffmpeg is already running" && exit 1
+
 # Remove mp4 files that have not been modified for one week
 find . -name \*.mp4 -mtime +7 -delete
 
