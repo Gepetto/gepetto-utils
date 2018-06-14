@@ -62,5 +62,6 @@ optional arguments:
 ## `axis_play.sh` & `axis_record.sh`
 
 The first allows to check that the camera is configured correctly.
+If you are not satisfied, you have to use the [web interface](http://axis-ptz1).
 
 The second records the current view. It is meant to be run in `eur0c:/local/axis`
