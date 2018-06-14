@@ -58,3 +58,9 @@ optional arguments:
   -h, --help     show this help message and exit
   -v, --verbose
 ```
+
+## `axis_play.sh` & `axis_record.sh`
+
+The first allows to check that the camera is configured correctly.
+
+The second records the current view. It is meant to be run in `eur0c:/local/axis`
