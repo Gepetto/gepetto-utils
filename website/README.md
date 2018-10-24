@@ -9,8 +9,10 @@ For now, it will compare them to HAL's one.
 
 ### Get dependencies
 
-- Get Python 3
-- `pip3 install -U -r requirements.txt` (you might need `sudo`, or *better* `--user`, or *best* a virtualenv)
+```
+pipenv install
+pipenv shell
+```
 
 ### HOWTO use it
 
