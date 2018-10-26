@@ -300,6 +300,7 @@ class RobotpkgTestRC:
             self.execute("git reset --hard")
             # Pull all the modification push upstream.
             self.execute("git pull origin "+branchname+':'+branchname)
+            self.execute("git submodule update")
 
     def apply_git_checkout_branch(self,packagename,branchname):
         """
@@ -358,7 +359,9 @@ arch_release_candidates= [ ('dynamic-graph-v3','devel'),
                            ('py-sot-dyninv-v3','master'),
                            ('sot-dynamic-pinocchio-v3','rc-v3.2.4'),
                            ('py-sot-dynamic-pinocchio-v3','rc-v3.2.4'),
-                           ('roscontrol-sot','master')]
+                           ('roscontrol-sot','rc-v0.0.5'),
+                           ('sot-talos','rc-v1.0.2'),
+                           ('talos-metapkg-ros-control-sot','master')]
 
 arpgtestrc =RobotpkgTestRC()
 arpgtestrc.perform_test(arch_release_candidates)
