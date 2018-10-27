@@ -56,7 +56,7 @@ def greet(to, sender):
     msg['From'] = sender
     msg['To'] = to
     msg['Bcc'] = sender
-    s = SMTP('localhost')
+    s = SMTP('mail.laas.fr')
     s.send_message(msg)
     s.quit()
 
