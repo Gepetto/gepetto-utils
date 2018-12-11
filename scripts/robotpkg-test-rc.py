@@ -198,7 +198,7 @@ class RobotpkgTestRC:
             file_robotpkgconf_contents = file_robotpkgconf.read()
 
         # Append the optional conf file given as parameter
-        if self.conf.exists():
+        if self.conf is not None and self.conf.exists():
             with self.conf.open() as f:
                 file_robotpkgconf_contents += f.read()
 
@@ -315,7 +315,10 @@ arch_release_candidates = [
     ('math', 'pinocchio', 'devel'),
     ('math', 'py-pinocchio', 'devel'),
     ('wip', 'sot-core-v3', 'topic/pinocchio_v2'),
+    ('wip', 'py-sot-core-v3', 'topic/pinocchio_v2'),
     ('wip', 'sot-dynamic-pinocchio-v3', 'topic/pinocchio_v2'),
+    ('wip', 'py-sot-dynamic-pinocchio-v3', 'topic/pinocchio_v2'),
+    ('wip', 'sot-talos', 'master'),
 ]
 
 if __name__ == '__main__':
