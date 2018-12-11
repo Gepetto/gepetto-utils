@@ -155,7 +155,7 @@ class RobotpkgTestRC:
 
     def cloning_robotpkg_main(self):
         """Clones the main robotpkg repository"""
-        logging.info(GREEN + 'Cloning robotpkg' + NC + '\n')
+        logging.info(GREEN + 'Cloning robotpkg\n' + NC)
         if (self.robotpkg_root / 'robotpkg').exists():
             self.execute("git pull", cwd=self.robotpkg_root / 'robotpkg')
         else:
@@ -163,7 +163,7 @@ class RobotpkgTestRC:
 
     def cloning_robotpkg_wip(self):
         """Clones the wip robotpkg repository"""
-        logging.info(GREEN + 'Cloning robotpkg/wip' + NC + '\n')
+        logging.info(GREEN + 'Cloning robotpkg/wip\n' + NC)
         if (self.robotpkg_root / 'robotpkg/wip').exists():
             self.execute("git pull", cwd=self.robotpkg_root / 'robotpkg/wip')
         else:
@@ -183,7 +183,7 @@ class RobotpkgTestRC:
         if rpkg_conf_file.is_file():
             logging.warning(PURPLE + str(rpkg_conf_file) + NC + ' already exists\n')
             return
-        logging.info(GREEN + 'Boostrap robotpkg' + NC + '\n')
+        logging.info(GREEN + 'Boostrap robotpkg\n' + NC)
         self.execute('./bootstrap --prefix=%s' % self.robotpkg_base, cwd=self.robotpkg_root / 'robotpkg/bootstrap')
 
     def complete_robotpkg_conffile(self):
@@ -191,7 +191,7 @@ class RobotpkgTestRC:
 
         Avoid to add two times the same information.
         """
-        logging.info(GREEN + 'Adding information to ' + str(self.robotpkg_base) + '/etc/robotpkg.conf\n')
+        logging.info(GREEN + 'Adding information to ' + str(self.robotpkg_base) + '/etc/robotpkg.conf\n' + NC)
 
         # Open the file, read it and stores it in file_robotpkg_contents
         with (self.robotpkg_base / 'etc/robotpkg.conf').open() as file_robotpkgconf:
@@ -199,8 +199,9 @@ class RobotpkgTestRC:
 
         # Append the optional conf file given as parameter
         if self.conf is not None and self.conf.exists():
+            logging.info(GREEN + 'Adding %s to %s/etc/robotpkg.conf\n' + NC, self.conf, self.robotpkg_base)
             with self.conf.open() as f:
-                file_robotpkgconf_contents += f.read()
+                self.robotpkg_conf_lines += [line.strip() for line in f.readlines()]
 
         # Add new lines at the end of robotpkg.conf file.
         with (self.robotpkg_base / 'etc/robotpkg.conf').open('a') as file_robotpkgconf:
