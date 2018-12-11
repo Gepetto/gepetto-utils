@@ -264,6 +264,7 @@ class RobotpkgTestRC:
             self.execute("git reset --hard", cwd=finaldirectory)
             # Pull all the modification push upstream.
             self.execute("git pull origin " + branchname + ':' + branchname, cwd=finaldirectory)
+            self.execute("git submodule update", cwd=finaldirectory)
 
     def apply_git_checkout_branch(self, packagename, branchname, category):
         """
