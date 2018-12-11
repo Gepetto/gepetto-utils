@@ -105,7 +105,7 @@ class RobotpkgTestRC:
 
     def init_robotpkg_conf_add(self):
         self.robotpkg_conf_lines = ['ROS_PACKAGE_PATH=${ROBOTPKG_BASE}/share:$ROS_PACKAGE_PATH']
-        self.robotpkg_conf_lines += ['ACCEPTABLE_LICENSES += %s' % license for licence in ACCEPTABLE_LICENSES]
+        self.robotpkg_conf_lines += ['ACCEPTABLE_LICENSES += %s' % license for license in ACCEPTABLE_LICENSES]
         self.robotpkg_conf_lines += ['PREFER.%s = system' % pkg for pkg in PREFER_SYSTEM]
 
     def execute(self, command, cwd=None):
