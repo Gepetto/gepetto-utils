@@ -41,7 +41,7 @@ parser.add_argument('--robotpkg_wip_git', default='ssh://git@git.openrobots.org/
 parser.add_argument('--conf', type=Path)
 
 
-def env_join(base, dirs, old=None):
+def prepend_paths(base, dirs, old=None):
     """
     format an environment variable with <dirs> in <base>, and eventually keep <old> value at the end
     """
@@ -81,24 +81,24 @@ class RobotpkgTestRC:
         self.env = os.environ.copy()
         self.env["ROBOTPKG_BASE"] = str(self.robotpkg_base)
         # For binaries
-        self.env["PATH"] = env_join(self.robotpkg_base, ['sbin', 'bin'], self.env['PATH'])
+        self.env["PATH"] = prepend_paths(self.robotpkg_base, ['sbin', 'bin'], self.env['PATH'])
 
         # For libraries
-        self.env["LD_LIBRARY_PATH"] = env_join(self.robotpkg_base, ['lib', 'lib/plugin', 'lib64'],
-                                               self.env.get('LD_LIBRARY_PATH'))
+        self.env["LD_LIBRARY_PATH"] = prepend_paths(self.robotpkg_base, ['lib', 'lib/plugin', 'lib64'],
+                                                    self.env.get('LD_LIBRARY_PATH'))
 
         # For python
-        self.env["PYTHON_PATH"] = env_join(self.robotpkg_base,
-                                           ['lib/python2.7/site-packages', 'lib/python2.7/dist-packages'],
-                                           self.env.get('PYTHON_PATH', ''))
+        self.env["PYTHON_PATH"] = prepend_paths(self.robotpkg_base,
+                                                ['lib/python2.7/site-packages', 'lib/python2.7/dist-packages'],
+                                                self.env.get('PYTHON_PATH', ''))
 
         # For pkgconfig
-        self.env["PKG_CONFIG_PATH"] = env_join(self.robotpkg_base, ['lib/pkgconfig'],
-                                               self.env.get("PKG_CONFIG_PATH", ''))
+        self.env["PKG_CONFIG_PATH"] = prepend_paths(self.robotpkg_base, ['lib/pkgconfig'],
+                                                    self.env.get("PKG_CONFIG_PATH", ''))
 
         # For ros packages
-        self.env["ROS_PACKAGE_PATH"] = env_join(self.robotpkg_base, ['share', 'stacks'],
-                                                self.env.get("ROS_PACKAGE_PATH", ''))
+        self.env["ROS_PACKAGE_PATH"] = prepend_paths(self.robotpkg_base, ['share', 'stacks'],
+                                                     self.env.get("ROS_PACKAGE_PATH", ''))
 
         # For cmake
         self.env["CMAKE_PREFIX_PATH"] = str(self.robotpkg_base) + ':' + self.env.get("CMAKE_PREFIX_PATH", '')
@@ -247,8 +247,8 @@ class RobotpkgTestRC:
                     outputdata = self.execute("git symbolic-ref --short -q HEAD", cwd=folder)
                     for stdout_line in outputdata.splitlines():
                         if stdout_line != branchname:
-                            logging.error(RED + ' Wrong branch name: ' + stdout_line + ' instead of ' +
-                                              branchname + NC)
+                            logging.error(RED + ' Wrong branch name: ' + stdout_line + ' instead of ' + branchname +
+                                          NC)
                         else:
                             finaldirectory = folder
                             directory_to_clean = False
