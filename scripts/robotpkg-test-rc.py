@@ -320,6 +320,9 @@ arch_release_candidates = [
     ('wip', 'sot-dynamic-pinocchio-v3', 'topic/pinocchio_v2'),
     ('wip', 'py-sot-dynamic-pinocchio-v3', 'topic/pinocchio_v2'),
     ('wip', 'sot-talos', 'master'),
+    ('wip', 'sot-hrp2-v3', 'master'),
+    ('wip', 'py-sot-application-v3', 'master'),
+    ('wip', 'py-dynamic-graph-bridge-v3', 'master'),
 ]
 
 if __name__ == '__main__':
