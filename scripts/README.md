@@ -65,3 +65,14 @@ The first allows to check that the camera is configured correctly.
 If you are not satisfied, you have to use the [web interface](http://axis-ptz1).
 
 The second records the current view. It is meant to be run in `eur0c:/local/axis`
+
+## `searchLib.sh`
+
+```
+usage: searchLib.sh my_lib version_to_avoid
+
+This script searches all the .so files in the current directory.
+The first arg is a string contained in the dependencies of the library you are looking for.
+The second arg is a string contained in the dependencies that you want to reject. 
+The script will display the names of the .so files which meet these criteria.
+```
