@@ -1,16 +1,21 @@
 Welcome in Gepetto !
 
-Here's a link to the The Gepetto wiki:
+Please, join us here:
+https://riot.laas.fr/#/room/#gepetto:laas.fr
+You can log in with your LAAS credentials.
+
+
+Here's a also a useful link to the The Gepetto wiki:
 https://wiki.laas.fr/gepetto/Welcome
 
 You will find information about:
 - the mailing-list, gepetto-students@laas.fr
-- Framateam - our instant messaging tool
+- Riot - our instant messaging tool
 - the team software and hardware guidelines
 - ...
 
 See you soon !
 
 --
-This is an automatic email from https://github.com/nim65s/gepetto-utils/tree/master/newcomers
+This is an automatic email from https://gepgitlab.laas.fr/gepetto/gepetto-utils/tree/master/newcomers
 Feel free to answer to it if you have any question !
