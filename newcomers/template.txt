@@ -4,8 +4,8 @@ Here's a link to the The Gepetto wiki:
 https://wiki.laas.fr/gepetto/Welcome
 
 You will find information about:
+- https://riot.laas.fr/#/room/#gepetto:laas.fr - our instant messaging tool
 - the mailing-list, gepetto-students@laas.fr
-- Framateam - our instant messaging tool
 - the team software and hardware guidelines
 - ...
 
