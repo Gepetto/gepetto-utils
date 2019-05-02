@@ -1,3 +1,3 @@
 #!/bin/bash
 
-vlc http://axis-ptz1/mjpg/video.mjpg
+vlc https://root:gepetto@axis-ptz4/mjpg/video.mjpg
