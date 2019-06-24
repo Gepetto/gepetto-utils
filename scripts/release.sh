@@ -41,4 +41,5 @@ echo -e "# Done ! Now you have to run:"
 echo -e "git push --tags"
 TAGS=$(git tag -l|grep '^v'|tail -n2|sed ':a;N;$!ba;s/\n/../g')
 echo -e "git log --grep='Merge pull request #' --date-order --pretty='format:- %b' $TAGS"
+echo -e "git log --grep='Merge branch' --date-order --pretty='format:- %b' $TAGS | grep '^-'"
 echo -e "# Draft new release"
