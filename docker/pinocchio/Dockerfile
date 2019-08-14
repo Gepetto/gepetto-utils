@@ -21,7 +21,7 @@ ENV CMAKE_PREFIX_PATH=$ROBOTPKG_BASE:$CMAKE_PREFIX_PATH \
      ROS_PACKAGE_PATH=$ROBOTPKG_BASE/share:$ROS_PACKAGE_PATH
 
 # get Pinocchio dependencies
-ARG PYTHON=python2
+ARG PYTHON=python3
 RUN apt-get update -qqy \
  && apt-get install -qqy \
     $(echo $PYTHON | sed 's/2//') \
