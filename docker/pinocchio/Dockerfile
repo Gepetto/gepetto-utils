@@ -3,7 +3,7 @@ FROM ubuntu:$UBUNTU
 
 # Setup Robotpkg apt binary repository
 ARG UBUNTU=bionic
-RUN apt-get update -qqy && apt-get install -qqy \
+RUN apt-get update -y && apt-get install -y \
     build-essential \
     cmake \
     curl \
@@ -22,10 +22,10 @@ ENV CMAKE_PREFIX_PATH=$ROBOTPKG_BASE:$CMAKE_PREFIX_PATH \
 
 # get Pinocchio dependencies
 ARG PYTHON=python3
-RUN apt-get update -qqy \
- && apt-get install -qqy \
+RUN apt-get update -y \
+ && apt-get install -y \
     $(echo $PYTHON | sed 's/2//') \
- && apt-get install -qqy \
+ && apt-get install -y \
     libeigen3-dev \
     liburdfdom-dev \
     libtinyxml-dev \
@@ -45,6 +45,6 @@ RUN git clone --recursive --branch $BRANCH https://github.com/$NAMESPACE/pinocch
 WORKDIR /pinocchio/build
 ARG MAKE_JOBS=1
 RUN cmake -DPYTHON_EXECUTABLE=$(which $PYTHON) .. \
- && make -j$(MAKE_JOBS)
+ && make -j$MAKE_JOBS
 
 CMD make test
