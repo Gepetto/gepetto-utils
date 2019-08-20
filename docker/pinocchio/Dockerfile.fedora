@@ -1,0 +1,26 @@
+ARG FEDORA=28
+FROM gepetto/buildfarm:robotpkg-py3-fedora$FEDORA
+
+# (in)validate docker build cache with the HTTP "Last-Modified" header from github
+ARG NAMESPACE=stack-of-tasks
+ARG BRANCH=devel
+ADD https://github.com/$NAMESPACE/pinocchio/archive/$BRANCH.zip .
+
+# but this zip doesn't come with .git nor submodules
+RUN git clone --recursive --branch $BRANCH https://github.com/$NAMESPACE/pinocchio.git \
+ && mkdir pinocchio/build
+
+RUN cd math/pinocchio \
+ && make checkout MASTER_REPOSITORY="git https://github.com/$NAMESPACE/pinocchio.git" \
+ && cd ../py-pinocchio \
+ && make checkout MASTER_REPOSITORY="git https://github.com/$NAMESPACE/pinocchio.git"
+
+ARG MAKE_JOBS=1
+ENV CTEST_PARALLEL_LEVEL=$MAKE_JOBS CTEST_OUTPUT_ON_FAILURE=true
+
+RUN cd math/py-pinocchio \
+ && make MAKE_JOBS=$MAKE_JOBS \
+ && cd $(make show-var VARNAME=WRKSRC) \
+ && make test \
+ && cd - \
+ && make install
