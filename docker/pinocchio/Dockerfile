@@ -3,12 +3,15 @@ FROM ubuntu:$UBUNTU
 
 # Setup Robotpkg apt binary repository
 ARG UBUNTU=bionic
+ENV UBUNTU=$UBUNTU
 RUN apt-get update -y && apt-get install -y \
     build-essential \
     cmake \
     curl \
     git \
  && echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $UBUNTU robotpkg" \
+ >> /etc/apt/sources.list.d/robotpkg.list \
+ && echo "deb [arch=amd64] http://robotpkg.openrobots.org/wip/packages/debian/pub $UBUNTU robotpkg" \
  >> /etc/apt/sources.list.d/robotpkg.list \
  && curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add - \
  && rm -rf /var/lib/apt/lists/*
@@ -22,6 +25,7 @@ ENV CMAKE_PREFIX_PATH=$ROBOTPKG_BASE:$CMAKE_PREFIX_PATH \
 
 # get Pinocchio dependencies
 ARG PYTHON=python3
+ENV PYTHON=$PYTHON
 RUN apt-get update -y \
  && apt-get install -y \
     $(echo $PYTHON | sed 's/2//') \
@@ -44,7 +48,8 @@ RUN git clone --recursive --branch $BRANCH https://github.com/$NAMESPACE/pinocch
 
 WORKDIR /pinocchio/build
 ARG MAKE_JOBS=1
+ENV CTEST_PARALLEL_LEVEL=$MAKE_JOBS CTEST_OUTPUT_ON_FAILURE=true
 RUN cmake -DPYTHON_EXECUTABLE=$(which $PYTHON) .. \
- && make -j$MAKE_JOBS
-
-CMD make test
+ && make -j$MAKE_JOBS \
+ && make test \
+ && make install
