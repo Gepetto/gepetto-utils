@@ -2,7 +2,7 @@
 
 from io import BytesIO
 from pathlib import Path
-from zipfile import BadZipFile, ZipFile
+from zipfile import ZipFile
 
 import requests
 
@@ -25,7 +25,7 @@ if __name__ == '__main__':
             z = ZipFile(BytesIO(r.content))
             path.mkdir(parents=True, exist_ok=True)
             z.extractall(str(path))
-        except BadZipFile:
+        except Exception:
             pass
 
         if path.exists():
