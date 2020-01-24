@@ -1,13 +1,10 @@
-ARG UBUNTU=disco
+ARG UBUNTU=xenial
 FROM ubuntu:$UBUNTU
 
 SHELL ["/bin/bash", "-c"]
 
-ARG UBUNTU=disco
 ARG PYTHON=python3
-ARG HPP_FCL=1.1.3
-ARG EIGENPY=1.6.0
-ARG MAKE_JOBS=1
+ARG MAKE_JOBS=6
 
 ENV CTEST_PARALLEL_LEVEL=$MAKE_JOBS CTEST_OUTPUT_ON_FAILURE=true PYTHON=$PYTHON
 
@@ -30,35 +27,43 @@ RUN apt-get update -y \
     ${PYTHON/2/}-numpy \
  && rm -rf /var/lib/apt/lists/*
 
-# hpp-fcl
-ADD https://github.com/humanoid-path-planner/hpp-fcl/releases/download/v${HPP_FCL}/hpp-fcl-${HPP_FCL}.tar.gz /
-RUN tar xvf /hpp-fcl-${HPP_FCL}.tar.gz \
- && mkdir /hpp-fcl-${HPP_FCL}/build \
- && cd /hpp-fcl-${HPP_FCL}/build \
- && cmake .. \
- && make -j$MAKE_JOBS \
- && make install
+ARG HPP_FCL=1.2.2
+ARG EIGENPY=1.6.13
+ARG PINOCCHIO=2.2.3
+ARG BUILD_TYPE=Debug
+
+ENV CMAKE_OPTS="-DPYTHON_EXECUTABLE=/usr/bin/${PYTHON} \
+                -DBUILD_PYTHON_INTERFACE=ON \
+                -DCMAKE_INSTALL_LIBDIR=lib \
+                -DCMAKE_INSTALL_PREFIX=/usr \
+                -DCMAKE_BUILD_TYPE=${BUILD_TYPE}"
 
 # eigenpy
 ADD https://github.com/stack-of-tasks/eigenpy/releases/download/v${EIGENPY}/eigenpy-${EIGENPY}.tar.gz /
-RUN tar xvf /eigenpy-${EIGENPY}.tar.gz \
+RUN tar xf /eigenpy-${EIGENPY}.tar.gz \
  && mkdir /eigenpy-${EIGENPY}/build \
  && cd /eigenpy-${EIGENPY}/build \
- && cmake -DPYTHON_EXECUTABLE=$(which $PYTHON) .. \
- && make -j$MAKE_JOBS \
- && make install
+ && cmake ${CMAKE_OPTS} .. \
+ && make -s -j$MAKE_JOBS \
+ && make -s test \
+ && make -s install
 
-# (in)validate docker build cache with the HTTP "Last-Modified" header from github
-ARG NAMESPACE=stack-of-tasks
-ARG BRANCH=devel
-ADD https://github.com/$NAMESPACE/pinocchio/archive/$BRANCH.zip .
+# hpp-fcl
+ADD https://github.com/humanoid-path-planner/hpp-fcl/releases/download/v${HPP_FCL}/hpp-fcl-${HPP_FCL}.tar.gz /
+RUN tar xf /hpp-fcl-${HPP_FCL}.tar.gz \
+ && mkdir /hpp-fcl-${HPP_FCL}/build \
+ && cd /hpp-fcl-${HPP_FCL}/build \
+ && cmake ${CMAKE_OPTS} .. \
+ && make -s -j$MAKE_JOBS \
+ && make -s test \
+ && make -s install
 
-# but this zip doesn't come with .git nor submodules
-RUN git clone --recursive --branch $BRANCH https://github.com/$NAMESPACE/pinocchio.git \
- && mkdir pinocchio/build
-
-WORKDIR /pinocchio/build
-
-RUN cmake -DPYTHON_EXECUTABLE=$(which $PYTHON) .. \
- && make -j${MAKE_JOBS} \
- || true
+# pinocchio
+ADD https://github.com/stack-of-tasks/pinocchio/releases/download/v${PINOCCHIO}/pinocchio-${PINOCCHIO}.tar.gz /
+RUN tar xf /pinocchio-${PINOCCHIO}.tar.gz \
+ && mkdir /pinocchio-${PINOCCHIO}/build \
+ && cd /pinocchio-${PINOCCHIO}/build \
+ && cmake ${CMAKE_OPTS} -DBUILD_WITH_COLLISION_SUPPORT=ON -DBUILD_TESTING=ON .. \
+ && make -s -j$MAKE_JOBS \
+ && make -s test \
+ && make -s install
