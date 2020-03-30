@@ -4,7 +4,7 @@
 # pkg_name defaults to the name of the current working directory
 # eg.: ./release.sh 0.8.1
 
-set -e
+set -ex
 
 TAG=$1
 SOFT=${2:-$(basename $(pwd))}
@@ -36,10 +36,8 @@ tar rf "${SOFTAG}.tar" --transform "s=.=${SOFTAG}/.="   .version
 gzip "${SOFTAG}.tar"
 
 gpg --armor --detach-sign "${SOFTAG}.tar.gz"
+[[ -f "${SOFTAG}.tar.gz.asc" ]] && mv "${SOFTAG}.tar.gz.asc" "${SOFTAG}.tar.gz.sig"
 
-echo -e "# Done ! Now you have to run:"
-echo -e "git push --tags"
-TAGS=$(git tag -l|grep '^v'|tail -n2|sed ':a;N;$!ba;s/\n/../g')
-echo -e "git log --grep='Merge pull request #' --date-order --pretty='format:- %b' $TAGS"
-echo -e "git log --grep='Merge branch' --date-order --pretty='format:- %b' $TAGS | grep '^-'"
-echo -e "# Draft new release"
+rm .version
+mkdir -p build
+mv "${SOFTAG}"* build/
