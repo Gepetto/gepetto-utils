@@ -9,6 +9,7 @@ RUN apt-get update -y \
     cmake \
     libboost-all-dev \
     libeigen3-dev \
+    python3-numpy \
  && rm -rf /var/lib/apt/lists/*
 
 ARG EIGENPY=2.2.2
@@ -20,4 +21,3 @@ RUN tar xf /eigenpy-${EIGENPY}.tar.gz \
 WORKDIR /eigenpy-${EIGENPY}/build
 
 RUN cmake ..
-RUN make
