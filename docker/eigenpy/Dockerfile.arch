@@ -1,0 +1,20 @@
+FROM archlinux/base
+
+RUN pacman -Syu --noconfirm \
+    base-devel \
+    boost \
+    boost-libs \
+    cmake \
+    eigen3 \
+    python-numpy \
+ && pacman -Scc --noconfirm
+
+ARG EIGENPY=2.2.2
+
+ADD https://github.com/stack-of-tasks/eigenpy/releases/download/v${EIGENPY}/eigenpy-${EIGENPY}.tar.gz /
+RUN tar xf /eigenpy-${EIGENPY}.tar.gz \
+ && mkdir /eigenpy-${EIGENPY}/build
+
+WORKDIR /eigenpy-${EIGENPY}/build
+
+RUN cmake ..
