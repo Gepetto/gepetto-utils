@@ -1,0 +1,57 @@
+ARG UBUNTU=focal
+FROM ubuntu:$UBUNTU
+
+SHELL ["/bin/bash", "-c"]
+
+ARG MAKE_JOBS=6
+
+ENV CTEST_PARALLEL_LEVEL=$MAKE_JOBS CTEST_OUTPUT_ON_FAILURE=true DEBIAN_FRONTEND=noninteractive \
+    CMAKE_OPTS="-DBUILD_PYTHON_INTERFACE=OFF \
+                -DCMAKE_INSTALL_LIBDIR=lib \
+                -DCMAKE_INSTALL_PREFIX=/usr \
+                -DBUILD_TESTING=ON \
+                -DCMAKE_BUILD_TYPE=Release"
+
+RUN apt-get update -y \
+ && apt-get install -y \
+    assimp-utils \
+    build-essential \
+    cmake \
+    curl \
+    git \
+    libassimp-dev \
+    libboost-all-dev \
+    libccd-dev \
+    libeigen3-dev \
+    liboctomap-dev \
+    libtinyxml-dev \
+    liburdfdom-dev \
+ && rm -rf /var/lib/apt/lists/*
+
+ARG HPP_FCL=1.3.0
+ARG PINOCCHIO=2.3.1
+
+# hpp-fcl
+ADD https://github.com/humanoid-path-planner/hpp-fcl/releases/download/v${HPP_FCL}/hpp-fcl-${HPP_FCL}.tar.gz /
+RUN tar xf /hpp-fcl-${HPP_FCL}.tar.gz \
+ && mkdir /hpp-fcl-${HPP_FCL}/build
+
+WORKDIR /hpp-fcl-${HPP_FCL}/build
+
+RUN cmake ${CMAKE_OPTS} .. \
+ && make -s -j$MAKE_JOBS \
+ && make -s test \
+ && make -s install
+
+# pinocchio
+WORKDIR /
+ADD https://github.com/stack-of-tasks/pinocchio/releases/download/v${PINOCCHIO}/pinocchio-${PINOCCHIO}.tar.gz /
+RUN tar xf /pinocchio-${PINOCCHIO}.tar.gz \
+ && mkdir /pinocchio-${PINOCCHIO}/build
+
+WORKDIR /pinocchio-${PINOCCHIO}/build
+
+RUN cmake ${CMAKE_OPTS} -DBUILD_WITH_COLLISION_SUPPORT=ON -DBUILD_BENCHMARKS=ON .. \
+ && make -s -j$MAKE_JOBS \
+ && make -s test \
+ && make -s install
