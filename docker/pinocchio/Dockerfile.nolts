@@ -1,4 +1,4 @@
-ARG UBUNTU=xenial
+ARG UBUNTU=bionic
 FROM ubuntu:$UBUNTU
 
 SHELL ["/bin/bash", "-c"]
@@ -27,9 +27,9 @@ RUN apt-get update -y \
     ${PYTHON/2/}-numpy \
  && rm -rf /var/lib/apt/lists/*
 
-ARG HPP_FCL=1.2.2
-ARG EIGENPY=1.6.13
-ARG PINOCCHIO=2.2.3
+ARG HPP_FCL=1.4.0
+ARG EIGENPY=2.2.2
+ARG PINOCCHIO=2.3.1
 ARG BUILD_TYPE=Debug
 
 ENV CMAKE_OPTS="-DPYTHON_EXECUTABLE=/usr/bin/${PYTHON} \
@@ -59,11 +59,12 @@ RUN tar xf /hpp-fcl-${HPP_FCL}.tar.gz \
  && make -s install
 
 # pinocchio
-ADD https://github.com/stack-of-tasks/pinocchio/releases/download/v${PINOCCHIO}/pinocchio-${PINOCCHIO}.tar.gz /
-RUN tar xf /pinocchio-${PINOCCHIO}.tar.gz \
- && mkdir /pinocchio-${PINOCCHIO}/build \
- && cd /pinocchio-${PINOCCHIO}/build \
+#ADD https://github.com/stack-of-tasks/pinocchio/releases/download/v${PINOCCHIO}/pinocchio-${PINOCCHIO}.tar.gz /
+#RUN tar xf /pinocchio-${PINOCCHIO}.tar.gz \
+# && mkdir /pinocchio-${PINOCCHIO}/build \
+# && cd /pinocchio-${PINOCCHIO}/build \
+RUN git clone -b devel --recursive https://github.com/stack-of-tasks/pinocchio.git \
+ && mkdir /pinocchio/build \
+ && cd /pinocchio/build \
  && cmake ${CMAKE_OPTS} -DBUILD_WITH_COLLISION_SUPPORT=ON -DBUILD_TESTING=ON .. \
- && make -s -j$MAKE_JOBS \
- && make -s test \
- && make -s install
+ && make -s -j$MAKE_JOBS
