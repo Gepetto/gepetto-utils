@@ -1,0 +1,34 @@
+# syntax=docker/dockerfile:experimental
+ARG UBUNTU=bionic
+FROM ubuntu:$UBUNTU
+
+ENV DEBIAN_FRONTEND=noninteractive CTEST_OUTPUT_ON_FAILURE=true
+
+RUN rm -f /etc/apt/apt.conf.d/docker-clean \
+ && echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+
+# check ccache vs docker cache hits with "docker build --build-arg EPOCH=$(date +%s) -f Dockerfile.experimental ."
+ARG EPOCH=1
+ENV EPOCH=${EPOCH}
+
+RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
+    apt-get update -y \
+ && apt-get install -y \
+    build-essential \
+    ccache \
+    cmake \
+    git \
+    libboost-all-dev \
+    libeigen3-dev \
+    python3-numpy
+
+RUN git clone --recursive -b devel https://github.com/stack-of-tasks/eigenpy.git \
+ && mkdir /eigenpy/build
+
+WORKDIR /eigenpy/build
+
+ENV CXX="/usr/lib/ccache/g++" CC="/usr/lib/ccache/gcc"
+
+RUN cmake -DPYTHON_EXECUTABLE=/usr/bin/python3 ..
+
+RUN --mount=type=cache,target=/root/.ccache make -s
