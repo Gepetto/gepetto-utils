@@ -53,3 +53,5 @@ RUN cmake -DPYTHON_EXECUTABLE=$(which $PYTHON) .. \
  && make -j$MAKE_JOBS \
  && make test \
  && make install
+
+ENV PYTHONPATH=/usr/local/lib/python3/dist-packages/
