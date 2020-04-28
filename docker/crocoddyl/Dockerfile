@@ -128,3 +128,7 @@ RUN cmake ${CMAKE_OPTS}
 RUN make -s
 RUN make -s test
 RUN make -s install
+
+ADD entrypoint.sh /usr/local
+
+CMD /usr/local/entrypoint.sh
