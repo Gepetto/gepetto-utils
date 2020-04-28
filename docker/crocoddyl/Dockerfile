@@ -82,14 +82,14 @@ FROM main as pinocchio
 COPY --from=hpp-fcl /usr /usr
 COPY --from=cppadcg /usr /usr
 
-ARG PINOCCHIO_ORG=proyan
-ARG PINOCCHIO_VER=forAdria
+ARG PINOCCHIO_ORG=stack-of-tasks
+ARG PINOCCHIO_VER=v2.4.3
 
 ADD https://api.github.com/repos/${PINOCCHIO_ORG}/pinocchio/commits/${PINOCCHIO_VER} /tmp
 RUN git clone -b ${PINOCCHIO_VER} --recursive https://github.com/${PINOCCHIO_ORG}/pinocchio.git
 RUN mkdir /pinocchio/build
 WORKDIR /pinocchio/build
-RUN cmake ${CMAKE_OPTS} -DBUILD_WITH_COLLISION_SUPPORT=ON
+RUN cmake ${CMAKE_OPTS} -DBUILD_WITH_COLLISION_SUPPORT=ON -DBUILD_WITH_CODEGEN_SUPPORT=ON -D-DBUILD_WITH_AUTODIFF_SUPPORT=ON
 RUN make -s -j$MAKE_JOBS
 RUN make -s install
 
