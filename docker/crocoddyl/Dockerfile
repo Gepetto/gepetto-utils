@@ -19,6 +19,7 @@ RUN apt-get update -y \
     liboctomap-dev \
     libtinyxml-dev \
     liburdfdom-dev \
+    time \
  && rm -rf /var/lib/apt/lists/*
 
 RUN git config --global advice.detachedHead false

@@ -1,14 +1,17 @@
 #!/bin/bash
 
+set -ex
+
 lscpu
+cat /proc/meminfo
 
 cd /crocoddyl/build/benchmark/
 
-for bench in bipedal-timings arm-manipulation-cg arm-manipulation-timings bipedal-with-contact-cg
+for bench in bipedal-timings arm-manipulation-codegen arm-manipulation-timings bipedal-with-contact-codegen
 do
     echo
     echo ============ $bench ============
     echo
 
-    eval ./$bench
+    /usr/bin/time -v ./$bench
 done
