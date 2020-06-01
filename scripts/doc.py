@@ -7,7 +7,7 @@ from zipfile import ZipFile
 import requests
 
 DOC = Path('/net/pongo/vol/vol_projects/partage_gepetto/Doc')
-GITLAB = 'https://gepgitlab.laas.fr'
+GITLAB = 'https://gitlab.laas.fr'
 RAINBOARD = 'http://rainboard.laas.fr'
 INDEX = DOC / 'index.html'
 HEAD = DOC / 'index.head.html'

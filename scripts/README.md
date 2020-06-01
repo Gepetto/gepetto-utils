@@ -4,7 +4,7 @@
 
 Gets the projects / namespaces / branches to process from the [Gepetto Dashboard](http://rainboard.laas.fr)
 (activate `keep_doc` on the branches you need)
-Run them in this order in a cron job to put the last generated doxygen HTML from gepgitlab on
+Run them in this order in a cron job to put the last generated doxygen HTML from gitlab on
 `/net/cetus/data/gepetto/Doc`.
 
 ## `release.sh`
