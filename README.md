@@ -2,9 +2,9 @@
 
 This is a set of tools for the gepetto team.
 
-## [Dashboard](dashboard)
+## [Docker](docker)
 
-Creates a Dashboard that gives a status of all our packages
+Some standard Dockerfile to build our projects in various configurations, especially to ease debugging.
 
 ## [Newcomers](newcomers)
 
