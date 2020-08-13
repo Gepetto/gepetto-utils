@@ -8,7 +8,7 @@ python 2.7, 3.5, 3.6, 3.7 and 3.8.
 In the `config/config` file, set the variables for your project.
 
 The `config/packages` file need to be edited with the packages needed to build the 
-wheels, they need to be specified one per line and will with `yum`.
+wheels, they need to be specified one per line and will be installed with `yum`.
 
 #### Example config to build wheels for eigenpy 2.4.3:
 
