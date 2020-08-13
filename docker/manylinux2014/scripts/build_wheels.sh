@@ -9,10 +9,11 @@ function repair_wheel {
   fi
 }
 
-SKIP_TESTS=$(grep -l BOOST_PYTHON_MODULE unittest/*.cpp | cut -d'/' -f2 | sed 's/\.cpp/\.py/' | sed 's/^/test_/')
+TEST_DIR=$(echo *test) # Either 'unittest' or 'test' depending on the project
+SKIP_TESTS=$(grep -l BOOST_PYTHON_MODULE "$TEST_DIR"/*.cpp | cut -d'/' -f2 | sed 's/\.cpp/\.py/' | sed 's/^/test_/')
 function test {
   python="$1"
-  for f in /io/unittest/python/*.py; do
+  for f in /io/"$TEST_DIR"/python/*.py; do
     if ! echo "$SKIP_TESTS" | grep "$(basename "$f")" > /dev/null; then
       printf "\nTesting %s\n" "$f"
       "$python" "$f"
@@ -22,24 +23,19 @@ function test {
   printf "\n"
 }
 
+source config
+
 ## Install dependencies
-yum -y install eigen3-devel
+[ -s packages ] && xargs -a packages yum -y install
 
-# Build wheels for python 2.7
-pip2 install numpy
-python2 setup.py bdist_wheel
-LD_LIBRARY_PATH="$PWD/_skbuild/linux-x86_64-2.7/cmake-build:$LD_LIBRARY_PATH" \
-  repair_wheel "dist/$(ls -Art dist/ | tail -n 1)"
-rm -rf _skbuild
-
-# Build wheels for python 3
+# Build wheels
 for PYBIN in /opt/python/*/bin; do
-  VERSION=$(find "$PYBIN" -name 'python[0-9]\.[0-9]' -printf "%f\n" | grep -Eo '[0-9].[0-9]')
-  "$PYBIN/pip" install numpy
+  PYVERSION=$(find "$PYBIN" -name 'python[0-9]\.[0-9]' -printf "%f\n" | grep -Eo '[0-9].[0-9]')
+  "$PYBIN/pip" install "$(echo "$INSTALL_REQUIRES" | sed -E 's/"|\[|\]|,//g')"
   "$PYBIN/python" setup.py bdist_wheel
 
   # Bundle external shared libraries into the wheels
-  LD_LIBRARY_PATH="$PWD/_skbuild/linux-x86_64-$VERSION/cmake-build:$LD_LIBRARY_PATH" \
+  LD_LIBRARY_PATH="$PWD/_skbuild/linux-x86_64-$PYVERSION/cmake-build:$LD_LIBRARY_PATH" \
     repair_wheel "dist/$(ls -Art dist/ | tail -n 1)"
   rm -rf _skbuild
 done
@@ -49,28 +45,25 @@ for whl in wheelhouse/*.whl; do
   wheel unpack "$whl"
 
   # Put the libs inside the package directory so the relative path to the libs is always the same
-  mv eigenpy-2.4.3/eigenpy.libs eigenpy-2.4.3/eigenpy-2.4.3.data/data/lib/python*/site-packages/eigenpy/
+  mv "$TARGET_NAME-$VERSION/$TARGET_NAME.libs" "$TARGET_NAME-$VERSION/$TARGET_NAME-$VERSION.data"/data/lib/python*/site-packages/"$PACKAGE_NAME"/
 
   # Repair rpath
-  patchelf --set-rpath '$ORIGIN/eigenpy.libs' eigenpy-2.4.3/eigenpy-2.4.3.data/data/lib/python*/site-packages/eigenpy/eigenpy*.so
-  patchelf --set-rpath '$ORIGIN' eigenpy-2.4.3/eigenpy-2.4.3.data/data/lib/python*/site-packages/eigenpy/eigenpy.libs/libeigenpy*.so
+  patchelf --set-rpath '$ORIGIN/eigenpy.libs' "$TARGET_NAME-$VERSION/$TARGET_NAME-$VERSION.data"/data/lib/python*/site-packages/"$PACKAGE_NAME"/*.so
+  patchelf --set-rpath '$ORIGIN' "$TARGET_NAME-$VERSION/$TARGET_NAME-$VERSION.data"/data/lib/python*/site-packages/"$PACKAGE_NAME"/"$TARGET_NAME".libs/lib"$PACKAGE_NAME"*.so
 
   # Remove libraries that are present twice
-  rm -rf eigenpy-2.4.3/eigenpy-2.4.3.data/data/lib64/libeigenpy.
+  rm -rf "$TARGET_NAME-$VERSION/$TARGET_NAME-$VERSION.data"/data/lib64/*.so
 
-  wheel pack eigenpy-2.4.3 -d wheelhouse
-  rm -rf eigenpy-2.4.3/
+  wheel pack "$TARGET_NAME-$VERSION" -d /wheelhouse
+  rm -rf "$TARGET_NAME-$VERSION"/
 done
 
 # Install packages and test
-pip2 install eigenpy --no-index --find-links=/io/wheelhouse/
-(cd "$HOME"; test python2)
-
 for PYBIN in /opt/python/*/bin; do
-    "$PYBIN/pip" install eigenpy --no-index --find-links=/io/wheelhouse/
+    "$PYBIN/pip" install "$TARGET_NAME" --no-index --find-links=/wheelhouse/
     (cd "$HOME"; test "$PYBIN/python")
 done
 
-rm -rf eigenpy.egg-info/ dist/
+rm -rf "$TARGET_NAME".egg-info/ dist/
 
-ls wheelhouse/
+ls /wheelhouse

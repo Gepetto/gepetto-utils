@@ -1,0 +1,6 @@
+PACKAGE_NAME=eigenpy
+TARGET_NAME=eigenpy # Name of the package on PyPi
+RELEASE_TAG=v2.4.3
+VERSION=2.4.3
+GIT_URL=https://github.com/stack-of-tasks/eigenpy.git
+INSTALL_REQUIRES='["numpy"]'

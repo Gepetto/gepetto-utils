@@ -3,12 +3,13 @@ FROM quay.io/pypa/manylinux2014_x86_64:latest
 ENV PLAT manylinux2014_x86_64
 
 WORKDIR /build
-
-COPY build-wheel/install_boost.sh build-wheel/project-config.jam ./
+COPY build/install_boost.sh build/project-config.jam ./
 RUN ./install_boost.sh
 
-COPY build-wheel/setup_python.sh ./
+COPY build/setup_python.sh ./
 RUN ./setup_python.sh
+
+COPY scripts /scripts
 
 WORKDIR /io
 

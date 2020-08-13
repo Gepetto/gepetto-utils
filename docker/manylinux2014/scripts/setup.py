@@ -13,7 +13,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url=URL,
-    install_requires=[INSTALL_REQUIRES],
+    install_requires=INSTALL_REQUIRES,
     classifiers=[
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
