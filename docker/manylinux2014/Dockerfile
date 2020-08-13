@@ -9,8 +9,6 @@ RUN ./install_boost.sh
 COPY build/setup_python.sh ./
 RUN ./setup_python.sh
 
-COPY scripts /scripts
-
 WORKDIR /io
 
 CMD ["/bin/bash"]

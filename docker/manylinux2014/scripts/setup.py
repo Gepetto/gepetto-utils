@@ -12,7 +12,7 @@ setup(
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url=URL,
+    url=GIT_URL,
     install_requires=INSTALL_REQUIRES,
     classifiers=[
         "Programming Language :: Python :: 2",

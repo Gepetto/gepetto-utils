@@ -9,7 +9,7 @@ function repair_wheel {
   fi
 }
 
-TEST_DIR=$(echo *test) # Either 'unittest' or 'test' depending on the project
+TEST_DIR=$(echo *test*) # Either 'unittest' or 'test' depending on the project
 SKIP_TESTS=$(grep -l BOOST_PYTHON_MODULE "$TEST_DIR"/*.cpp | cut -d'/' -f2 | sed 's/\.cpp/\.py/' | sed 's/^/test_/')
 function test {
   python="$1"
@@ -31,8 +31,8 @@ source config
 # Build wheels
 for PYBIN in /opt/python/*/bin; do
   PYVERSION=$(find "$PYBIN" -name 'python[0-9]\.[0-9]' -printf "%f\n" | grep -Eo '[0-9].[0-9]')
-  "$PYBIN/pip" install "$(echo "$INSTALL_REQUIRES" | sed -E 's/"|\[|\]|,//g')"
-  "$PYBIN/python" setup.py bdist_wheel
+  [ -n "$INSTALL_REQUIRES" ] && "$PYBIN/pip" install "$(echo "$INSTALL_REQUIRES" | sed -E 's/"|\[|\]|,//g')"
+  "$PYBIN/python" setup.py bdist_wheel -- -- -j"$NPROC"
 
   # Bundle external shared libraries into the wheels
   LD_LIBRARY_PATH="$PWD/_skbuild/linux-x86_64-$PYVERSION/cmake-build:$LD_LIBRARY_PATH" \
@@ -45,25 +45,25 @@ for whl in wheelhouse/*.whl; do
   wheel unpack "$whl"
 
   # Put the libs inside the package directory so the relative path to the libs is always the same
-  mv "$TARGET_NAME-$VERSION/$TARGET_NAME.libs" "$TARGET_NAME-$VERSION/$TARGET_NAME-$VERSION.data"/data/lib/python*/site-packages/"$PACKAGE_NAME"/
+  mv "${TARGET_NAME//-/_}-$VERSION/${TARGET_NAME//-/_}.libs" "${TARGET_NAME//-/_}-$VERSION/${TARGET_NAME//-/_}-$VERSION.data"/data/lib/python*/site-packages/"$PACKAGE_NAME"/
 
   # Repair rpath
-  patchelf --set-rpath '$ORIGIN/eigenpy.libs' "$TARGET_NAME-$VERSION/$TARGET_NAME-$VERSION.data"/data/lib/python*/site-packages/"$PACKAGE_NAME"/*.so
-  patchelf --set-rpath '$ORIGIN' "$TARGET_NAME-$VERSION/$TARGET_NAME-$VERSION.data"/data/lib/python*/site-packages/"$PACKAGE_NAME"/"$TARGET_NAME".libs/lib"$PACKAGE_NAME"*.so
+  patchelf --set-rpath "\$ORIGIN/${TARGET_NAME//-/_}.libs" "${TARGET_NAME//-/_}-$VERSION/${TARGET_NAME//-/_}-$VERSION.data"/data/lib/python*/site-packages/"$PACKAGE_NAME"/*.so
+  patchelf --set-rpath '$ORIGIN' "${TARGET_NAME//-/_}-$VERSION/${TARGET_NAME//-/_}-$VERSION.data"/data/lib/python*/site-packages/"$PACKAGE_NAME"/"${TARGET_NAME//-/_}".libs/lib"${PACKAGE_NAME//_/-}"*
 
   # Remove libraries that are present twice
-  rm -rf "$TARGET_NAME-$VERSION/$TARGET_NAME-$VERSION.data"/data/lib64/*.so
+  rm -rf "${TARGET_NAME//-/_}-$VERSION/${TARGET_NAME//-/_}-$VERSION.data"/data/lib64/*.so
 
-  wheel pack "$TARGET_NAME-$VERSION" -d /wheelhouse
-  rm -rf "$TARGET_NAME-$VERSION"/
+  wheel pack "${TARGET_NAME//-/_}-$VERSION" -d /work/wheelhouse
+  rm -rf "${TARGET_NAME//-/_}-$VERSION"/
 done
 
 # Install packages and test
 for PYBIN in /opt/python/*/bin; do
-    "$PYBIN/pip" install "$TARGET_NAME" --no-index --find-links=/wheelhouse/
+    "$PYBIN/pip" install "$TARGET_NAME" --no-index --find-links=/work/wheelhouse/
     (cd "$HOME"; test "$PYBIN/python")
 done
 
 rm -rf "$TARGET_NAME".egg-info/ dist/
 
-ls /wheelhouse
+ls /work/wheelhouse

@@ -1,15 +1,16 @@
 #!/bin/bash -eu
 
 # Verify that variables are set properly
-source "/config/config"
-for var in TARGET_NAME PACKAGE_NAME RELEASE_TAG GIT_URL VERSION; do
-  [ -z ${!var} ] && { echo "$var is not set."; exit; }
+source "/work/config/config"
+for var in TARGET_NAME PACKAGE_NAME GIT_URL VERSION NPROC; do
+  [ -z "${!var}" ] && { echo "$var is not set."; exit; }
 done
 
- [ "$(ls -A /wheelhouse)" ] && { echo "./wheelhouse should be empty before running this script."; exit; }
+mkdir -p /work/wheelhouse
+[ "$(ls -A /work/wheelhouse)" ] && { echo "./wheelhouse should be empty before running this script."; exit; }
 
-git clone --recursive -j"$(nproc)" -b "$RELEASE_TAG" "$GIT_URL" /io
-cp /scripts/* /io
-cp /config/* /io
+git clone --recursive -j"$NPROC" -b v"$VERSION" "$GIT_URL" /io
+cp /work/scripts/* /io
+cp /work/config/* /io
 ./setup.sh
 bash

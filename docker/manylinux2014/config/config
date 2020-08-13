@@ -1,6 +1,17 @@
-PACKAGE_NAME=eigenpy
-TARGET_NAME=eigenpy # Name of the package on PyPi
-RELEASE_TAG=v2.4.3
-VERSION=2.4.3
-GIT_URL=https://github.com/stack-of-tasks/eigenpy.git
-INSTALL_REQUIRES='["numpy"]'
+# Name of the package
+PACKAGE_NAME=
+
+# Name of the package uploaded on PyPi
+TARGET_NAME=
+
+# Release version
+VERSION=
+
+# Git repo url
+GIT_URL=
+
+# List of python packages needed to build and install the wheel (ex: '["foo", "bar"]')
+INSTALL_REQUIRES=''
+
+# Maximum number of parallel jobs
+NPROC=

@@ -8,11 +8,12 @@ sed -i 's/REQUIRED COMPONENTS Interpreter Development/REQUIRED COMPONENTS Interp
 
 # Write setup.py
 DESCRIPTION=$(grep PROJECT_DESCRIPTION CMakeLists.txt | cut -d'"' -f2)
-URL=$(grep PROJECT_URL CMakeLists.txt | cut -d'"' -f2)
-for name in TARGET_NAME VERSION DESCRIPTION URL; do
+for name in TARGET_NAME VERSION DESCRIPTION GIT_URL; do
   var=$(echo "${!name}" | sed 's/\//\\\//g')
   sed -i "s/$name/\"$var\"/" setup.py
 done
+
+[ -z "$INSTALL_REQUIRES" ] && sed -i '/INSTALL_REQUIRES/d' setup.py
 sed -i "s/INSTALL_REQUIRES/$INSTALL_REQUIRES/" setup.py
 
 python setup.py --help > /dev/null 2>&1 || { echo "Syntax error in config/setup.py, please edit this file."; exit; }
