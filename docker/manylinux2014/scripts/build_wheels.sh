@@ -14,7 +14,7 @@ PYTHON_TEST_DIR=$(echo "$TEST_DIR"/python*) # Either 'python' or 'python_unit' d
 SKIP_TESTS=$(grep -l BOOST_PYTHON_MODULE "$TEST_DIR"/*.cpp | cut -d'/' -f2 | sed 's/\.cpp/\.py/' | sed 's/^/test_/')
 function test {
   python="$1"
-  for f in /io/"$PYTHON_TEST_DIR"/*.py; do
+  for f in /src/"$PYTHON_TEST_DIR"/*.py; do
     if ! echo "$SKIP_TESTS" | grep "$(basename "$f")" > /dev/null; then
       printf "\nTesting %s\n" "$f"
       "$python" "$f"
@@ -45,7 +45,7 @@ for PYBIN in /opt/python/*/bin; do
   rm -rf _skbuild
 done
 
-for whl in wheelhouse/*.whl; do
+for whl in /io/wheelhouse/*.whl; do
   wheel unpack "$whl"
 
   MAIN_LIB=$(find . -type f ! -path '*.libs/*' ! -path '*lib64/*' -name '*.so*')
@@ -71,23 +71,23 @@ for whl in wheelhouse/*.whl; do
 
   #TODO: .cmake files should not have references to _skbuild, temporary fix (only for eigenpy.so):
   find "$WHEEL_DIR" -name '*.cmake' | while read -r file; do
-    sed -i 's:;/io/_skbuild/linux-x86_64-.*/cmake-install/include::' "$file"
-    sed -i 's:/io/_skbuild/linux-x86_64-.*/cmake-install/lib64/libeigenpy.so:/usr/lib/python2.7/site-packages/eigenpy/eigenpy.libs/libeigenpy-453555c1.so:' "$file"
+    sed -i 's:;/src/_skbuild/linux-x86_64-.*/cmake-install/include::' "$file"
+    sed -i 's:/src/_skbuild/linux-x86_64-.*/cmake-install/lib64/libeigenpy.so:/usr/lib/python2.7/site-packages/eigenpy/eigenpy.libs/libeigenpy-453555c1.so:' "$file"
     sed -i 's:libeigenpy.so:libeigenpy-453555c1.so:' "$file"
-    sed -i 's:/io/_skbuild/linux-x86_64-.*/cmake-install/include:/usr/local/include:' "$file"
-    sed -i 's:/io/_skbuild/linux-x86_64-.*/cmake-install/lib64:/usr/local/lib64:' "$file"
+    sed -i 's:/src/_skbuild/linux-x86_64-.*/cmake-install/include:/usr/local/include:' "$file"
+    sed -i 's:/src/_skbuild/linux-x86_64-.*/cmake-install/lib64:/usr/local/lib64:' "$file"
   done
 
-  wheel pack "$WHEEL_DIR" -d /work/wheelhouse
+  wheel pack "$WHEEL_DIR" -d /io/wheelhouse
   rm -rf "${WHEEL_DIR:?}"/
 done
 
 # Install packages and test
 for PYBIN in /opt/python/*/bin; do
-    "$PYBIN/pip" install "$TARGET_NAME" --no-index --find-links=/work/wheelhouse/
+    "$PYBIN/pip" install "$TARGET_NAME" --no-index --find-links=/io/wheelhouse/
     (cd "$HOME"; test "$PYBIN/python")
 done
 
 rm -rf "$TARGET_NAME".egg-info/ dist/
 
-ls /work/wheelhouse
+ls /io/wheelhouse

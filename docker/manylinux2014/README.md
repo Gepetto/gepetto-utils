@@ -19,7 +19,7 @@ You can also edit `scripts/pre_builds.sh` if needed, it will be run before build
 To build the wheels run:
 ```
 docker build . -t manylinux
-docker run -it -v `pwd`:/work manylinux /work/scripts/setup.sh
+docker run -it -v `pwd`:/io manylinux /io/scripts/setup.sh
 ```
 Then you need to verify that the generated `setup.py` is as you want,
 and run `./build_wheels.sh`.
