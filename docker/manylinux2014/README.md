@@ -76,29 +76,20 @@ zlib-devel
 ```
 #!/bin/bash -eux
 
-source "/work/config/config"
+source "/io/config/config"
 
 for PYBIN in /opt/python/*/bin; do
   "$PYBIN"/pip install numpy
-  "$PYBIN"/pip install -i https://test.pypi.org/simple/ eigenpy==2.4.2
+  "$PYBIN"/pip install -i https://test.pypi.org/simple/ eigenpy-test==2.4.3
 done
-
-# TODO: eigenpyTargets-release.cmake has the wrong path to libeigenpy
-sed -i 's:IMPORTED_LOCATION_RELEASE "":IMPORTED_LOCATION_RELEASE "/usr/lib/python2.7/site-packages/eigenpy/eigenpy.libs/libeigenpy-453555c1.so":' /usr/lib/cmake/eigenpy/eigenpyTargets-release.cmake
-sed -i 's:libeigenpy.so:libeigenpy-453555c1.so:' /usr/lib/cmake/eigenpy/eigenpyTargets-release.cmake
-
-# TODO: the files in /opt/_internal/cpython-*/lib/cmake/eigenpy/eigenpyTargets-release.cmake need to be modified
-# TODO: but even then cmake need to be searching in the right directory (with the right python version) to find these files
 
 git clone -j"$NPROC" git://github.com/OctoMap/octomap.git
 cd octomap/
 mkdir build && cd build
 cmake ..
 make -j"$NPROC" install
-cd /io
+cd /src
 rm -rf octomap
 ```
 
-To build : `LD_LIBRARY_PATH=/usr/lib/python2.7/site-packages/eigenpy/eigenpy.libs:$LD_LIBRARY_PATH ./build_wheels.sh`
-
-Only the python 2.7 wheels are working for now, to test the wheels make sure `libgl1-mesa-dev` is installed.
+To test the wheels make sure `libgl1` is installed.
