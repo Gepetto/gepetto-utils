@@ -34,7 +34,7 @@ twine upload wheelhouse/*
 
 ## Examples
 
-###eigenpy 2.4.3:
+### eigenpy 2.4.3:
 
 `config/config`:
 ```
@@ -51,7 +51,7 @@ NPROC=8
 eigen3-devel
 ```
 
-###hppfcl 1.5.1:
+### hppfcl 1.5.1:
 `config/config`:
 ```
 PACKAGE_NAME=hppfcl
