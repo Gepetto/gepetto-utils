@@ -1,0 +1,17 @@
+# Name of the package
+PACKAGE_NAME=
+
+# Name of the package uploaded on PyPi
+TARGET_NAME=
+
+# Release version
+VERSION=
+
+# Git repo url
+GIT_URL=
+
+# List of python packages needed to build and install the wheel (ex: '["foo", "bar"]')
+INSTALL_REQUIRES=''
+
+# Maximum number of parallel jobs
+NPROC=
