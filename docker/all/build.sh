@@ -22,7 +22,10 @@ then
     fi
     sed -i "s/python /$PYTHON /" /run.sh
     for p in /usr/local/lib/python*
-    do ln -s "${p}"/{dist,site}-packages
+    do
+        mkdir -p "${p}"/dist-packages
+        rm -rf "${p}"/site-packages
+        ln -s "${p}"/{dist,site}-packages
     done
 else
     build "$3"
