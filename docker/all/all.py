@@ -3,26 +3,30 @@
 Build all Dockerfiles and check the build result
 """
 
-from multiprocessing import Pool
-from pathlib import Path
+import concurrent.futures
 from subprocess import DEVNULL, CalledProcessError, check_call, check_output
 
+DISTRIBUTIONS = '16.04 18.04 20.04 fedora28 fedora31 archlinux stretch buster centos7'.split()
 
-def build(path):
+
+def build(args):
     """Build a dockerfile."""
-    path = str(path.parent)
-    tag = f'all/{path}'
+    dist, python = args
+    tag = f'all/{dist}/py{python}'
+    args = {'DIST': dist, 'RPKG': 'robotpkg-py3' if python == 3 else 'robotpkg'}
+    args = ' '.join(f'--build-arg {key}={value}' for key, value in args.items())
     try:
-        check_call(f'docker build -f {path}/Dockerfile -t {tag} .'.split(), stdout=DEVNULL, stderr=DEVNULL)
+        check_call(f'docker build {args} -t {tag} .'.split(), stdout=DEVNULL, stderr=DEVNULL)
     except CalledProcessError:
-        return path, 'build failed'
+        return dist, python, 'build failed'
     try:
-        return path, check_output(f'docker run --rm -it {tag}'.split(), stderr=DEVNULL).decode().strip()
+        return tag, check_output(f'docker run --rm -it {tag}'.split(), stderr=DEVNULL).decode().strip()
     except CalledProcessError:
-        return path, 'run failed'
+        return tag, 'run failed'
 
 
 if __name__ == '__main__':
-    with Pool(12) as p:
-        for job, result in p.map(build, Path('.').glob('*/*/Dockerfile')):
-            print(f'{job:15}', result, end='\r\n')
+    build_args = ((dist, python) for dist in DISTRIBUTIONS for python in (2, 3) if (dist, python) != ('20.04', ''))
+    with concurrent.futures.ProcessPoolExecutor(2) as executor:
+        for tag, result in executor.map(build, build_args):
+            print(f'{tag:15}', ' '.join(result.split('\n')), end='\r\n')

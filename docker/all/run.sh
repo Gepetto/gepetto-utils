@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/bin/bash -eux
 
-grep "Boost_PYTHON_LIBRARY " /eigenpy/build/config.log
+python /run.py
