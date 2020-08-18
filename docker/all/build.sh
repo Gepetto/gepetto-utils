@@ -21,12 +21,10 @@ then
     if [ "$DIST" = "archlinux" ] && [ "$PYTHON" = "python2" ]
     then pacman -Sy --noconfirm python2-numpy
     fi
-    if [ "$DIST" = "centos7" ]
-    then
-        $PYTHON -m pip install cmake
-        yum install -q -y python3-devel python3-numpy boost-python36-devel
-    fi
     sed -i "s/python /$PYTHON /" /run.sh
 else
+    if [ "$DIST" = "centos7" ]
+    then export PATH=/usr/lib64/python2.7/site-packages/cmake/data/bin:$PATH
+    fi
     build "$3"
 fi
