@@ -7,6 +7,7 @@ ARG DIST=18.04
 
 WORKDIR /src
 ENV LD_LIBRARY_PATH=/usr/local/lib:/opt/openrobots/lib
+USER root
 
 ADD build.sh run.sh build.py run.py /
 RUN /build.sh ${DIST} ${PYTHON}
