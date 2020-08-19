@@ -1,8 +1,9 @@
 #!/bin/bash -eux
 
-export DIST=$1
-export PROJECT=${2:-main}
-export CTEST_PARALLEL_LEVEL=${3:-5}
+source /dist
+
+export PROJECT=${1:-main}
+export CTEST_PARALLEL_LEVEL=${2:-5}
 
 build() {
     git clone --recursive --depth 1 --branch topic/multipy2 "https://github.com/nim65s/$1.git"

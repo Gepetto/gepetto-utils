@@ -1,4 +1,8 @@
-#!/bin/bash -eux
+#!/bin/bash -eu
 
-python2 /run.py
+source /dist
+
+if [ "$DIST" != "20.04" ]
+then python2 /run.py
+fi
 python3 /run.py
