@@ -21,6 +21,9 @@ then
     if [ "$DIST" = "archlinux" ] && [ "$PYTHON" = "python2" ]
     then pacman -Sy --noconfirm python2-numpy
     fi
+    if [ "$DIST" = "centos7" ]
+    then make -C ~/robotpkg/graphics/urdfdom install
+    fi
     sed -i "s/python /$PYTHON /" /run.sh
 else
     if [ "$DIST" = "centos7" ]
