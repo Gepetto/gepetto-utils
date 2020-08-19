@@ -1,3 +1,4 @@
 #!/bin/bash -eux
 
-python /run.py
+python2 /run.py
+python3 /run.py
