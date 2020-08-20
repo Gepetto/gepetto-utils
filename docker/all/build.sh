@@ -42,7 +42,11 @@ then
     then pacman -Sy --noconfirm python2-numpy
     fi
     if [ "$DIST" = "centos7" ]
-    then make -C ~/robotpkg/graphics/urdfdom install
+    then
+        mkdir -p /src/boost
+        cd /src/boost
+        /install_boost.sh
+        make -C ~/robotpkg/graphics/urdfdom install
     fi
 else
     if [ "$DIST" = "centos7" ]
