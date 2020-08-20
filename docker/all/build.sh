@@ -2,7 +2,7 @@
 
 source /dist
 
-export PROJECT=${1:-main}
+export PROJECT=$1
 export CTEST_PARALLEL_LEVEL=${2:-5}
 
 build() {
@@ -36,21 +36,8 @@ build() {
     make install
 }
 
-if [ "$PROJECT" = "main" ]
-then
-    if [ "$DIST" = "archlinux" ]
-    then pacman -Sy --noconfirm python2-numpy
-    fi
-    if [ "$DIST" = "centos7" ]
-    then
-        mkdir -p /src/boost
-        cd /src/boost
-        /install_boost.sh
-        make -C ~/robotpkg/graphics/urdfdom install
-    fi
-else
-    if [ "$DIST" = "centos7" ]
-    then export PATH=/usr/lib64/python2.7/site-packages/cmake/data/bin:$PATH
-    fi
-    build "$PROJECT"
+if [ "$DIST" = "centos7" ]
+then export PATH=/usr/lib64/python2.7/site-packages/cmake/data/bin:$PATH
 fi
+
+build "$PROJECT"

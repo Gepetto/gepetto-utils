@@ -8,8 +8,9 @@ ENV LD_LIBRARY_PATH=/usr/local/lib:/opt/openrobots/lib
 USER root
 RUN echo "DIST=${DIST}" > /dist
 
-ADD build.sh build.py misc /
-RUN /build.sh
+ADD build.sh build.py /
+ADD dist/${DIST}.sh /dist.sh
+RUN bash /dist.sh
 
 ADD https://api.github.com/repos/nim65s/eigenpy/commits/topic/multipy2 /
 RUN /build.sh eigenpy
