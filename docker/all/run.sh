@@ -7,9 +7,6 @@ then echo /opt/openrobots/lib/python2.7/site-packages/ > /usr/lib/python2.7/site
 fi
 
 if [ "$DIST" != "20.04" ]
-then
-    echo python 2
-    grep "Boost_PYTHON_LIBRARY " /src/eigenpy/build2/config.log
+then python2 /run.py
 fi
-echo python 3
-grep "Boost_PYTHON_LIBRARY " /src/eigenpy/build3/config.log
+python3 /run.py
