@@ -23,6 +23,6 @@ def build(dist):
 
 
 if __name__ == '__main__':
-    with concurrent.futures.ProcessPoolExecutor(2) as executor:
+    with concurrent.futures.ProcessPoolExecutor(10) as executor:
         for dist, result in executor.map(build, DISTRIBUTIONS):
             print(f'{dist:10}', ' '.join(result.split('\n')), end='\r\n')

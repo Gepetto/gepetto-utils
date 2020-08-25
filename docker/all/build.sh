@@ -6,34 +6,47 @@ export PROJECT=$1
 export CTEST_PARALLEL_LEVEL=${2:-5}
 
 build() {
-    git clone --recursive --depth 1 --branch topic/multipy2 "https://github.com/nim65s/$1.git"
-    mkdir "$1"/build{,2,3}
-    cd "/src/$1/build" || exit 1
-    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_CXX_STANDARD=11 \
-        -DCMAKE_INSTALL_PREFIX=/opt/openrobots -DCMAKE_INSTALL_LIBDIR=lib \
-        -DBUILD_PYTHON_INTERFACE=OFF ..
-    make -sj"$CTEST_PARALLEL_LEVEL"
-    # make test TODO: hpp-fcl tests are failing for many platforms
-    make install
-
+    git clone --recursive --depth 1 --branch devel https://github.com/stack-of-tasks/eigenpy.git
+    cd eigenpy/cmake || exit 1
+    git fetch
+    git checkout master
+    git reset --hard f4fca276f9feaaea1ef9b866df32f8a263a35501
+    mkdir ../build2
+    cd ../build2 || exit 1
     if [ "$DIST" != "20.04" ]
-    then
-        cd "../build2" || exit 1
-        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_CXX_STANDARD=11 \
-            -DCMAKE_INSTALL_PREFIX=/opt/openrobots -DCMAKE_INSTALL_LIBDIR=lib \
-            -DPYTHON_EXECUTABLE="/usr/bin/python2" -DPYTHON_STANDARD_LAYOUT=ON -DINSTALL_PYTHON_INTERFACE_ONLY=ON ..
-        make -sj"$CTEST_PARALLEL_LEVEL"
-        # make test TODO: hpp-fcl tests are failing for many platforms
-        make install
+    then cmake -DPYTHON_EXECUTABLE="/usr/bin/python2" ..
     fi
+    mkdir ../build3
+    cd ../build3 || exit 1
+    cmake -DPYTHON_EXECUTABLE="/usr/bin/python3" ..
+    #git clone --recursive --depth 1 --branch topic/multipy2 "https://github.com/nim65s/$1.git"
+    #mkdir "$1"/build{,2,3}
+    #cd "/src/$1/build" || exit 1
+    #cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_CXX_STANDARD=11 \
+        #-DCMAKE_INSTALL_PREFIX=/opt/openrobots -DCMAKE_INSTALL_LIBDIR=lib \
+        #-DBUILD_PYTHON_INTERFACE=OFF ..
+    #make -sj"$CTEST_PARALLEL_LEVEL"
+    ## make test TODO: hpp-fcl tests are failing for many platforms
+    #make install
 
-    cd "../build3" || exit 1
-    cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_CXX_STANDARD=11 \
-        -DCMAKE_INSTALL_PREFIX=/opt/openrobots -DCMAKE_INSTALL_LIBDIR=lib \
-        -DPYTHON_EXECUTABLE="/usr/bin/python3" -DPYTHON_STANDARD_LAYOUT=ON -DINSTALL_PYTHON_INTERFACE_ONLY=ON ..
-    make -sj"$CTEST_PARALLEL_LEVEL"
-    # make test TODO: hpp-fcl tests are failing for many platforms
-    make install
+    #if [ "$DIST" != "20.04" ]
+    #then
+        #cd "../build2" || exit 1
+        #cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_CXX_STANDARD=11 \
+            #-DCMAKE_INSTALL_PREFIX=/opt/openrobots -DCMAKE_INSTALL_LIBDIR=lib \
+            #-DPYTHON_EXECUTABLE="/usr/bin/python2" -DPYTHON_STANDARD_LAYOUT=ON -DINSTALL_PYTHON_INTERFACE_ONLY=ON ..
+        #make -sj"$CTEST_PARALLEL_LEVEL"
+        ## make test TODO: hpp-fcl tests are failing for many platforms
+        #make install
+    #fi
+
+    #cd "../build3" || exit 1
+    #cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_CXX_STANDARD=11 \
+        #-DCMAKE_INSTALL_PREFIX=/opt/openrobots -DCMAKE_INSTALL_LIBDIR=lib \
+        #-DPYTHON_EXECUTABLE="/usr/bin/python3" -DPYTHON_STANDARD_LAYOUT=ON -DINSTALL_PYTHON_INTERFACE_ONLY=ON ..
+    #make -sj"$CTEST_PARALLEL_LEVEL"
+    ## make test TODO: hpp-fcl tests are failing for many platforms
+    #make install
 }
 
 if [ "$DIST" = "centos7" ]

@@ -15,11 +15,11 @@ RUN bash /dist.sh
 ADD https://api.github.com/repos/nim65s/eigenpy/commits/topic/multipy2 /
 RUN /build.sh eigenpy
 
-ADD https://api.github.com/repos/nim65s/hpp-fcl/commits/topic/multipy2 /
-RUN /build.sh hpp-fcl
+#ADD https://api.github.com/repos/nim65s/hpp-fcl/commits/topic/multipy2 /
+#RUN /build.sh hpp-fcl
 
-ADD https://api.github.com/repos/nim65s/pinocchio/commits/topic/multipy2 /
-RUN /build.sh pinocchio
+#ADD https://api.github.com/repos/nim65s/pinocchio/commits/topic/multipy2 /
+#RUN /build.sh pinocchio
 
 ADD run.sh run.py /
 CMD /run.sh
