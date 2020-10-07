@@ -1,11 +1,10 @@
 ARG DIST=18.04
 FROM memmos.laas.fr:5000/gepetto/buildfarm/robotpkg-py3:$DIST
 
-ARG DIST=18.04
-
 WORKDIR /src
-ENV LD_LIBRARY_PATH=/usr/local/lib:/opt/openrobots/lib
 USER root
+
+ARG DIST=18.04
 RUN echo "DIST=${DIST}" > /dist
 
 ADD build.sh build.py /

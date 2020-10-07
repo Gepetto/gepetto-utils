@@ -3,26 +3,31 @@
 Build all Dockerfiles and check the build result
 """
 
-import concurrent.futures
-from subprocess import DEVNULL, CalledProcessError, check_call, check_output
+import asyncio
+from asyncio.subprocess import PIPE, DEVNULL
 
 DISTRIBUTIONS = '16.04 18.04 20.04 fedora28 fedora31 archlinux stretch buster centos7'.split()
 
 
-def build(dist):
-    """Build a dockerfile."""
-    try:
-        check_call(f'docker build --build-arg DIST={dist} -t all/{dist} .'.split(), stdout=DEVNULL, stderr=DEVNULL)
-    except CalledProcessError:
-        return dist, 'build failed'
-    try:
-        return dist, check_output(f'docker run --rm -it all/{dist}'.split(), stderr=DEVNULL,
-                                  universal_newlines=True).strip()
-    except CalledProcessError:
-        return dist, 'run failed'
+async def build_run(dist):
+    """Build and run a dockerfile."""
+    cmd = f'docker build --build-arg DIST={dist} -t all/{dist} .'.split()
+    proc = await asyncio.create_subprocess_exec(*cmd, stdout=DEVNULL, stderr=DEVNULL)
+    await proc.wait()
+    if proc.returncode != 0:
+        print(f'{dist:10} build failed\r')
+        return
+    cmd = f'docker run --rm -it all/{dist}'.split()
+    proc = await asyncio.create_subprocess_exec(*cmd, stdout=PIPE, stderr=DEVNULL)
+    stdout, _ = await proc.communicate()
+    stdout = stdout.decode().replace('\r\n', ' ')
+    if proc.returncode == 0:
+        print(f'{dist:10} {stdout}\r')
+    else:
+        print(f'{dist:10} run failed\r')
 
 
 if __name__ == '__main__':
-    with concurrent.futures.ProcessPoolExecutor(2) as executor:
-        for dist, result in executor.map(build, DISTRIBUTIONS):
-            print(f'{dist:10}', ' '.join(result.split('\n')), end='\r\n')
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(asyncio.gather(*(build_run(dist) for dist in DISTRIBUTIONS)))
+    loop.close()
