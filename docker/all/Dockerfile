@@ -11,6 +11,9 @@ ADD build.sh build.py /
 ADD dist/${DIST}.sh /dist.sh
 RUN bash /dist.sh
 
+ARG PARALLEL=1
+ENV CTEST_PARALLEL_LEVEL=${PARALLEL}
+
 ADD https://api.github.com/repos/nim65s/eigenpy/commits/topic/multipy2 /
 RUN /build.sh eigenpy
 

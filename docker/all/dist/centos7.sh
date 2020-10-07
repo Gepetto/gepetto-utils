@@ -1,6 +1,6 @@
 #!/bin/bash -eux
 
-BOOST_VERSION="1_72_0"
+BOOST_VERSION="1_74_0"
 
 yum install -q -y which wget
 yum erase -q -y boost-libs boost-devel boost-python36-devel python2-numpy numpy

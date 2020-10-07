@@ -3,7 +3,6 @@
 source /dist
 
 export PROJECT=$1
-export CTEST_PARALLEL_LEVEL=${2:-1}
 
 DO_TEST=true
 if [ "$PROJECT" = "hpp-fcl" ]
