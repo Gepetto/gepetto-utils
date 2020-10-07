@@ -13,7 +13,7 @@ then
 fi
 
 build() {
-    git clone --recursive --depth 1 --branch topic/multipy2 "https://github.com/nim65s/$PROJECT.git"
+    git clone --recursive --depth 1 --branch topic/multipy "https://github.com/nim65s/$PROJECT.git"
     mkdir "$PROJECT"/build{,2,3}
     cd "/src/$PROJECT/build" || exit 1
     cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DCMAKE_CXX_STANDARD=11 -DINSTALL_DOCUMENTATION=OFF \

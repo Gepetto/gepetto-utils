@@ -14,13 +14,13 @@ RUN bash /dist.sh
 ARG PARALLEL=1
 ENV CTEST_PARALLEL_LEVEL=${PARALLEL}
 
-ADD https://api.github.com/repos/nim65s/eigenpy/commits/topic/multipy2 /
+ADD https://api.github.com/repos/nim65s/eigenpy/commits/topic/multipy /
 RUN /build.sh eigenpy
 
-ADD https://api.github.com/repos/nim65s/hpp-fcl/commits/topic/multipy2 /
+ADD https://api.github.com/repos/nim65s/hpp-fcl/commits/topic/multipy /
 RUN /build.sh hpp-fcl
 
-ADD https://api.github.com/repos/nim65s/pinocchio/commits/topic/multipy2 /
+ADD https://api.github.com/repos/nim65s/pinocchio/commits/topic/multipy /
 RUN /build.sh pinocchio
 
 ADD run.sh run.py /
