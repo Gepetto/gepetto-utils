@@ -1,0 +1,5 @@
+PACKAGE_NAME=eigenpy
+GITHUB_ORG=stack-of-tasks
+VERSION=2.4.3
+INSTALL_REQUIRES='["numpy"]'
+NPROC=8
