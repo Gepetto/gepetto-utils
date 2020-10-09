@@ -1,5 +1,5 @@
 PACKAGE_NAME=pinocchio
 GITHUB_ORG=stack-of-tasks
-VERSION=2.4.7
+VERSION=2.5.0
 INSTALL_REQUIRES='["hppfcl"]'
 NPROC=8
