@@ -1,4 +1,0 @@
-ORG=humanoid-path-planner
-VERSION=1.6.0
-INSTALL_REQUIRES='["eigenpy"]'
-NPROC=8

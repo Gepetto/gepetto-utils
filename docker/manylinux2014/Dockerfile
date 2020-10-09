@@ -17,6 +17,7 @@ RUN ./setup_python.sh
 
 ADD config/packages /
 RUN yum install -y $(cat /packages)
+ENV CXX="ccache g++" CC="ccache gcc"
 
 WORKDIR /src
 

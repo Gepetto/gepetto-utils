@@ -1,4 +1,0 @@
-ORG=stack-of-tasks
-VERSION=2.5.0
-INSTALL_REQUIRES='["hpp-fcl"]'
-NPROC=8

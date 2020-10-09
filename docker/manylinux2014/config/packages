@@ -1,4 +1,5 @@
 assimp-devel
+ccache
 eigen3-devel
 tinyxml
 tinyxml2
