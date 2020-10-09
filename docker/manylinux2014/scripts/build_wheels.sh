@@ -61,8 +61,9 @@ done
 
 # Install packages and test
 for PYBIN in /opt/python/*/bin; do
+    PYVERSION=$(find "$PYBIN" -type f -name 'python*.*' | head -1 | grep -Eo "[0-9]\.[0-9]")
     "$PYBIN/pip" install "$PACKAGE_NAME" --no-index --find-links=/io/wheelhouse/
-    (cd "$HOME"; "$PYBIN/python" "/io/config/$TARGET/test.py")
+    (cd "$HOME"; "$PYBIN/python" "/io/config/$TARGET/test.py") || touch "/io/wheelhouse/$PYVERSION-$PACKAGE_NAME"
 done
 
 # TODO: Fix generated .cmake files (need to be done after installing the wheels so we know where the shared libraries are installed)
