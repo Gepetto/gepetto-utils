@@ -23,6 +23,7 @@ if ! [ python.configured ]
     using python : 3.6 : /opt/python/cp36-cp36m/bin/python : /opt/python/cp36-cp36m/include/python3.6m : /opt/python/cp36-cp36m/lib ;
     using python : 3.7 : /opt/python/cp37-cp37m/bin/python : /opt/python/cp37-cp37m/include/python3.7m : /opt/python/cp37-cp37m/lib ;
     using python : 3.8 : /opt/python/cp38-cp38/bin/python : /opt/python/cp38-cp38/include/python3.8 : /opt/python/cp38-cp38/lib ;
+    using python : 3.9 : /opt/python/cp39-cp39/bin/python : /opt/python/cp39-cp39/include/python3.9 : /opt/python/cp39-cp39/lib ;
 }
 
 # List of --with-<library> and --without-<library>
