@@ -2,7 +2,6 @@
 
 while read tgt
 do  echo -e "\n================================ $tgt ===================================\n"
-    source "/$tgt/config"
-    pip install --find-links=/ "$PACKAGE_NAME"
+    pip install --find-links=/ "$tgt"
     python "/$tgt/test.py"
 done < targets

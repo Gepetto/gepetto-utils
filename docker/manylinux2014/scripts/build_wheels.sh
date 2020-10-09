@@ -62,8 +62,8 @@ done
 # Install packages and test
 for PYBIN in /opt/python/*/bin; do
     PYVERSION=$(find "$PYBIN" -type f -name 'python*.*' | head -1 | grep -Eo "[0-9]\.[0-9]")
-    "$PYBIN/pip" install "$PACKAGE_NAME" --no-index --find-links=/io/wheelhouse/
-    (cd "$HOME"; "$PYBIN/python" "/io/config/$TARGET/test.py") || touch "/io/wheelhouse/$PYVERSION-$PACKAGE_NAME"
+    "$PYBIN/pip" install "$TARGET" --no-index --find-links=/io/wheelhouse/
+    (cd "$HOME"; "$PYBIN/python" "/io/config/$TARGET/test.py") || touch "/io/wheelhouse/$PYVERSION-$TARGET"
 done
 
 # TODO: Fix generated .cmake files (need to be done after installing the wheels so we know where the shared libraries are installed)
@@ -72,7 +72,7 @@ for whl in /io/wheelhouse/*.whl; do
 
   WHEEL_DIR=$(find . -name *.so | head -1 | cut -d'/' -f2)
   PYVERSION=$(find "$WHEEL_DIR" -type d -name 'python*' | grep 'lib/python' | tail -c4)
-  MAIN_LIB=$(find / ! -path "*$WHEEL_DIR*" -path "*$PYVERSION*$PACKAGE_NAME*.libs/*" -name "*$PACKAGE_NAME*.so*")
+  MAIN_LIB=$(find / ! -path "*$WHEEL_DIR*" -path "*$PYVERSION*$TARGET*.libs/*" -name "*$TARGET*.so*")
   MAIN_LIB_NAME=$(basename "$MAIN_LIB") # libeigenpy-[hash].so
   MAIN_LIB_NAME_NO_HASH=$(echo $MAIN_LIB_NAME | sed 's/-.*\.so/\.so/') # libeigenpy.so
 
@@ -88,7 +88,7 @@ for whl in /io/wheelhouse/*.whl; do
   rm -rf "${WHEEL_DIR:?}"/
 done
 
-rm -rf "$PACKAGE_NAME".egg-info/ dist/
+rm -rf "$TARGET".egg-info/ dist/
 
 mkdir -p /io/dist
 mv /io/wheelhouse/* /io/dist/

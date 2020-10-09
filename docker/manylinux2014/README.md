@@ -24,12 +24,11 @@ docker run --rm -it manylinux-test
 ## Upload the wheels on PyPi
 
 ```
-twine upload wheelhouse/*
+twine upload dist/*
 ```
 
 ## TODO
 
-- use TARGET instead of PACKAGE_NAME: hpp-fcl on PyPI
 - use robotpkg to build, instead of downloading the sources: could build all non-python stuff in the docker image
 - pyproject.toml in skbuild doc
 - lib/pythonX.Y/site-packages/foo.cpython\*.so links to libfoo.so and has RPATH: $ORIGIN/../../../foo.libs

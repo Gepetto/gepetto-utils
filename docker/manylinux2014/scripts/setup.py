@@ -7,12 +7,12 @@ except FileNotFoundError:
     long_description = ""
 
 setup(
-    name="PACKAGE_NAME",
+    name="TARGET",
     version="VERSION",
     description="DESCRIPTION",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/GITHUB_ORG/TARGET",
+    url="https://github.com/ORG/TARGET",
     install_requires=INSTALL_REQUIRES,
     classifiers=[
         "Programming Language :: Python :: 2", "Programming Language :: Python :: 3",

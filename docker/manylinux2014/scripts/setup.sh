@@ -4,14 +4,14 @@ TARGET=${1:-eigenpy}
 
 # Verify that variables are set properly
 source "/io/config/$TARGET/config"
-for var in PACKAGE_NAME GITHUB_ORG VERSION NPROC; do
+for var in ORG VERSION NPROC; do
   [ -z "${!var}" ] && { echo "$var is not set."; exit; }
 done
 
 mkdir -p /io/wheelhouse
 [ "$(ls -A /io/wheelhouse)" ] && { echo "./wheelhouse should be empty before running this script."; exit; }
 
-curl -sSL "https://github.com/$GITHUB_ORG/$TARGET/releases/download/v$VERSION/$TARGET-$VERSION.tar.gz" \
+curl -sSL "https://github.com/$ORG/$TARGET/releases/download/v$VERSION/$TARGET-$VERSION.tar.gz" \
     | tar xz --strip-components=1 2> /dev/null
 
 cp /scripts/setup.py .
@@ -22,7 +22,7 @@ sed -i 's/REQUIRED COMPONENTS Interpreter Development/REQUIRED COMPONENTS Interp
 
 # Write setup.py
 DESCRIPTION=$(grep PROJECT_DESCRIPTION CMakeLists.txt | cut -d'"' -f2) # TODO: Not working on multiple lines
-for var in PACKAGE_NAME GITHUB_ORG TARGET VERSION DESCRIPTION; do
+for var in ORG TARGET VERSION DESCRIPTION; do
   sed -i "s~$var~${!var}~" setup.py
 done
 
