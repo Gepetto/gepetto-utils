@@ -19,7 +19,7 @@ test() {
 if [ "$pyver" = all ]
 then
     for pyver in 2.7 3.5 3.6 3.7 3.8 3.9
-    do build $pyver
+    do build $pyver &
     done
     wait
 else
