@@ -3,13 +3,13 @@
 TARGET=${1:-eigenpy}
 PYVER=${2:-3.9}
 
-VERSION="$(grep version "/io/config/$TARGET/setup.py" | head -1 | cut -d'"' -f2)"
+export CMAKE_PREFIX_PATH="~/.local:/opt/openrobots"
+VERSION="$(grep version setup.py | head -1 | cut -d'"' -f2)"
 TARVER="$TARGET-$VERSION"
 WHEEL_DIR="${TARGET/-/_}-$VERSION"
 PACKAGE="$TARGET"
 [ "$TARGET" = "hpp-fcl" ] && PACKAGE=hppfcl
 PYBIN="$(find /opt/python -name "cp${PYVER/.}*")/bin"
-export CMAKE_PREFIX_PATH="~/.local:/opt/openrobots"
 INSTALLED_PREFIX="$PWD/_skbuild/linux-x86_64-$PYVER/cmake-install"
 SITE_PACKAGES="lib/python$PYVER/site-packages"
 USER_PACKAGES="$HOME/.local/$SITE_PACKAGES"
@@ -19,7 +19,7 @@ PACKAGE_DIR="$WHEEL_DIR/$WHEEL_DIR.data/data/$SITE_PACKAGES/$PACKAGE"
 
 # Install dependencies
 "$PYBIN/pip" install --user --find-links=/io/dist/ \
-    $(grep install_requires "/io/config/$TARGET/setup.py" | sed "s/.*\['//;s/'\].*//;s/,//")
+    $(grep install_requires setup.py | sed "s/.*\['//;s/'\].*//;s/,//")
 
 # Build wheels
 "$PYBIN/python" setup.py bdist_wheel -j"$(nproc)" -DBUILD_TESTING=OFF -DINSTALL_DOCUMENTATION=OFF \
@@ -54,7 +54,7 @@ for lib in "$WHEEL_DIR/${LIB_DIR}"/*
 do patchelf --set-rpath '$ORIGIN' "$lib"
 done
 
-# .cmake files should not have references to _skbuild
+# fix .cmake files: remove _skbuild references & update lib name with their hash from auditwheel
 MAIN_LIB=$(find "$WHEEL_DIR/$LIB_DIR" -name "lib$TARGET-*.so") # eigenpy-2.5.0/eigenpy.libs/libeigenpy-0c5e8890.so
 MAIN_LIB_NAME=$(basename "$MAIN_LIB") # libeigenpy-0c5e8890.so
 MAIN_LIB_NAME_NO_HASH=$(echo "$MAIN_LIB_NAME" | sed 's/-[[:xdigit:]]\{8\}//') # libeigenpy.so

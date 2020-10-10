@@ -8,7 +8,7 @@ except FileNotFoundError:
 
 setup(
     name="eigenpy",
-    version="2.5.0",
+    version="VERSION",
     description="Bindings between Numpy and Eigen using Boost.Python",
     long_description=long_description,
     long_description_content_type="text/markdown",

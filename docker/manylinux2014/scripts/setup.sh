@@ -4,7 +4,7 @@ TARGET=${1:-eigenpy}
 PYVER=${2:-3.9}
 
 URL="$(grep url "/io/config/$TARGET/setup.py" | cut -d'"' -f2)"
-VERSION="$(grep version "/io/config/$TARGET/setup.py" | head -1 | cut -d'"' -f2)"
+VERSION="$(curl -sSL "$(echo $URL | sed 's:github.com:api.github.com/repos:')/releases/latest" | grep tag_name | sed 's/[^.0-9]//g')"
 
 mkdir -p /io/wheelhouse
 [ "$(ls -A /io/wheelhouse)" ] && { echo "./wheelhouse should be empty before running this script."; exit; }
@@ -14,6 +14,8 @@ curl -sSL "$URL/releases/download/v$VERSION/$TARGET-$VERSION.tar.gz" \
 
 cp "/io/config/$TARGET/setup.py" .
 cp /scripts/pyproject.toml .
+
+sed -i "s/VERSION/$VERSION/" setup.py
 
 # Fix CMake for scikit-build
 find . -name CMakeLists.txt | xargs sed -i 's/PYTHON_INCLUDE_DIRS/PYTHON_INCLUDE_DIR/'

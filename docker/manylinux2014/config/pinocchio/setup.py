@@ -8,7 +8,7 @@ except FileNotFoundError:
 
 setup(
     name="pinocchio",
-    version="2.5.0",
+    version="VERSION",
     description="A fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives",
     long_description=long_description,
     long_description_content_type="text/markdown",
