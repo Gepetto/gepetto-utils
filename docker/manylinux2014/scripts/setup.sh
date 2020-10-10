@@ -1,6 +1,8 @@
 #!/bin/bash -eux
 
 TARGET=${1:-eigenpy}
+PYVER=${2:-3.9}
+
 URL="$(grep url "/io/config/$TARGET/setup.py" | cut -d'"' -f2)"
 VERSION="$(grep version "/io/config/$TARGET/setup.py" | head -1 | cut -d'"' -f2)"
 
@@ -17,8 +19,4 @@ cp /scripts/pyproject.toml .
 find . -name CMakeLists.txt | xargs sed -i 's/PYTHON_INCLUDE_DIRS/PYTHON_INCLUDE_DIR/'
 sed -i 's/REQUIRED COMPONENTS Interpreter Development/REQUIRED COMPONENTS Interpreter/' cmake/python.cmake
 
-[ -x "/io/config/$TARGET/pre_build.sh" ] && "/io/config/$TARGET/pre_build.sh"
-
-echo -e "\n=========================================================================================================\n"
-
-/scripts/build_wheels.sh "$TARGET"
+/scripts/build_wheels.sh "$TARGET" "$PYVER"

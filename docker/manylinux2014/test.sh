@@ -2,6 +2,6 @@
 
 while read tgt
 do  echo -e "\n================================ $tgt ===================================\n"
-    pip install --find-links=/ "$tgt"
+    pip install --user --find-links=/ "$tgt"
     python "/$tgt/test.py"
 done < targets
