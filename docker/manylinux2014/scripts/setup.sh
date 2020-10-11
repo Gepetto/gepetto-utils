@@ -15,8 +15,6 @@ curl -sSL "$URL/releases/download/v$VERSION/$TARGET-$VERSION.tar.gz" \
 cp "/io/config/$TARGET/setup.py" .
 cp /scripts/pyproject.toml .
 
-sed -i "s/VERSION/$VERSION/" setup.py
-
 # Fix CMake for scikit-build
 find . -name CMakeLists.txt | xargs sed -i 's/PYTHON_INCLUDE_DIRS/PYTHON_INCLUDE_DIR/'
 sed -i 's/REQUIRED COMPONENTS Interpreter Development/REQUIRED COMPONENTS Interpreter/' cmake/python.cmake
