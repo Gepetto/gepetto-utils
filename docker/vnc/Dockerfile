@@ -13,5 +13,7 @@ RUN apt-get update -qqy \
     xfce4 \
  && rm -rf /var/lib/apt/lists/*
 
+EXPOSE 5901
+
 ADD docker-vnc /usr/local/bin
 CMD docker-vnc
