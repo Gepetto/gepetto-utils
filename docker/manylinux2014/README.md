@@ -24,8 +24,18 @@ docker run --rm -it manylinux-test
 ## Upload the wheels on PyPi
 
 ```
-twine upload dist/*
+twine upload --repository testpypi dist/*
 ```
+
+## Check everything:
+
+```
+for pv in 2.7 3.5 3.6 3.7 3.8 3.9
+    docker build -f check.Dockerfile --build-arg PYVER=$pv -t gepetto/utils:wheel-$pv .
+    docker push gepetto/utils:wheel-$pv
+end
+```
+
 
 ## TODO
 

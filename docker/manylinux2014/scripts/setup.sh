@@ -18,5 +18,8 @@ cp /scripts/pyproject.toml .
 # Fix CMake for scikit-build
 find . -name CMakeLists.txt | xargs sed -i 's/PYTHON_INCLUDE_DIRS/PYTHON_INCLUDE_DIR/'
 sed -i 's/REQUIRED COMPONENTS Interpreter Development/REQUIRED COMPONENTS Interpreter/' cmake/python.cmake
+sed -i "s/VERSION/$VERSION/" setup.py
+
+[ -f "/io/config/$TARGET/static.patch" ] && patch -p0 -i "/io/config/$TARGET/static.patch"
 
 /scripts/build_wheels.sh "$TARGET" "$PYVER"
