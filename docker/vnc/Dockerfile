@@ -11,10 +11,7 @@ RUN apt-get update -qqy \
     terminator \
     x11-apps \
     xfce4 \
- && rm -rf /var/lib/apt/lists/* \
- && mkdir ~/.vnc \
- && echo "#!/bin/sh\nstartxfce4" > ~/.vnc/xstartup \
- && chmod +x ~/.vnc/xstartup
+ && rm -rf /var/lib/apt/lists/*
 
-ADD entrypoint.sh /
-CMD /entrypoint.sh
+ADD docker-vnc /usr/local/bin
+CMD docker-vnc

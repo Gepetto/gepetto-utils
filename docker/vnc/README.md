@@ -13,3 +13,5 @@ Navigate to this URL:
 
 Press Ctrl-C to exit
 ```
+
+Open this URL, and then click "Connect".
