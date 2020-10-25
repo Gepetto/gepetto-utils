@@ -43,8 +43,7 @@ ARG BRANCH=devel
 ADD https://github.com/$NAMESPACE/pinocchio/archive/$BRANCH.zip .
 
 # but this zip doesn't come with .git nor submodules
-RUN git clone --recursive --branch $BRANCH https://github.com/$NAMESPACE/pinocchio.git \
- && mkdir pinocchio/build
+RUN git clone --recursive --branch $BRANCH https://github.com/$NAMESPACE/pinocchio.git
 
 WORKDIR /pinocchio/build
 ARG MAKE_JOBS=1

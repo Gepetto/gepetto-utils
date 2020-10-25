@@ -15,8 +15,7 @@ RUN apt-get update -y \
 ARG EIGENPY=2.2.2
 
 ADD https://github.com/stack-of-tasks/eigenpy/releases/download/v${EIGENPY}/eigenpy-${EIGENPY}.tar.gz /
-RUN tar xf /eigenpy-${EIGENPY}.tar.gz \
- && mkdir /eigenpy-${EIGENPY}/build
+RUN tar xf /eigenpy-${EIGENPY}.tar.gz
 
 WORKDIR /eigenpy-${EIGENPY}/build
 

@@ -41,8 +41,7 @@ ARG NAMESPACE=humanoid-path-planner
 ARG BRANCH=devel
 ADD https://api.github.com/repos/${NAMESPACE}/hpp-fcl/commits/${BRANCH} /tmp
 
-RUN git clone --recursive --branch $BRANCH https://github.com/$NAMESPACE/hpp-fcl.git \
- && mkdir hpp-fcl/build
+RUN git clone --recursive --branch $BRANCH https://github.com/$NAMESPACE/hpp-fcl.git
 
 WORKDIR /hpp-fcl/build
 ARG MAKE_JOBS=1
