@@ -32,15 +32,18 @@ WRONG_OFFICE = {
     'B61a': {('Bruno', 'Watier')},
     'B63': {('Aurélie', 'Bonnefoy')},
     'B65': {('Nils', 'Hareng')},
-    'B67': {('Gabriele', 'Fadini')},
+    'B67': {('Gabriele', 'Fadini'), ('Pierre', 'Fernbach')},
     'B69.1': {('Ewen', 'Dantec'), ('Vincent', 'Bonnet'), ('Guilhem', 'Saurel')},
     'B90': {('Nicolas', 'Mansard')},
-    'B181': {('Diane', 'Bury')},
+    'B181': {('Diane', 'Bury'), ('Médéric', 'Fourmy')},
     'B185': {('Fanny', 'Risbourg')},
 }
 WRONG_OFFICE = {k: {Gepettist(sn, gn) for (gn, sn) in v} for k, v in WRONG_OFFICE.items()}
 # Guys with name that don't fit. Sorry, PA.
-ALIAS = {'B67': ({Gepettist('Leziart', 'Pierre-Alexandre')}, {Gepettist('Leziart', 'P-A')})}
+ALIAS = {
+    'B67': ({Gepettist('Leziart', 'Pierre-Alexandre')}, {Gepettist('Leziart', 'P-A')}),
+    'B61a': ({Gepettist('Taix', 'Michel')}, {Gepettist('Taïx', 'Michel')}),
+}
 
 
 def door_label(members):
