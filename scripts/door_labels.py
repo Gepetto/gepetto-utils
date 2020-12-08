@@ -27,13 +27,10 @@ class Gepettist(NamedTuple):
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
-    'Exterieur': {('Lexia Ambaba', 'Ledaga Leounda'), ('Joan', 'Sola'), ('Melya', 'Boukheddimi'),
-                  ('Florent', 'Lamiraux'), ('Steve', 'Tonneau')},
-    'B61a': {('Bruno', 'Watier')},
-    'B63': {('Aurélie', 'Bonnefoy')},
+    'Exterieur': {('Joan', 'Sola'), ('Florent', 'Lamiraux'), ('Steve', 'Tonneau')},
     'B65': {('Nils', 'Hareng')},
-    'B67': {('Gabriele', 'Fadini'), ('Pierre', 'Fernbach')},
-    'B69.1': {('Ewen', 'Dantec'), ('Vincent', 'Bonnet'), ('Guilhem', 'Saurel')},
+    'B67': {('Pierre', 'Fernbach')},
+    'B69.1': {('Vincent', 'Bonnet'), ('Guilhem', 'Saurel')},
     'B90': {('Nicolas', 'Mansard')},
     'B181': {('Diane', 'Bury'), ('Médéric', 'Fourmy')},
     'B185': {('Fanny', 'Risbourg')},
