@@ -11,7 +11,7 @@ from wand.display import display
 from wand.drawing import Drawing
 from wand.image import Image
 
-LOGO = '/net/pongo/vol/vol_projects/partage_gepetto/Logos/gepetto/logo-low-black.png'
+LOGO = '/net/cubitus/projects/Partage_GEPETTO/Logos/gepetto/logo-low-black.png'
 DPCM = 300 / 2.54  # dot per cm @300DPI
 WIDTH, HEIGHT = int(6 * DPCM), int(3 * DPCM)  # door labels are 6cm x 3cm
 
