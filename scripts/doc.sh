@@ -4,7 +4,7 @@
 
 set -e
 
-cd /net/pongo/vol/vol_projects/partage_gepetto/Doc
+cd /net/cubitus/projects/Partage_GEPETTO/Doc
 
 find . -type d -exec chmod 0775 {} \;
 find . -type f -exec chmod 0664 {} \;
