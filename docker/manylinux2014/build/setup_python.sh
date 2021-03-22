@@ -16,6 +16,9 @@ ln -s /usr/bin/pip $PY27_BIN/
 
 # Upgrade pip and install scikit-build
 for PYBIN in /opt/python/*/bin; do
-    "$PYBIN"/pip install --upgrade pip
+    if "$PYBIN"/pip --version | grep -q 2.7
+    then "$PYBIN"/pip install --upgrade "pip<21"
+    else "$PYBIN"/pip install --upgrade pip
+    fi
     "$PYBIN"/pip install --user scikit-build numpy
 done
