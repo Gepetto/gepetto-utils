@@ -1,5 +1,5 @@
 ARG IMAGE=ubuntu18.04O
-FROM IMAGE
+FROM $IMAGE
 
 RUN apt-get update -qqy \
  && DEBIAN_FRONTEND=noninteractive apt-get install -qqy \

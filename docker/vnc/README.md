@@ -19,6 +19,6 @@ Open this URL, and then click "Connect".
 ## For ferrum:
 
 ```bash
-docker build --add-host "archives.basestation:10.68.1.1" --build-arg=IMAGE=gitlab.laas.fr:4567/gepetto/buildfarm/robotpkg:ferrum -t vnc .
+docker build --add-host "archives.basestation:10.68.1.1" --build-arg IMAGE=gitlab.laas.fr:4567/gepetto/buildfarm/robotpkg:ferrum -t vnc .
 docker run --add-host "archives.basestation:10.68.1.1" --rm -it -p 6080:6080 vnc
 ```
