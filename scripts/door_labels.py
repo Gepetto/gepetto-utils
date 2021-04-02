@@ -1,9 +1,12 @@
 #!/usr/bin/python3
-"""Generate an A4 papier with labels for the doors of Gepetto offices."""
+"""Utils to manage Gepetto offices"""
 
+import logging
+from argparse import ArgumentParser
 from collections import defaultdict
 from datetime import date
 from json import dumps, loads
+from pathlib import Path
 from typing import NamedTuple
 
 from ldap3 import Connection
@@ -12,7 +15,11 @@ from wand.display import display
 from wand.drawing import Drawing
 from wand.image import Image
 
-LOGO = '/net/cubitus/projects/Partage_GEPETTO/Logos/gepetto/logo-low-black.png'
+# Cache LDAP data
+CACHE = Path('data/offices-ldap.json')
+
+# Door labels constants
+LOGO = 'data/logo-low-black.png'
 DPCM = 300 / 2.54  # dot per cm @300DPI
 WIDTH, HEIGHT = int(6 * DPCM), int(3 * DPCM)  # door labels are 6cm x 3cm
 
@@ -33,10 +40,13 @@ class Offices:
         self.data.update(offices)
 
     def __str__(self):
-        return '\n'.join(f'{room:5}: {", ".join(members)}' for room, members in self.sorted().items())
+        return '\n'.join(f'{room:5}: {", ".join(str(m) for m in members)}' for room, members in self.sorted().items())
 
     def __getitem__(self, key):
         return self.data[key]
+
+    def __setitem__(self, key, value):
+        self.data[key] = value
 
     def __iter__(self):
         yield from self.data
@@ -45,7 +55,7 @@ class Offices:
         return self.data.items()
 
     def sorted(self):
-        return {k: [str(p) for p in sorted(v)] for k, v in self.data.items() if k != 'Exterieur' and v}
+        return {k: sorted(v) for k, v in self.data.items() if k != 'Exterieur' and v}
 
     def dumps(self):
         """dump a sorted dict of offices with sorted lists of members as a JSON string"""
@@ -54,12 +64,13 @@ class Offices:
     @staticmethod
     def loads(s):
         """constructor from a JSON string"""
-        return Offices(**loads(s))
+        return Offices(**{room: set(Gepettist(*m) for m in members) for room, members in loads(s).items()})
 
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
-    'Exterieur': {('Joan', 'Sola'), ('Florent', 'Lamiraux'), ('Steve', 'Tonneau')},
+    'Exterieur': {('Joan', 'Sola'), ('Steve', 'Tonneau'), ('Joseph', 'Mirabel')},
+    'B63': {('Ewen', 'Dantec')},
     'B65': {('Nils', 'Hareng')},
     'B67': {('Pierre', 'Fernbach')},
     'B69.1': {('Vincent', 'Bonnet'), ('Guilhem', 'Saurel')},
@@ -84,7 +95,7 @@ def door_label(members):
         draw.font_size = 80 if len(members) >= 4 else 90
         draw.text_alignment = 'center'
         height = HEIGHT - len(members) * draw.font_size
-        draw.text(int(WIDTH / 2), int(height / 2) + 65, '\n'.join(members))
+        draw.text(int(WIDTH / 2), int(height / 2) + 65, '\n'.join(str(m) for m in members))
         draw(img)
         return img.clone()
 
@@ -104,8 +115,8 @@ def offices_ldap():
     return offices
 
 
-def offices_ldap_fixed(offices):
-    """Fix the dict of Gepettists in their respective office from LDAP."""
+def fix_wrong_offices(offices):
+    """Fix the dict of Gepettists in their respective office from embedded WRONG_OFFICE."""
     for woffice, wmembers in WRONG_OFFICE.items():  # Patch wrong stuff from LDAP
         offices[woffice] |= wmembers  # Add members to their rightfull office
         for wrong_office in offices:
@@ -120,7 +131,8 @@ def labels(offices):
     """Generate an A4 papier with labels for the doors of Gepetto offices."""
     with Image(width=int(21 * DPCM), height=int(29.7 * DPCM)) as page, Drawing() as draw:
         for i, (office, members) in enumerate(offices.items()):
-            print(office, members)
+            if not members:
+                continue
             with door_label(members) as label:
                 row, col = divmod(i, 3)
                 row *= HEIGHT + DPCM
@@ -131,4 +143,38 @@ def labels(offices):
 
 
 if __name__ == '__main__':
-    labels(offices_ldap_fixed(offices_ldap()))
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument('--update', action='store_true', help='update data from ldap')
+    parser.add_argument('--fixed', action='store_true', help='fix data from embeded WRONG_OFFICE')
+    parser.add_argument('--show', action='store_true', help='show data')
+    parser.add_argument('--labels', action='store_true', help='generate door labels')
+    parser.add_argument('--map', action='store_true', help='generate offices map')
+    parser.add_argument('-v', '--verbose', action='count', default=0)
+
+    args = parser.parse_args()
+    logging.basicConfig(level=50 - 10 * args.verbose)
+
+    # Collect and fix data
+    if args.update or not CACHE.exists():
+        logging.info(' updating team members from LDAP')
+        offices = offices_ldap()
+        with CACHE.open('w') as f:
+            f.write(offices.dumps())
+    else:
+        logging.info(' using cached team members')
+        with CACHE.open() as f:
+            offices = Offices.loads(f.read())
+    if args.fixed:
+        logging.info(' fixing data')
+        offices = fix_wrong_offices(offices)
+
+    # Use collected data
+    if args.show:
+        logging.info(' showing data')
+        print(offices)
+    if args.labels:
+        logging.info(' generating door labels')
+        labels(offices)
+    if args.map:
+        logging.info(' generating map')
+        logging.error(' not yet implemented')
