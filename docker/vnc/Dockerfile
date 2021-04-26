@@ -1,4 +1,4 @@
-ARG IMAGE=ubuntu18.04O
+ARG IMAGE=ubuntu18.04
 FROM $IMAGE
 
 RUN apt-get update -qqy \
