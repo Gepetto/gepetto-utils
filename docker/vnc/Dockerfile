@@ -1,4 +1,4 @@
-ARG IMAGE=ubuntu18.04
+ARG IMAGE=ubuntu:20.04
 FROM $IMAGE
 
 RUN apt-get update -qqy \
@@ -12,9 +12,15 @@ RUN apt-get update -qqy \
     terminator \
     x11-apps \
     xfce4 \
+    sudo \
  && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 5901
 
+RUN useradd -m user \
+ && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
+ && chmod 777 /usr/share/novnc/utils
+
+USER user
 ADD docker-vnc /usr/local/bin
 CMD docker-vnc
