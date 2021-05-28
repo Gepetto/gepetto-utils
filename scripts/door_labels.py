@@ -22,6 +22,7 @@ CACHE = Path('data/offices-ldap.json')
 LOGO = 'data/logo-low-black.png'
 DPCM = 300 / 2.54  # dot per cm @300DPI
 WIDTH, HEIGHT = int(6 * DPCM), int(3 * DPCM)  # door labels are 6cm x 3cm
+NOT_OFFICES = ['Exterieur', 'BSalleGerardBauzil']
 
 
 class Gepettist(NamedTuple):
@@ -131,7 +132,7 @@ def labels(offices):
     """Generate an A4 papier with labels for the doors of Gepetto offices."""
     with Image(width=int(21 * DPCM), height=int(29.7 * DPCM)) as page, Drawing() as draw:
         for i, (office, members) in enumerate(offices.items()):
-            if not members:
+            if not members or office in NOT_OFFICES:
                 continue
             with door_label(members) as label:
                 row, col = divmod(i, 3)
