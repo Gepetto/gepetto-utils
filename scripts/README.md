@@ -75,7 +75,28 @@ usage: searchLib.sh my_lib version_to_avoid
 
 This script searches all the .so files in the current directory.
 The first arg is a string contained in the dependencies of the library you are looking for.
-The second arg is a string contained in the dependencies that you want to reject. 
+The second arg is a string contained in the dependencies that you want to reject.
 The script will display the names of the .so files which meet these criteria.
 
 
+## `offices.py`
+
+```
+usage: offices.py [-h] [--update] [--fixed] [--show] [--labels] [--map] [-v]
+
+Utils to manage Gepetto offices
+
+optional arguments:
+  -h, --help     show this help message and exit
+  --update       update data from ldap
+  --fixed        fix data from embeded WRONG_OFFICE
+  --show         show data
+  --labels       generate door labels
+  --map          generate offices map
+  -v, --verbose
+```
+
+With this, you can
+- check that LDAP data are up-to-date
+- generate door labels or a map of team members
+- generate a map with names on it (not yet implemented)
