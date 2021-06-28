@@ -70,7 +70,7 @@ class Offices:
         return self.data.items()
 
     def sorted(self):
-        return {k: sorted(v) for k, v in self.data.items() if k != 'Exterieur' and v}
+        return {o: sorted(self.data[o]) for o in sorted(self.data) if o != 'Exterieur' and self.data[o]}
 
     def dumps(self):
         """dump a sorted dict of offices with sorted lists of members as a JSON string"""
