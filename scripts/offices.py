@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """Utils to manage Gepetto offices"""
 
 import logging
