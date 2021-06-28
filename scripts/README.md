@@ -89,7 +89,7 @@ Utils to manage Gepetto offices
 optional arguments:
   -h, --help     show this help message and exit
   --update       update data from ldap
-  --fixed        fix data from embeded WRONG_OFFICE
+  --fixed        fix LDAP data from embeded infos
   --show         show data
   --labels       generate door labels
   --map          generate offices map
@@ -99,4 +99,4 @@ optional arguments:
 With this, you can
 - check that LDAP data are up-to-date
 - generate door labels or a map of team members
-- generate a map with names on it (not yet implemented)
+- generate a map with names on it

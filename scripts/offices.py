@@ -11,18 +11,32 @@ from typing import NamedTuple
 
 from ldap3 import Connection
 from wand.color import Color
-from wand.display import display
 from wand.drawing import Drawing
 from wand.image import Image
 
 # Cache LDAP data
 CACHE = Path('data/offices-ldap.json')
 
-# Door labels constants
+# Drawings constants
 LOGO = 'data/logo-low-black.png'
 DPCM = 300 / 2.54  # dot per cm @300DPI
 WIDTH, HEIGHT = int(6 * DPCM), int(3 * DPCM)  # door labels are 6cm x 3cm
 NOT_OFFICES = ['Exterieur', 'BSalleGerardBauzil']
+BAT_B = 'data/bat_b.png'
+MAP_POSITIONS = [
+    ('B181', 1600, 830),
+    ('B185', 1600, 130),
+    ('B61a', 1333, 1820),
+    ('B63', 1333, 1500),
+    ('B65', 1333, 1320),
+    ('B67', 1333, 870),
+    ('B69.1', 1333, 680),
+    ('B69.2', 1333, 520),
+    ('B90', 0, 130),
+    ('B91', 0, 280),
+    ('B92', 0, 430),
+    ('B94', 0, 750),
+]
 
 
 class Gepettist(NamedTuple):
@@ -70,33 +84,39 @@ class Offices:
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
-    'Exterieur': {('Joan', 'Sola'), ('Steve', 'Tonneau'), ('Joseph', 'Mirabel')},
+    'Exterieur': {('Steve', 'Tonneau')},
     'B63': {('Ewen', 'Dantec')},
     'B65': {('Nils', 'Hareng')},
     'B67': {('Pierre', 'Fernbach')},
     'B69.1': {('Vincent', 'Bonnet'), ('Guilhem', 'Saurel')},
     'B90': {('Nicolas', 'Mansard')},
+    'B94': {('Florent', 'Lamiraux')},
     'B181': {('Diane', 'Bury'), ('Médéric', 'Fourmy')},
     'B185': {('Fanny', 'Risbourg')},
 }
 WRONG_OFFICE = {k: {Gepettist(sn, gn) for (gn, sn) in v} for k, v in WRONG_OFFICE.items()}
-# Guys with name that don't fit. Sorry, PA.
+# Fix unicode from LDAP data…
 ALIAS = {
-    'B67': ({Gepettist('Leziart', 'Pierre-Alexandre')}, {Gepettist('Leziart', 'P-A')}),
+    'B67': ({Gepettist('Leziart', 'Pierre-Alexandre')}, {Gepettist('Léziart', 'P-A')}),
     'B61a': ({Gepettist('Taix', 'Michel')}, {Gepettist('Taïx', 'Michel')}),
+    'B91': ({Gepettist('Soueres', 'Philippe')}, {Gepettist('Souères', 'Philippe')}),
+    'B181': ({Gepettist('Ramuzat', 'Noelie')}, {Gepettist('Ramuzat', 'Noëlie')}),
 }
 
 
-def door_label(members):
+def door_label(members, logo=True):
     """Generate the label for one office."""
+    if not members:
+        return
     with Image(width=WIDTH, height=HEIGHT, background=Color('white')) as img, Drawing() as draw:
-        with Image(filename=LOGO) as logo:
-            logo.transform(resize=f'{WIDTH}x{HEIGHT}')
-            draw.composite('add', 200, 0, logo.width, logo.height, logo)
+        if logo:
+            with Image(filename=LOGO) as logo:
+                logo.transform(resize=f'{WIDTH}x{HEIGHT}')
+                draw.composite('replace', 200, 0, logo.width, logo.height, logo)
         draw.font_size = 80 if len(members) >= 4 else 90
         draw.text_alignment = 'center'
         height = HEIGHT - len(members) * draw.font_size
-        draw.text(int(WIDTH / 2), int(height / 2) + 65, '\n'.join(str(m) for m in members))
+        draw.text(int(WIDTH / 2), int(height / 2) + 65, '\n'.join(str(m) for m in sorted(members)))
         draw(img)
         return img.clone()
 
@@ -117,7 +137,7 @@ def offices_ldap():
 
 
 def fix_wrong_offices(offices):
-    """Fix the dict of Gepettists in their respective office from embedded WRONG_OFFICE."""
+    """Fix the dict of Gepettists in their respective office from embedded infos."""
     for woffice, wmembers in WRONG_OFFICE.items():  # Patch wrong stuff from LDAP
         offices[woffice] |= wmembers  # Add members to their rightfull office
         for wrong_office in offices:
@@ -134,19 +154,30 @@ def labels(offices):
         for i, (office, members) in enumerate(offices.items()):
             if not members or office in NOT_OFFICES:
                 continue
-            with door_label(members) as label:
-                row, col = divmod(i, 3)
-                row *= HEIGHT + DPCM
-                col *= WIDTH + DPCM * 0.5
-                draw.composite('add', int(col + DPCM * 0.75), int(row + DPCM), label.width, label.height, label)
+            label = door_label(members)
+            row, col = divmod(i, 3)
+            row *= HEIGHT + DPCM
+            col *= WIDTH + DPCM * 0.5
+            draw.composite('replace', int(col + DPCM * 0.75), int(row + DPCM), label.width, label.height, label)
         draw(page)
         page.save(filename='labels.png')
+
+
+def maps(offices, fixed):
+    """Generate a map with labels"""
+    with Image(filename=BAT_B) as page, Drawing() as draw:
+        for office, x, y in MAP_POSITIONS:
+            label = door_label(offices[office], logo=False)
+            if label:
+                draw.composite('replace', x, y, label.width / 3, label.height / 3, label)
+        draw(page)
+        page.save(filename='generated_map%s.png' % ('_fixed' if fixed else ''))
 
 
 if __name__ == '__main__':
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('--update', action='store_true', help='update data from ldap')
-    parser.add_argument('--fixed', action='store_true', help='fix data from embeded WRONG_OFFICE')
+    parser.add_argument('--fixed', action='store_true', help='fix LDAP data from embeded infos')
     parser.add_argument('--show', action='store_true', help='show data')
     parser.add_argument('--labels', action='store_true', help='generate door labels')
     parser.add_argument('--map', action='store_true', help='generate offices map')
@@ -178,4 +209,4 @@ if __name__ == '__main__':
         labels(offices)
     if args.map:
         logging.info(' generating map')
-        logging.error(' not yet implemented')
+        maps(offices, args.fixed)
