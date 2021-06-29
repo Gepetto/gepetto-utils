@@ -87,8 +87,9 @@ WRONG_OFFICE = {
     'Exterieur': {('Steve', 'Tonneau')},
     'B63': {('Ewen', 'Dantec')},
     'B65': {('Nils', 'Hareng')},
-    'B67': {('Pierre', 'Fernbach')},
-    'B69.1': {('Guilhem', 'Saurel')},
+    'B67': {('Michel', 'Aractingi')},
+    'B69.1': {('Guilhem', 'Saurel'), ('Pierre', 'Fernbach')},
+    'B69.2': {('Nahla', 'Tabti')},
     'B90': {('Nicolas', 'Mansard')},
     'B181': {('Médéric', 'Fourmy')},
 }
