@@ -1,11 +1,9 @@
 {
-  "A106": [
-    [
-      "Lamiraux",
-      "Florent"
-    ]
-  ],
   "B181": [
+    [
+      "Bury",
+      "Diane"
+    ],
     [
       "Nicolin",
       "Alexis"
@@ -23,6 +21,10 @@
     [
       "Otmani",
       "Sabrina"
+    ],
+    [
+      "Risbourg",
+      "Fanny"
     ]
   ],
   "B61a": [
@@ -81,10 +83,6 @@
       "Pierre-Alexandre"
     ],
     [
-      "Risbourg",
-      "Fanny"
-    ],
-    [
       "Tonneau",
       "Steve"
     ]
@@ -96,6 +94,10 @@
     ]
   ],
   "B69.1": [
+    [
+      "Bonnet",
+      "Vincent"
+    ],
     [
       "Dantec",
       "Ewen"
@@ -115,12 +117,6 @@
       "Nahuel"
     ]
   ],
-  "B90": [
-    [
-      "Bonnet",
-      "Vincent"
-    ]
-  ],
   "B91": [
     [
       "Soueres",
@@ -134,6 +130,10 @@
     ]
   ],
   "B94": [
+    [
+      "Lamiraux",
+      "Florent"
+    ],
     [
       "Mansard",
       "Nicolas"
@@ -171,12 +171,6 @@
     [
       "Silva",
       "Manon"
-    ]
-  ],
-  "Brochelle": [
-    [
-      "Bury",
-      "Diane"
     ]
   ]
 }

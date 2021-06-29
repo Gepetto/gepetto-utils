@@ -88,11 +88,9 @@ WRONG_OFFICE = {
     'B63': {('Ewen', 'Dantec')},
     'B65': {('Nils', 'Hareng')},
     'B67': {('Pierre', 'Fernbach')},
-    'B69.1': {('Vincent', 'Bonnet'), ('Guilhem', 'Saurel')},
+    'B69.1': {('Guilhem', 'Saurel')},
     'B90': {('Nicolas', 'Mansard')},
-    'B94': {('Florent', 'Lamiraux')},
-    'B181': {('Diane', 'Bury'), ('Médéric', 'Fourmy')},
-    'B185': {('Fanny', 'Risbourg')},
+    'B181': {('Médéric', 'Fourmy')},
 }
 WRONG_OFFICE = {k: {Gepettist(sn, gn) for (gn, sn) in v} for k, v in WRONG_OFFICE.items()}
 # Fix unicode from LDAP data…
