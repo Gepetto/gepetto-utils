@@ -13,7 +13,6 @@ from ldap3 import Connection
 from wand.color import Color
 from wand.drawing import Drawing
 from wand.image import Image
-from wand.version import VERSION_INFO
 
 # Cache LDAP data
 CACHE = Path('data/offices-ldap.json')
@@ -38,7 +37,6 @@ MAP_POSITIONS = [
     ('B92', 0, 430),
     ('B94', 0, 750),
 ]
-OPERATOR = 'modulus_add' if VERSION_INFO >= (0, 5, 6) else 'add'
 
 
 class Gepettist(NamedTuple):
@@ -113,7 +111,7 @@ def door_label(members, logo=True):
         if logo:
             with Image(filename=LOGO) as logo:
                 logo.transform(resize=f'{WIDTH}x{HEIGHT}')
-                draw.composite(OPERATOR, 200, 0, logo.width, logo.height, logo)
+                draw.composite('over', 200, 0, logo.width, logo.height, logo)
         draw.font_size = 80 if len(members) >= 4 else 90
         draw.text_alignment = 'center'
         height = HEIGHT - len(members) * draw.font_size
@@ -159,7 +157,7 @@ def labels(offices):
             row, col = divmod(i, 3)
             row *= HEIGHT + DPCM
             col *= WIDTH + DPCM * 0.5
-            draw.composite(OPERATOR, int(col + DPCM * 0.75), int(row + DPCM), label.width, label.height, label)
+            draw.composite('over', int(col + DPCM * 0.75), int(row + DPCM), label.width, label.height, label)
         draw(page)
         page.save(filename='labels.png')
 
@@ -170,7 +168,7 @@ def maps(offices, fixed):
         for office, x, y in MAP_POSITIONS:
             label = door_label(offices[office], logo=False)
             if label:
-                draw.composite(OPERATOR, x, y, label.width / 3, label.height / 3, label)
+                draw.composite('over', x, y, label.width / 3, label.height / 3, label)
         draw(page)
         page.save(filename='generated_map%s.png' % ('_fixed' if fixed else ''))
 
