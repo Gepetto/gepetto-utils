@@ -8,12 +8,13 @@ RUN apt-get update -y \
     libboost-all-dev \
     libeigen3-dev \
     python3-numpy \
+    python-is-python3 \
  && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --recursive -b devel https://github.com/stack-of-tasks/eigenpy.git
 
 WORKDIR eigenpy/build
 
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-march=native" -DPYTHON_EXECUTABLE=/usr/bin/python3 ..
+RUN cmake ..
 
-RUN make -sj16
+#RUN make -sj16
