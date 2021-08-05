@@ -1,56 +1,55 @@
-ARG UBUNTU=bionic
-FROM ubuntu:$UBUNTU
+FROM ubuntu:focal
 
 # Setup Robotpkg apt binary repository
-ARG UBUNTU=bionic
-ENV UBUNTU=$UBUNTU
-RUN apt-get update -y && apt-get install -y \
-    build-essential \
-    cmake \
-    curl \
-    git \
- && echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub $UBUNTU robotpkg" \
- >> /etc/apt/sources.list.d/robotpkg.list \
- && echo "deb [arch=amd64] http://robotpkg.openrobots.org/wip/packages/debian/pub $UBUNTU robotpkg" \
- >> /etc/apt/sources.list.d/robotpkg.list \
- && curl http://robotpkg.openrobots.org/packages/debian/robotpkg.key | apt-key add - \
- && rm -rf /var/lib/apt/lists/*
-
-ENV ROBOTPKG_BASE=/opt/openrobots
-ENV CMAKE_PREFIX_PATH=$ROBOTPKG_BASE:$CMAKE_PREFIX_PATH \
-      LD_LIBRARY_PATH=$ROBOTPKG_BASE/lib:$ROBOTPKG_BASE/lib/plugin:$LD_LIBRARY_PATH \
-                 PATH=$ROBOTPKG_BASE/bin:$ROBOTPKG_BASE/sbin:$PATH \
-      PKG_CONFIG_PATH=$ROBOTPKG_BASE/lib/pkgconfig:$PKG_CONFIG_PATH \
-     ROS_PACKAGE_PATH=$ROBOTPKG_BASE/share:$ROS_PACKAGE_PATH
+ADD http://robotpkg.openrobots.org/packages/debian/robotpkg.key /
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt --mount=type=cache,sharing=locked,target=/var/lib/apt \
+    apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy gnupg2 \
+ && apt-key add /robotpkg.key \
+ && echo "deb [arch=amd64] http://robotpkg.openrobots.org/packages/debian/pub focal robotpkg\n" \
+         "deb [arch=amd64] http://robotpkg.openrobots.org/wip/packages/debian/pub focal robotpkg\n" \
+ >> /etc/apt/sources.list.d/robotpkg.list
 
 # get Pinocchio dependencies
-ARG PYTHON=python3
-ENV PYTHON=$PYTHON
-RUN apt-get update -y \
- && apt-get install -y \
-    $(echo $PYTHON | sed 's/2//') \
- && apt-get install -y \
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt --mount=type=cache,sharing=locked,target=/var/lib/apt \
+    apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy \
+    build-essential \
+    ccache \
+    cmake \
+    git \
     libeigen3-dev \
     liburdfdom-dev \
     libtinyxml-dev \
-    robotpkg-hpp-fcl \
-    robotpkg-py$($PYTHON -V 2>&1 | sed 's/.*\([23]\)\.\([0-9]\).*/\1\2/')-eigenpy \
- && rm -rf /var/lib/apt/lists/*
+    python-is-python3 \
+    robotpkg-cppadcodegen \
+    robotpkg-py38-casadi \
+    robotpkg-py38-hpp-fcl
+
+# Configure python path
+RUN echo "/opt/openrobots/lib/python3.8/site-packages" >> /usr/lib/python3/dist-packages/robotpkg.pth
 
 # (in)validate docker build cache with the HTTP "Last-Modified" header from github
-ARG NAMESPACE=stack-of-tasks
+ARG ORG=stack-of-tasks
 ARG BRANCH=devel
-ADD https://github.com/$NAMESPACE/pinocchio/archive/$BRANCH.zip .
+ADD https://api.github.com/repos/${ORG}/pinocchio/commits/${BRANCH} .
 
-# but this zip doesn't come with .git nor submodules
-RUN git clone --recursive --branch $BRANCH https://github.com/$NAMESPACE/pinocchio.git
+RUN git clone --recursive --branch $BRANCH -j4 https://github.com/$ORG/pinocchio.git
 
 WORKDIR /pinocchio/build
 ARG MAKE_JOBS=1
-ENV CTEST_PARALLEL_LEVEL=$MAKE_JOBS CTEST_OUTPUT_ON_FAILURE=true
-RUN cmake -DPYTHON_EXECUTABLE=$(which $PYTHON) .. \
- && make -j$MAKE_JOBS \
- && make test \
- && make install
+ENV CCACHE_DIR=/ccache CMAKE_PREFIX_PATH=/opt/openrobots \
+    CTEST_PARALLEL_LEVEL=$MAKE_JOBS CTEST_OUTPUT_ON_FAILURE=true
 
-ENV PYTHONPATH=/usr/local/lib/python3/dist-packages/
+RUN --mount=type=cache,target=/ccache cmake -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+                                            -DBUILD_ADVANCED_TESTING=ON \
+                                            -DBUILD_BENCHMARK=ON \
+                                            -DBUILD_UTILS=ON \
+                                            -DBUILD_WITH_AUTODIFF_SUPPORT=ON \
+                                            -DBUILD_WITH_CASADI_SUPPORT=ON \
+                                            -DBUILD_WITH_CODEGEN_SUPPORT=ON \
+                                            -DBUILD_WITH_COLLISION_SUPPORT=ON \
+                                            -DBUILD_WITH_OPENMP_SUPPORT=ON \
+                                            -DLINK_PYTHON_INTERFACE_TO_OPENM=ON \
+                                            ..
+RUN --mount=type=cache,target=/ccache make -sj$MAKE_JOBS
+RUN make test
+RUN make install

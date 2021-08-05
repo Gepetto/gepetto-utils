@@ -1,8 +1,7 @@
-ARG IMAGE=ubuntu:20.04
-FROM $IMAGE
+FROM ubuntu:focal
 
-RUN apt-get update -qqy \
- && DEBIAN_FRONTEND=noninteractive apt-get install -qqy \
+RUN --mount=type=cache,sharing=locked,target=/var/cache/apt --mount=type=cache,sharing=locked,target=/var/lib/apt \
+    apt-get update -qqy && DEBIAN_FRONTEND=noninteractive apt-get install -qqy \
     git \
     mesa-utils \
     net-tools \
@@ -11,16 +10,13 @@ RUN apt-get update -qqy \
     tigervnc-xorg-extension \
     terminator \
     x11-apps \
-    xfce4 \
-    sudo \
- && rm -rf /var/lib/apt/lists/*
+    xfce4
 
 EXPOSE 5901
 
-RUN useradd -m user \
- && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \
- && chmod 777 /usr/share/novnc/utils
+RUN chmod 777 /usr/share/novnc/utils
 
+RUN useradd -m user
 USER user
-ADD docker-vnc /usr/local/bin
+ADD --chown=user docker-vnc /usr/local/bin
 CMD docker-vnc
