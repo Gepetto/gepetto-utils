@@ -1,10 +1,6 @@
 {
   "B181": [
     [
-      "Bury",
-      "Diane"
-    ],
-    [
       "Nicolin",
       "Alexis"
     ],
@@ -59,17 +55,9 @@
     [
       "Lasguignes",
       "Thibaud"
-    ],
-    [
-      "Scherrer",
-      "Louise"
     ]
   ],
   "B67": [
-    [
-      "Brisville",
-      "Mathieu"
-    ],
     [
       "Fadini",
       "Gabriele"
@@ -81,12 +69,6 @@
     [
       "Leziart",
       "Pierre-Alexandre"
-    ]
-  ],
-  "B68": [
-    [
-      "Tabti",
-      "Nahla"
     ]
   ],
   "B69.1": [
@@ -137,32 +119,12 @@
   ],
   "BSalleGerardBauzil": [
     [
-      "Cherfi",
-      "Hakim"
-    ],
-    [
-      "Collobert",
-      "Alexandre"
-    ],
-    [
       "Hareng",
       "Nils"
     ],
     [
-      "Louahadj",
-      "Aniss"
-    ],
-    [
-      "Nguyen",
-      "Dinh Vinh Thanh"
-    ],
-    [
-      "Rouanet",
-      "Paul"
-    ],
-    [
-      "Silva",
-      "Manon"
+      "Sosnowski",
+      "Vinicius"
     ]
   ]
 }
