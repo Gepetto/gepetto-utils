@@ -85,13 +85,10 @@ class Offices:
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
     'Exterieur': {('Steve', 'Tonneau')},
-    'B63': {('Ewen', 'Dantec')},
-    'B65': {('Nils', 'Hareng')},
     'B67': {('Michel', 'Aractingi')},
     'B69.1': {('Guilhem', 'Saurel'), ('Pierre', 'Fernbach')},
-    'B69.2': {('Nahla', 'Tabti')},
     'B90': {('Nicolas', 'Mansard')},
-    'B181': {('Médéric', 'Fourmy')},
+    'B181': {('Bury', 'Diane')},
 }
 WRONG_OFFICE = {k: {Gepettist(sn, gn) for (gn, sn) in v} for k, v in WRONG_OFFICE.items()}
 # Fix unicode from LDAP data…
