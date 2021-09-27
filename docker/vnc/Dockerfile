@@ -6,6 +6,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt --mount=type=cache,s
     mesa-utils \
     net-tools \
     novnc \
+    sudo \
     tigervnc-standalone-server \
     tigervnc-xorg-extension \
     terminator \
@@ -14,9 +15,10 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt --mount=type=cache,s
 
 EXPOSE 5901
 
-RUN chmod 777 /usr/share/novnc/utils
+RUN chmod 777 /usr/share/novnc/utils \
+ && useradd -m user \
+ && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-RUN useradd -m user
 USER user
 ADD --chown=user docker-vnc /usr/local/bin
 CMD docker-vnc

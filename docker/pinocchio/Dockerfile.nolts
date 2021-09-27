@@ -27,9 +27,9 @@ RUN apt-get update -y \
     ${PYTHON/2/}-numpy \
  && rm -rf /var/lib/apt/lists/*
 
-ARG HPP_FCL=1.7.2
-ARG EIGENPY=2.6.3
-ARG PINOCCHIO=2.6.0
+ARG HPP_FCL=1.7.5
+ARG EIGENPY=2.6.5
+ARG PINOCCHIO=2.6.3
 ARG BUILD_TYPE=Debug
 
 ENV CMAKE_OPTS="-DPYTHON_EXECUTABLE=/usr/bin/${PYTHON} \
