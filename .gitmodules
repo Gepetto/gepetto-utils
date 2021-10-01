@@ -1,3 +1,0 @@
-[submodule "scholar.py"]
-	path = website/scholar
-	url = git@github.com:nim65s/scholar.py.git
