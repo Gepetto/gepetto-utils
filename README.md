@@ -10,10 +10,6 @@ Some standard Dockerfile to build our projects in various configurations, especi
 
 Automatically find new gepettists, and send them a greetings mail, with some useful informations
 
-## [Website](website)
-
-Tools to maintain our main website
-
 ## [Scripts](scripts)
 
 Set of little useful scripts
