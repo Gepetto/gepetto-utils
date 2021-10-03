@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.1.1 (c3084ef, 2021-09-22)"
-   sodipodi:docname="Gepetto-v2.svg"
+   sodipodi:docname="Gepetto.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -23,9 +23,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="3.3235436"
-     inkscape:cx="1003.5975"
-     inkscape:cy="626.28937"
+     inkscape:zoom="0.8308859"
+     inkscape:cx="1109.0572"
+     inkscape:cy="626.4398"
      inkscape:window-width="1790"
      inkscape:window-height="999"
      inkscape:window-x="0"
@@ -46,6 +46,10 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-106.93848,-59.518499)">
+    <path
+       style="fill:#abc837;stroke:#abc837;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 336.35233,173.70887 -10.93657,12.67902 1.10253,0.95101 10.93657,-12.67902 z"
+       id="path63081-1" />
     <path
        style="fill:#5fd35f;stroke:#5fd35f;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 347.18603,205.65894 -9.80758,-6.71472 -0.80543,1.43788 9.45324,7.55292 z"
@@ -638,6 +642,28 @@
            id="tspan30622-8-2-7-1">Python</tspan></text>
     </g>
     <g
+       id="g74214-9"
+       transform="translate(178.99788,40.249543)">
+      <ellipse
+         style="fill:#dde9af;fill-opacity:1;fill-rule:evenodd;stroke:#abc837;stroke-width:0.237634;stroke-miterlimit:4;stroke-dasharray:none"
+         id="path15022-6-2-9-4-5-9"
+         cx="205.29767"
+         cy="124.67101"
+         rx="16.472258"
+         ry="5.8408928" />
+      <text
+         xml:space="preserve"
+         style="font-size:4.58611px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';stroke-width:0.264583"
+         x="205.73068"
+         y="126.07317"
+         id="text15630-2-2-8-5-9-5"><tspan
+           sodipodi:role="line"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.58611px;font-family:Noteworthy;-inkscape-font-specification:'Noteworthy Bold';text-align:center;text-anchor:middle;fill:#445016;stroke-width:0.264583"
+           x="205.73068"
+           y="126.07317"
+           id="tspan30622-8-2-7-1-9">ROS</tspan></text>
+    </g>
+    <g
        id="g74199"
        transform="translate(115.23384,66.901703)">
       <ellipse
@@ -986,7 +1012,7 @@
     </g>
     <g
        id="g74209"
-       transform="translate(119.23788,62.352475)">
+       transform="translate(63.830152,85.279811)">
       <ellipse
          style="fill:#dde9af;fill-opacity:1;fill-rule:evenodd;stroke:#abc837;stroke-width:0.237634;stroke-miterlimit:4;stroke-dasharray:none"
          id="path15022-6-2-9-8"
