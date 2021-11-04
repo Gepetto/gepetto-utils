@@ -13,6 +13,7 @@ from ldap3 import Connection
 from wand.color import Color
 from wand.drawing import Drawing
 from wand.image import Image
+from wand.display import display
 
 # Cache LDAP data
 CACHE = Path('data/offices-ldap.json')
@@ -84,11 +85,10 @@ class Offices:
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
-    'Exterieur': {('Steve', 'Tonneau')},
-    'B67': {('Michel', 'Aractingi')},
+    'Exterieur': {('Steve', 'Tonneau'), ('Nils', 'Hareng')},
     'B69.1': {('Guilhem', 'Saurel'), ('Pierre', 'Fernbach')},
     'B90': {('Nicolas', 'Mansard')},
-    'B181': {('Bury', 'Diane')},
+    'B69.2': {('D. V. Thanh', 'Nguyen')},
 }
 WRONG_OFFICE = {k: {Gepettist(sn, gn) for (gn, sn) in v} for k, v in WRONG_OFFICE.items()}
 # Fix unicode from LDAP data…
@@ -109,7 +109,7 @@ def door_label(members, logo=True):
             with Image(filename=LOGO) as logo:
                 logo.transform(resize=f'{WIDTH}x{HEIGHT}')
                 draw.composite('over', 200, 0, logo.width, logo.height, logo)
-        draw.font_size = 80 if len(members) >= 4 else 90
+        draw.font_size = 70 if len(members) > 4 else (80 if len(members) == 4 else 90)
         draw.text_alignment = 'center'
         height = HEIGHT - len(members) * draw.font_size
         draw.text(int(WIDTH / 2), int(height / 2) + 65, '\n'.join(str(m) for m in sorted(members)))
