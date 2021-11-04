@@ -13,7 +13,6 @@ from ldap3 import Connection
 from wand.color import Color
 from wand.drawing import Drawing
 from wand.image import Image
-from wand.display import display
 
 # Cache LDAP data
 CACHE = Path('data/offices-ldap.json')
