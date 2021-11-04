@@ -109,7 +109,12 @@ def door_label(members, logo=True):
             with Image(filename=LOGO) as logo:
                 logo.transform(resize=f'{WIDTH}x{HEIGHT}')
                 draw.composite('over', 200, 0, logo.width, logo.height, logo)
-        draw.font_size = 70 if len(members) > 4 else (80 if len(members) == 4 else 90)
+        if len(members) > 4:
+            draw.font_size = 70
+        elif len(members) == 4:
+            draw.font_size = 80
+        else:
+            draw.font_size = 90
         draw.text_alignment = 'center'
         height = HEIGHT - len(members) * draw.font_size
         draw.text(int(WIDTH / 2), int(height / 2) + 65, '\n'.join(str(m) for m in sorted(members)))
