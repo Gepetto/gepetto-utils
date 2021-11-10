@@ -9,7 +9,7 @@ from pathlib import Path
 from ldap3 import Connection
 
 HERE = Path(__file__).resolve().parent
-SHELF = HERE / '.cache'
+SHELF = str(HERE / '.cache')
 
 
 def get_gepetto():
