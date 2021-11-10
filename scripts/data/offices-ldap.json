@@ -1,6 +1,10 @@
 {
   "B181": [
     [
+      "Bury",
+      "Diane"
+    ],
+    [
       "Fourmy",
       "Médéric"
     ],
@@ -67,6 +71,14 @@
     [
       "Lasguignes",
       "Thibaud"
+    ],
+    [
+      "Marsan",
+      "Thibault"
+    ],
+    [
+      "Naveau",
+      "Maximilien"
     ]
   ],
   "B67": [
@@ -75,8 +87,20 @@
       "Gabriele"
     ],
     [
+      "Jallet",
+      "Wilson"
+    ],
+    [
       "Leziart",
       "Pierre-Alexandre"
+    ],
+    [
+      "Perrot",
+      "Côme"
+    ],
+    [
+      "Romualdi",
+      "Giulio"
     ]
   ],
   "B69.1": [
@@ -119,12 +143,6 @@
     [
       "Mansard",
       "Nicolas"
-    ]
-  ],
-  "BSalleGerardBauzil": [
-    [
-      "Sosnowski",
-      "Vinicius"
     ]
   ]
 }
