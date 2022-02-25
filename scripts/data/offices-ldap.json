@@ -7,14 +7,6 @@
     [
       "Fourmy",
       "Médéric"
-    ],
-    [
-      "Nicolin",
-      "Alexis"
-    ],
-    [
-      "Ramuzat",
-      "Noelie"
     ]
   ],
   "B185": [
@@ -99,8 +91,14 @@
       "Côme"
     ],
     [
-      "Romualdi",
-      "Giulio"
+      "Smaldone",
+      "Filippo Maria"
+    ]
+  ],
+  "B68": [
+    [
+      "Deves",
+      "Mathieu"
     ]
   ],
   "B69.1": [
@@ -110,10 +108,6 @@
     ]
   ],
   "B69.2": [
-    [
-      "Ha",
-      "Thuc Long"
-    ],
     [
       "Kleff",
       "Sébastien"
@@ -141,8 +135,22 @@
       "Florent"
     ],
     [
+      "Le",
+      "Quang Anh"
+    ],
+    [
       "Mansard",
       "Nicolas"
+    ]
+  ],
+  "BSalleGerardBauzil": [
+    [
+      "Depledt",
+      "Yann"
+    ],
+    [
+      "Nguyen",
+      "Dinh Vinh Thanh"
     ]
   ]
 }

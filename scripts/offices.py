@@ -84,18 +84,20 @@ class Offices:
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
-    'Exterieur': {('Steve', 'Tonneau'), ('Nils', 'Hareng')},
+    'Exterieur': {('Nils', 'Hareng')},
+    'BSalleGerardBauzil': {('Quang Anh', 'Le')},
     'B69.1': {('Guilhem', 'Saurel'), ('Pierre', 'Fernbach')},
     'B90': {('Nicolas', 'Mansard')},
-    'B69.2': {('D. V. Thanh', 'Nguyen')},
+    'B69.2': {('Dinh Vinh Thanh', 'Nguyen'), ('Filip', 'Becanovic')},
 }
 WRONG_OFFICE = {k: {Gepettist(sn, gn) for (gn, sn) in v} for k, v in WRONG_OFFICE.items()}
 # Fix unicode from LDAP data…
 ALIAS = {
-    'B67': ({Gepettist('Leziart', 'Pierre-Alexandre')}, {Gepettist('Léziart', 'P-A')}),
-    'B61a': ({Gepettist('Taix', 'Michel')}, {Gepettist('Taïx', 'Michel')}),
-    'B91': ({Gepettist('Soueres', 'Philippe')}, {Gepettist('Souères', 'Philippe')}),
-    'B181': ({Gepettist('Ramuzat', 'Noelie')}, {Gepettist('Ramuzat', 'Noëlie')}),
+    'B67': [({Gepettist('Leziart', 'Pierre-Alexandre')}, {Gepettist('Léziart', 'P-A')}), 
+            ({Gepettist('Smaldone', 'Filippo Maria')}, {Gepettist('Smaldone', 'Filippo M.')})],
+    'B61a': [({Gepettist('Taix', 'Michel')}, {Gepettist('Taïx', 'Michel')})],
+    'B91': [({Gepettist('Soueres', 'Philippe')}, {Gepettist('Souères', 'Philippe')})],
+    'B69.2': [({Gepettist('Nguyen', 'Dinh Vinh Thanh')}, {Gepettist('Nguyen', 'D. V. T.')})],
 }
 
 
@@ -143,8 +145,10 @@ def fix_wrong_offices(offices):
         for wrong_office in offices:
             if wrong_office != woffice:
                 offices[wrong_office] -= wmembers  # remove them from the other offices
-    for office, (before, after) in ALIAS.items():
-        offices[office] = offices[office] - before | after
+    for office, aliases in ALIAS.items():
+        for (before, after) in aliases:
+            print(f"Fixing: office {office}: {before}, {after}")
+            offices[office] = offices[office] - before | after
     return offices
 
 
