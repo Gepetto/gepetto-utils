@@ -146,7 +146,7 @@ def fix_wrong_offices(offices):
             if wrong_office != woffice:
                 offices[wrong_office] -= wmembers  # remove them from the other offices
     for office, aliases in ALIAS.items():
-        for (before, after) in aliases:
+        for before, after in aliases:
             offices[office] = offices[office] - before | after
     return offices
 
