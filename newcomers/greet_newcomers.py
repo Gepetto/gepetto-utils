@@ -9,7 +9,7 @@ from pathlib import Path
 from ldap3 import Connection
 
 HERE = Path(__file__).resolve().parent
-SHELF = str(HERE / '.cache')
+SHELF = str(HERE / ".cache")
 
 
 def get_gepetto():
@@ -17,7 +17,7 @@ def get_gepetto():
     Get the old list of Gepetto members
     """
     with shelve.open(SHELF) as shelf:
-        gepetto = shelf['gepetto'] if 'gepetto' in shelf else []
+        gepetto = shelf["gepetto"] if "gepetto" in shelf else []
     return gepetto
 
 
@@ -27,15 +27,18 @@ def whoami(gepetto):
     The mail will be sent from this account
     """
     with shelve.open(SHELF) as shelf:
-        me = shelf['me'] if 'me' in shelf else getuser()
+        me = shelf["me"] if "me" in shelf else getuser()
 
     while me not in gepetto:
-        print("You (%s) dont's seem to be in the Gepetto group… What's your LAAS username ?" % me)
-        me = input('--> ')
+        print(
+            "You (%s) dont's seem to be in the Gepetto group… What's your LAAS username ?"
+            % me
+        )
+        me = input("--> ")
 
     # remember this in the cache
     with shelve.open(SHELF) as shelf:
-        shelf['me'] = me
+        shelf["me"] = me
 
     return me
 
@@ -44,20 +47,20 @@ def greet(to, sender):
     """
     Send a greeting email to `to`
     """
-    if '@' not in sender:
-        sender = '%s@laas.fr' % sender
+    if "@" not in sender:
+        sender = "%s@laas.fr" % sender
 
-    if '@' not in to:
-        to = '%s@laas.fr' % to
+    if "@" not in to:
+        to = "%s@laas.fr" % to
 
-    with (HERE / 'template.txt').open() as f:
+    with (HERE / "template.txt").open() as f:
         msg = MIMEText(f.read())
 
-    msg['Subject'] = 'Welcome in Gepetto !'
-    msg['From'] = sender
-    msg['To'] = to
-    msg['Bcc'] = sender
-    s = SMTP('mail.laas.fr')
+    msg["Subject"] = "Welcome in Gepetto !"
+    msg["From"] = sender
+    msg["To"] = to
+    msg["Bcc"] = sender
+    s = SMTP("mail.laas.fr")
     s.send_message(msg)
     s.quit()
 
@@ -66,12 +69,12 @@ def get_gepetto_ldap():
     """
     Get a new list of Gepetto members in the LDAP of the LAAS
     """
-    conn = Connection('ldap.laas.fr', auto_bind=True)
-    conn.search('dc=laas,dc=fr', '(o=gepetto)', attributes=['uid'])
+    conn = Connection("ldap.laas.fr", auto_bind=True)
+    conn.search("dc=laas,dc=fr", "(o=gepetto)", attributes=["uid"])
     return [str(entry.uid) for entry in conn.entries]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Get old and new list of members
     gepetto = get_gepetto()
     gepetto_ldap = get_gepetto_ldap()
@@ -89,4 +92,4 @@ if __name__ == '__main__':
 
     # Save the new list
     with shelve.open(SHELF) as shelf:
-        shelf['gepetto'] = gepetto_ldap
+        shelf["gepetto"] = gepetto_ldap

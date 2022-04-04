@@ -8,5 +8,5 @@ class TestHPPFCL(unittest.TestCase):
         self.assertLess(abs(hppfcl.Capsule(2, 3).computeVolume() - 71.2094334814), 1e-7)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

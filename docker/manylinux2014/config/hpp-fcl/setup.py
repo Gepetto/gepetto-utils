@@ -13,11 +13,13 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/humanoid-path-planner/hpp-fcl",
-    install_requires=['eigenpy'],
-    cmake_minimum_required_version='3.1',
+    install_requires=["eigenpy"],
+    cmake_minimum_required_version="3.1",
     classifiers=[
-        "Programming Language :: Python :: 2", "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: BSD License", "Operating System :: POSIX :: Linux"
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: POSIX :: Linux",
     ],
-    python_requires='>=2.7',
+    python_requires=">=2.7",
 )

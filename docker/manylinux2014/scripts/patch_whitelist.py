@@ -13,18 +13,18 @@ from pathlib import Path
 
 import auditwheel
 
-POLICY = Path(auditwheel.__file__).parent / 'policy/policy.json'
+POLICY = Path(auditwheel.__file__).parent / "policy/policy.json"
 
 with POLICY.open() as f:
     policies = json.load(f)
 
 deps = []
-for dep in Path(sys.argv[-1]).glob('*.libs'):
+for dep in Path(sys.argv[-1]).glob("*.libs"):
     deps.append(dep.name)
-    for lib in dep.glob('*.so*'):
+    for lib in dep.glob("*.so*"):
         policies[-1]["lib_whitelist"].append(lib.name)
 
-with POLICY.open('w') as f:
+with POLICY.open("w") as f:
     json.dump(policies, f)
 
-print(''.join(f':$ORIGIN/../{dep}' for dep in deps))
+print("".join(f":$ORIGIN/../{dep}" for dep in deps))
