@@ -98,8 +98,9 @@ class Offices:
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
-    "Exterieur": {("Nils", "Hareng")},
+    "Exterieur": {("Nils", "Hareng"), ("Wilson", "Jallet")},
     "BSalleGerardBauzil": {("Quang Anh", "Le")},
+    "B65": {("Thomas", "Flayols")},
     "B69.1": {("Guilhem", "Saurel"), ("Pierre", "Fernbach")},
     "B90": {("Nicolas", "Mansard")},
     "B69.2": {("Dinh Vinh Thanh", "Nguyen"), ("Filip", "Becanovic")},
