@@ -8,24 +8,18 @@ import requests
 
 DOC = Path("/net/cubitus/projects/Partage_GEPETTO/Doc")
 GITLAB = "https://gitlab.laas.fr"
-RAINBOARD = "http://rainboard.laas.fr"
+RAINBOARD = "https://rainboard.laas.fr"
 INDEX = DOC / "index.html"
 HEAD = DOC / "index.head.html"
 
 if __name__ == "__main__":
-    with INDEX.open("w") as f:
-        with HEAD.open() as head:
-            f.write(head.read())
+    with INDEX.open("w") as f, HEAD.open() as head:
+        f.write(head.read())
 
     for project, namespace, branch in sorted(
-        requests.get("%s/doc" % RAINBOARD).json()["ret"]
+        requests.get(f"{RAINBOARD}/doc").json()["ret"]
     ):
-        url = "%s/%s/%s/-/jobs/artifacts/%s/download" % (
-            GITLAB,
-            namespace,
-            project,
-            branch,
-        )
+        url = f"{GITLAB}/{namespace}/{project}/-/jobs/artifacts/{branch}/download"
         path = DOC / namespace / project / branch
         r = requests.get(url, {"job": "doc-coverage"}, stream=True)
         try:
@@ -40,15 +34,14 @@ if __name__ == "__main__":
                 link = path.relative_to(DOC)
                 doxygen, coverage = link / "doxygen-html", link / "coverage"
                 print(
-                    "<tr><td>%s</td><td>%s</td><td>%s</td><td>"
-                    % (project, namespace, branch),
+                    f"<tr><td>{project}</td><td>{namespace}</td><td>{branch}</td><td>",
                     file=f,
                 )
                 if (DOC / doxygen).is_dir():
-                    print('<a href="%s">Doc</a>' % doxygen, file=f)
+                    print(f"<a href='{doxygen}'>Doc</a>", file=f)
                 print("</td><td>", file=f)
                 if (DOC / coverage).is_dir():
-                    print('<a href="%s">Coverage</a>' % coverage, file=f)
+                    print(f"<a href='{coverage}'>Coverage</a>", file=f)
                 print("</td></tr>", file=f)
 
     with INDEX.open("a") as f:
