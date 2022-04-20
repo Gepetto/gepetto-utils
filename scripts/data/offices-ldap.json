@@ -1,5 +1,9 @@
 {
-  "B185": [
+  "B181": [
+    [
+      "Bonnefoy",
+      "Aurélie"
+    ],
     [
       "Maroger",
       "Isabelle"
@@ -7,7 +11,9 @@
     [
       "Otmani",
       "Sabrina"
-    ],
+    ]
+  ],
+  "B185": [
     [
       "Risbourg",
       "Fanny"
@@ -25,10 +31,6 @@
   ],
   "B63": [
     [
-      "Bonnefoy",
-      "Aurélie"
-    ],
-    [
       "Chemin",
       "Jason"
     ],
@@ -42,6 +44,10 @@
     ]
   ],
   "B65": [
+    [
+      "Flayols",
+      "Thomas"
+    ],
     [
       "Lasguignes",
       "Thibaud"
@@ -85,6 +91,14 @@
     [
       "Deves",
       "Mathieu"
+    ],
+    [
+      "Fricou",
+      "Justine"
+    ],
+    [
+      "Sabbah",
+      "Maxime"
     ]
   ],
   "B69.1": [
@@ -135,12 +149,24 @@
       "Alessandro"
     ],
     [
+      "Baudu",
+      "Dorian"
+    ],
+    [
       "Depledt",
       "Yann"
     ],
     [
+      "Gibert",
+      "Alexis"
+    ],
+    [
       "Nguyen",
       "Dinh Vinh Thanh"
+    ],
+    [
+      "Zeng",
+      "Weikang"
     ]
   ]
 }
