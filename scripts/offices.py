@@ -100,6 +100,7 @@ class Offices:
 WRONG_OFFICE = {
     "Exterieur": {("Nils", "Hareng"), ("Wilson", "Jallet")},
     "BSalleGerardBauzil": {("Quang Anh", "Le")},
+    "B63": {("Médéric", "Fourmy")},
     "B65": {("Thomas", "Flayols")},
     "B69.1": {("Guilhem", "Saurel"), ("Pierre", "Fernbach")},
     "B90": {("Nicolas", "Mansard")},
