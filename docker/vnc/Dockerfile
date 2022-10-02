@@ -18,6 +18,7 @@ EXPOSE 5912
 RUN chmod 777 /usr/share/novnc/utils \
  && useradd -m user \
  && sed -i '/user/s/:x:/::/' /etc/passwd \
+ && chsh -s /bin/bash user \
  && echo "user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 USER user
