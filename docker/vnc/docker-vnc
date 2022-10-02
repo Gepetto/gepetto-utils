@@ -2,6 +2,6 @@
 
 mkdir ~/.vnc
 ln -s /usr/bin/startxfce4 ~/.vnc/xstartup
-tigervncserver -SecurityTypes None
-sed -i 's/.(hostname)/localhost/g;s/5900/5901/' /usr/share/novnc/utils/launch.sh
+tigervncserver -SecurityTypes None :12
+sed -i 's/.(hostname)/localhost/g;s/5900/5912/' /usr/share/novnc/utils/launch.sh
 /usr/share/novnc/utils/launch.sh
