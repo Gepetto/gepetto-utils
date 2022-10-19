@@ -102,7 +102,7 @@ WRONG_OFFICE = {
     "BSalleGerardBauzil": {("Quang Anh", "Le")},
     "B63": {("Médéric", "Fourmy")},
     "B65": {("Thomas", "Flayols")},
-    "B69.1": {("Guilhem", "Saurel"), ("Pierre", "Fernbach")},
+    "B69.1": {("Pierre", "Fernbach")},
     "B90": {("Nicolas", "Mansard")},
     "B69.2": {("Dinh Vinh Thanh", "Nguyen"), ("Filip", "Becanovic")},
 }
