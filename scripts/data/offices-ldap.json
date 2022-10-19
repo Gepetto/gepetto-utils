@@ -1,26 +1,8 @@
 {
-  "A49": [
-    [
-      "Baudu",
-      "Dorian"
-    ],
-    [
-      "Fricou",
-      "Justine"
-    ],
-    [
-      "Zeng",
-      "Weikang"
-    ]
-  ],
   "B181": [
     [
       "Bonnefoy",
       "Aurélie"
-    ],
-    [
-      "Maroger",
-      "Isabelle"
     ],
     [
       "Otmani",
@@ -42,10 +24,6 @@
     ]
   ],
   "B63": [
-    [
-      "Chemin",
-      "Jason"
-    ],
     [
       "Dantec",
       "Ewen"
@@ -79,10 +57,6 @@
       "Gabriele"
     ],
     [
-      "Grandesso",
-      "Gianluigi"
-    ],
-    [
       "Jallet",
       "Wilson"
     ],
@@ -97,20 +71,12 @@
     [
       "Perrot",
       "Côme"
-    ],
-    [
-      "Smaldone",
-      "Filippo Maria"
     ]
   ],
   "B68": [
     [
       "Deves",
       "Mathieu"
-    ],
-    [
-      "Fansi Tchameni",
-      "Maxime-Ulrich"
     ],
     [
       "Sabbah",
@@ -124,10 +90,6 @@
     ]
   ],
   "B69.2": [
-    [
-      "Kleff",
-      "Sébastien"
-    ],
     [
       "Villa",
       "Nahuel"
@@ -151,26 +113,8 @@
       "Florent"
     ],
     [
-      "Le",
-      "Quang Anh"
-    ],
-    [
       "Mansard",
       "Nicolas"
-    ]
-  ],
-  "BSalleGerardBauzil": [
-    [
-      "Assirelli",
-      "Alessandro"
-    ],
-    [
-      "Depledt",
-      "Yann"
-    ],
-    [
-      "Gibert",
-      "Alexis"
     ]
   ]
 }
