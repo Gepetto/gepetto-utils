@@ -97,6 +97,9 @@ class Offices:
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
+    "B04": {
+        ("Vincent", "Bonnet"),
+    },
     "B10": {
         ("Guilhem", "Saurel"),
         ("Thibault", "Marsan"),
@@ -138,7 +141,7 @@ def door_label(members, logo=True):
         # elif len(members) == 3:
         # draw.font_size = 75
         else:
-            draw.font_size = 90
+            draw.font_size = 80
         draw.text_alignment = "center"
         height = HEIGHT - len(members) * draw.font_size
         draw.text(
