@@ -22,20 +22,19 @@ LOGO = "data/logo-low-black.png"
 DPCM = 300 / 2.54  # dot per cm @300DPI
 WIDTH, HEIGHT = int(6 * DPCM), int(3 * DPCM)  # door labels are 6cm x 3cm
 NOT_OFFICES = ["Exterieur", "BSalleGerardBauzil"]
-BAT_B = "data/bat_b.png"
+BAT_B = "data/rdc.png"
 MAP_POSITIONS = [
-    ("B181", 1600, 830),
-    ("B185", 1600, 130),
-    ("B61a", 1333, 1820),
-    ("B63", 1333, 1500),
-    ("B65", 1333, 1320),
-    ("B67", 1333, 870),
-    ("B69.1", 1333, 680),
-    ("B69.2", 1333, 520),
-    ("B90", 0, 130),
-    ("B91", 0, 280),
-    ("B92", 0, 430),
-    ("B94", 0, 750),
+    ("B20", 460, 50, 650, 228, -350),
+    ("B19", 460, 233, 650, 412, -350),
+    ("B18", 460, 420, 650, 598, -350),
+    ("B17", 460, 608, 650, 785, -350),
+    ("B16", 460, 793, 650, 966, -350),
+    ("B10", 1410, 450, 1670, 691, 400),
+    ("B08", 1410, 700, 1670, 925, 400),
+    ("B06", 1410, 932, 1670, 1161, 400),
+    ("B04", 1410, 1453, 1670, 1647, 400),
+    ("B03", 1410, 1656, 1670, 1834, 400),
+    ("B01", 1410, 2021, 1670, 2202, 400),
 ]
 
 
@@ -98,31 +97,29 @@ class Offices:
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
-    "Exterieur": {("Nils", "Hareng"), ("Wilson", "Jallet")},
-    "BSalleGerardBauzil": {("Quang Anh", "Le")},
-    "B63": {("Médéric", "Fourmy")},
-    "B65": {("Thomas", "Flayols")},
-    "B69.1": {("Pierre", "Fernbach")},
-    "B90": {("Nicolas", "Mansard")},
-    "B69.2": {("Dinh Vinh Thanh", "Nguyen"), ("Filip", "Becanovic")},
+    "B04": {
+        ("Vincent", "Bonnet"),
+    },
+    "B10": {
+        ("Guilhem", "Saurel"),
+    },
+    "Exterieur": {
+        ("Ariane", "Lalles"),
+    },
 }
 WRONG_OFFICE = {
     k: {Gepettist(sn, gn) for (gn, sn) in v} for k, v in WRONG_OFFICE.items()
 }
 # Fix unicode from LDAP data…
 ALIAS = {
-    "B67": [
-        ({Gepettist("Leziart", "Pierre-Alexandre")}, {Gepettist("Léziart", "P-A")}),
+    "B08": [
         (
-            {Gepettist("Smaldone", "Filippo Maria")},
-            {Gepettist("Smaldone", "Filippo M.")},
-        ),
+            {Gepettist("Leziart", "Pierre-Alexandre")},
+            {Gepettist("Léziart", "Pierre-Alexandre")},
+        )
     ],
-    "B61a": [({Gepettist("Taix", "Michel")}, {Gepettist("Taïx", "Michel")})],
-    "B91": [({Gepettist("Soueres", "Philippe")}, {Gepettist("Souères", "Philippe")})],
-    "B69.2": [
-        ({Gepettist("Nguyen", "Dinh Vinh Thanh")}, {Gepettist("Nguyen", "D. V. T.")})
-    ],
+    "B17": [({Gepettist("Taix", "Michel")}, {Gepettist("Taïx", "Michel")})],
+    "B19": [({Gepettist("Soueres", "Philippe")}, {Gepettist("Souères", "Philippe")})],
 }
 
 
@@ -134,15 +131,15 @@ def door_label(members, logo=True):
         width=WIDTH, height=HEIGHT, background=Color("white")
     ) as img, Drawing() as draw:
         if logo:
-            with Image(filename=LOGO) as logo:
-                logo.transform(resize=f"{WIDTH}x{HEIGHT}")
-                draw.composite("over", 200, 0, logo.width, logo.height, logo)
-        if len(members) > 4:
-            draw.font_size = 70
-        elif len(members) == 4:
-            draw.font_size = 80
+            with Image(filename=LOGO) as li:
+                li.transform(resize=f"{WIDTH}x{HEIGHT}")
+                draw.composite("over", 200, 0, li.width, li.height, li)
+        if len(members) > 2 or not logo:
+            draw.font_size = 60
+        # elif len(members) == 3:
+        # draw.font_size = 75
         else:
-            draw.font_size = 90
+            draw.font_size = 80
         draw.text_alignment = "center"
         height = HEIGHT - len(members) * draw.font_size
         draw.text(
@@ -150,6 +147,16 @@ def door_label(members, logo=True):
             int(height / 2) + 65,
             "\n".join(str(m) for m in sorted(members)),
         )
+        draw(img)
+        return img.clone()
+
+
+def office_number(office):
+    c = int(DPCM * 1.5)
+    with Image(width=c, height=c, background=Color("white")) as img, Drawing() as draw:
+        draw.font_size = 90
+        draw.text_alignment = "center"
+        draw.text(int(c / 2), int(c / 2), office)
         draw(img)
         return img.clone()
 
@@ -176,6 +183,7 @@ def offices_ldap():
         ):
             continue  # filter out alumni
         if room == "[]":
+            logging.warning(f"Pas de bureau pour {gn} {sn}")
             continue  # filter out the Sans-Bureaux-Fixes
         offices[room].add(Gepettist(sn, gn))
     return offices
@@ -221,10 +229,18 @@ def labels(offices):
 def maps(offices, fixed):
     """Generate a map with labels"""
     with Image(filename=BAT_B) as page, Drawing() as draw:
-        for office, x, y in MAP_POSITIONS:
-            label = door_label(offices[office], logo=False)
-            if label:
-                draw.composite("over", x, y, label.width / 3, label.height / 3, label)
+        for office, x1, y1, x2, y2, shift in MAP_POSITIONS:
+            for i, img in enumerate(
+                (office_number(office), door_label(offices[office], logo=False)),
+            ):
+                if img:
+                    width = img.width / 2
+                    height = img.height / 2
+                    x = (x1 + x2 - width) / 2 + shift * i
+                    y = (y1 + y2 - height) / 2
+                    draw.composite("over", x, y, width, height, img)
+                else:
+                    logging.warning(f"no label for {office}")
         draw(page)
         page.save(filename="generated_map%s.png" % ("_fixed" if fixed else ""))
 

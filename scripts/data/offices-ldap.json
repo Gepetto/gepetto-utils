@@ -1,19 +1,115 @@
 {
-  "B181": [
+  "Algeco4": [
     [
-      "Bonnefoy",
-      "Aurélie"
-    ],
-    [
-      "Otmani",
-      "Sabrina"
-    ],
-    [
-      "Risbourg",
-      "Fanny"
+      "Lalles",
+      "Ariane"
     ]
   ],
-  "B61a": [
+  "B01": [
+    [
+      "Baudu",
+      "Dorian"
+    ],
+    [
+      "Nguyen",
+      "Dinh Vinh Thanh"
+    ],
+    [
+      "Wojciechowski",
+      "Krzysztof"
+    ]
+  ],
+  "B03": [
+    [
+      "Haffemayer",
+      "Arthur"
+    ],
+    [
+      "Pomarat",
+      "Zoé"
+    ]
+  ],
+  "B04": [
+    [
+      "Sabbah",
+      "Maxime"
+    ]
+  ],
+  "B06": [
+    [
+      "Batto",
+      "Virgile"
+    ],
+    [
+      "De Matteis",
+      "Ludovic"
+    ],
+    [
+      "Hadj Sassi",
+      "Sonia-Laure"
+    ],
+    [
+      "Perrot",
+      "Côme"
+    ]
+  ],
+  "B08": [
+    [
+      "Flayols",
+      "Thomas"
+    ],
+    [
+      "Leziart",
+      "Pierre-Alexandre"
+    ],
+    [
+      "Martinez-Fouché",
+      "Théo"
+    ],
+    [
+      "Subburaman",
+      "Rajesh"
+    ]
+  ],
+  "B10": [
+    [
+      "Chane-Sane",
+      "Elliot"
+    ],
+    [
+      "Fernbach",
+      "Pierre"
+    ],
+    [
+      "Lasguignes",
+      "Thibaud"
+    ],
+    [
+      "Marsan",
+      "Thibault"
+    ]
+  ],
+  "B114": [
+    [
+      "Jeannot",
+      "Thibault"
+    ],
+    [
+      "Lutz",
+      "Victor"
+    ],
+    [
+      "Parent",
+      "Laure"
+    ]
+  ],
+  "B16": [
+    [
+      "Lamiraux",
+      "Florent"
+    ]
+  ],
+  "B17": [
     [
       "Taix",
       "Michel"
@@ -23,95 +119,19 @@
       "Bruno"
     ]
   ],
-  "B63": [
-    [
-      "Dantec",
-      "Ewen"
-    ],
-    [
-      "Parag",
-      "Amit"
-    ]
-  ],
-  "B65": [
-    [
-      "Flayols",
-      "Thomas"
-    ],
-    [
-      "Lasguignes",
-      "Thibaud"
-    ],
-    [
-      "Marsan",
-      "Thibault"
-    ],
-    [
-      "Naveau",
-      "Maximilien"
-    ]
-  ],
-  "B67": [
-    [
-      "Fadini",
-      "Gabriele"
-    ],
-    [
-      "Jallet",
-      "Wilson"
-    ],
-    [
-      "Leziart",
-      "Pierre-Alexandre"
-    ],
-    [
-      "Nguyen",
-      "Dinh Vinh Thanh"
-    ],
-    [
-      "Perrot",
-      "Côme"
-    ]
-  ],
-  "B68": [
-    [
-      "Deves",
-      "Mathieu"
-    ],
-    [
-      "Sabbah",
-      "Maxime"
-    ]
-  ],
-  "B69.1": [
-    [
-      "Bonnet",
-      "Vincent"
-    ]
-  ],
-  "B69.2": [
-    [
-      "Villa",
-      "Nahuel"
-    ]
-  ],
-  "B91": [
-    [
-      "Soueres",
-      "Philippe"
-    ]
-  ],
-  "B92": [
+  "B18": [
     [
       "Stasse",
       "Olivier"
     ]
   ],
-  "B94": [
+  "B19": [
     [
-      "Lamiraux",
-      "Florent"
-    ],
+      "Soueres",
+      "Philippe"
+    ]
+  ],
+  "B20": [
     [
       "Mansard",
       "Nicolas"
