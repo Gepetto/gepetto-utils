@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Utils to manage Gepetto computers"""
 
+from argparse import ArgumentParser
 from datetime import date
 
 import pandas as pd
 from ldap3 import Connection
+from tabulate import tabulate
 
 ATTRIBUTES = [
     "cn",
@@ -18,6 +20,15 @@ ATTRIBUTES = [
     "laas-mach-utilisateur",
     "roomNumber",
 ]
+FILTERS = {
+    "laas-mach-group": "gepetto",
+    "laas-mach-type": "PC",
+}
+
+
+def short(attr: str) -> str:
+    """Use shorter versions of LDAP attributes for CLI & display."""
+    return attr.replace("laas-", "").replace("mach-", "").replace("Number", "")
 
 
 def parse(k, v):
@@ -31,27 +42,63 @@ def parse(k, v):
     return v
 
 
-def machines_ldap():
+def filter(**filters) -> str:
+    """format some filters for LDAP query."""
+    return "".join(f"({k}={v})" for k, v in filters.items())
+
+
+def machines_ldap(utilisateur="", responsable="", room="", **kwargs):
     """Get a dict of Gepettists machines from LDAP."""
+    filters = FILTERS
+    if utilisateur:
+        filters["laas-mach-utilisateur"] = utilisateur
+    if responsable:
+        filters["laas-mach-responsable"] = responsable
+    if room:
+        filters["roomNumber"] = room
+
     conn = Connection("ldap.laas.fr", auto_bind=True)
     conn.search(
         "ou=machines,dc=laas,dc=fr",
-        "(&(laas-mach-group=gepetto)(laas-mach-type=PC))",
+        f"(&{filter(**filters)})",
         attributes=ATTRIBUTES,
     )
-    df = pd.DataFrame(
-        {
-            str(entry.cn): {
-                k: parse(k, v)
-                for k, v in entry.entry_attributes_as_dict.items()
-                if k != "cn"
-            }
-            for entry in conn.entries
+
+    return {
+        str(entry.cn): {
+            short(k): parse(k, v) for k, v in entry.entry_attributes_as_dict.items()
         }
-    ).T.sort_values(by="laas-mach-datePeremption")
-    print(df.to_markdown())
-    return df
+        for entry in conn.entries
+    }
+
+
+def display(data, sort_by="datePeremption"):
+    """Pandas & Tabulate magic to display data."""
+    df = pd.DataFrame(data).T.sort_values(by=sort_by)
+    print(tabulate(df.drop("cn", axis=1), headers="keys"))
+
+
+def get_parser() -> ArgumentParser:
+    """Configure argparse."""
+    parser = ArgumentParser(description=__doc__)
+
+    # Filtering
+    parser.add_argument("-u", "--utilisateur")
+    parser.add_argument("-r", "--responsable")
+    parser.add_argument("-R", "--room")
+
+    # Sorting
+    parser.add_argument(
+        "-s",
+        "--sort_by",
+        choices=[short(a) for a in ATTRIBUTES],
+        default="datePeremption",
+    )
+
+    return parser
 
 
 if __name__ == "__main__":
-    df = machines_ldap()
+    args = get_parser().parse_args()
+    data = machines_ldap(**vars(args))
+    display(data, args.sort_by)
