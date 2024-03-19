@@ -97,9 +97,9 @@ def get_parser() -> ArgumentParser:
     parser = ArgumentParser(description=__doc__)
 
     # Filtering
+    parser.add_argument("-R", "--responsable")
     parser.add_argument("-u", "--utilisateur")
-    parser.add_argument("-r", "--responsable")
-    parser.add_argument("-R", "--room")
+    parser.add_argument("-r", "--room")
 
     # Sorting
     parser.add_argument(
