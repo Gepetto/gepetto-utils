@@ -123,6 +123,8 @@ if __name__ == "__main__":
             print(f"{k}: wrong user {v['utilisateur']}")
             continue
         user = users_data[v["utilisateur"]]
+        if user["room"] != v["room"]:
+            print(f"{k}: wrong user's room {user['room']} != {v['room']}")
         if user["st"] in ["JAMAIS", "NON-PERTINENT"]:
             continue
         d, m, y = (int(i) for i in user["st"].split("/"))
