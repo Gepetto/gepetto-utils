@@ -115,22 +115,25 @@ def get_parser() -> ArgumentParser:
 if __name__ == "__main__":
     args = get_parser().parse_args()
     machines_data = machines_ldap(**vars(args))
-    machines_display(machines_data, args.sort_by)
-    print()
-    users_data = users_ldap()
-    for k, v in machines_data.items():
-        if not v["utilisateur"] or v["utilisateur"] not in users_data:
-            print(f"{k}: wrong user {v['utilisateur']}")
-            continue
-        user = users_data[v["utilisateur"]]
-        if user["room"] != v["room"]:
-            print(f"{k}: wrong user's room {user['room']} != {v['room']}")
-        if user["st"] in ["JAMAIS", "NON-PERTINENT"]:
-            continue
-        d, m, y = (int(i) for i in user["st"].split("/"))
-        st = date(y, m, d)
-        if v["datePeremption"] > st:
-            print(
-                f"{k}: wrong peremption for {user['uid']}: "
-                f"{v['datePeremption']:%d/%m/%Y} > {st:%d/%m/%Y}"
-            )
+    if not machines_data:
+        print("nothing was found.")
+    else:
+        machines_display(machines_data, args.sort_by)
+        print()
+        users_data = users_ldap()
+        for k, v in machines_data.items():
+            if not v["utilisateur"] or v["utilisateur"] not in users_data:
+                print(f"{k}: wrong user {v['utilisateur']}")
+                continue
+            user = users_data[v["utilisateur"]]
+            if user["room"] != v["room"]:
+                print(f"{k}: wrong user's room {user['room']} != {v['room']}")
+            if user["st"] in ["JAMAIS", "NON-PERTINENT"]:
+                continue
+            d, m, y = (int(i) for i in user["st"].split("/"))
+            st = date(y, m, d)
+            if v["datePeremption"] > st:
+                print(
+                    f"{k}: wrong peremption for {user['uid']}: "
+                    f"{v['datePeremption']:%d/%m/%Y} > {st:%d/%m/%Y}"
+                )
