@@ -48,9 +48,11 @@ def filter(**filters) -> str:
     return "".join(f"({k}={v})" for k, v in filters.items())
 
 
-def machines_ldap(utilisateur="", responsable="", room="", **kwargs):
+def machines_ldap(utilisateur="", responsable="", room="", machine="", **kwargs):
     """Get a dict of Gepettists machines from LDAP."""
     filters = FILTERS
+    if machine:
+        filters["cn"] = machine
     if utilisateur:
         filters["laas-mach-utilisateur"] = utilisateur
     if responsable:
@@ -97,6 +99,7 @@ def get_parser() -> ArgumentParser:
     parser = ArgumentParser(description=__doc__)
 
     # Filtering
+    parser.add_argument("-m", "--machine")
     parser.add_argument("-R", "--responsable")
     parser.add_argument("-u", "--utilisateur")
     parser.add_argument("-r", "--room")
