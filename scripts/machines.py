@@ -19,6 +19,7 @@ ATTRIBUTES = [
     "laas-mach-responsable",
     # "laas-mach-type",
     "laas-mach-utilisateur",
+    "laas-mach-commentaire",
     "roomNumber",
 ]
 FILTERS = {
