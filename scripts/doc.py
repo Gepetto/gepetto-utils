@@ -21,7 +21,7 @@ if __name__ == "__main__":
     ):
         url = f"{GITLAB}/{namespace}/{project}/-/jobs/artifacts/{branch}/download"
         path = DOC / namespace / project / branch
-        r = httpx.get(url, {"job": "doc-coverage"}, stream=True)
+        r = httpx.get(url, params={"job": "doc-coverage"})
         try:
             z = ZipFile(BytesIO(r.content))
             path.mkdir(parents=True, exist_ok=True)
