@@ -4,7 +4,7 @@ from io import BytesIO
 from pathlib import Path
 from zipfile import ZipFile
 
-import requests
+import httpx
 
 DOC = Path("/net/cubitus/projects/Partage_GEPETTO/Doc")
 GITLAB = "https://gitlab.laas.fr"
@@ -17,11 +17,11 @@ if __name__ == "__main__":
         f.write(head.read())
 
     for project, namespace, branch in sorted(
-        requests.get(f"{RAINBOARD}/doc").json()["ret"]
+        httpx.get(f"{RAINBOARD}/doc").json()["ret"]
     ):
         url = f"{GITLAB}/{namespace}/{project}/-/jobs/artifacts/{branch}/download"
         path = DOC / namespace / project / branch
-        r = requests.get(url, {"job": "doc-coverage"}, stream=True)
+        r = httpx.get(url, {"job": "doc-coverage"}, stream=True)
         try:
             z = ZipFile(BytesIO(r.content))
             path.mkdir(parents=True, exist_ok=True)
