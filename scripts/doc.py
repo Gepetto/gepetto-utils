@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from io import BytesIO
+from os import environ
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -11,6 +12,7 @@ GITLAB = "https://gitlab.laas.fr"
 RAINBOARD = "https://rainboard.laas.fr"
 INDEX = DOC / "index.html"
 HEAD = DOC / "index.head.html"
+TOKEN = environ["GITLAB_TOKEN"]
 
 if __name__ == "__main__":
     with INDEX.open("w") as f, HEAD.open() as head:
@@ -19,9 +21,11 @@ if __name__ == "__main__":
     for project, namespace, branch in sorted(
         httpx.get(f"{RAINBOARD}/doc").json()["ret"]
     ):
-        url = f"{GITLAB}/{namespace}/{project}/-/jobs/artifacts/{branch}/download"
+        url = f"{GITLAB}/api/v4/projects/{namespace}%2F{project}/jobs/artifacts/{branch}/download"
         path = DOC / namespace / project / branch
-        r = httpx.get(url, params={"job": "doc-coverage"})
+        r = httpx.get(
+            url, params={"job": "doc-coverage"}, headers={"Private-Token": TOKEN}
+        )
         try:
             z = ZipFile(BytesIO(r.content))
             path.mkdir(parents=True, exist_ok=True)
