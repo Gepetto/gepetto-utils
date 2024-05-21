@@ -31,11 +31,13 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
  && bash /miniconda.sh -b -u -p /opt/miniconda3 \
  && rm /miniconda.sh
 
+RUN mkdir /wan24
+RUN chown user /wan24
 USER user
 
 RUN /opt/miniconda3/bin/conda config --add channels conda-forge
-RUN /opt/miniconda3/bin/conda create -yp wan24 python=3.10
-RUN /opt/miniconda3/bin/conda install -yp wan24 \
+RUN /opt/miniconda3/bin/conda create -yp /wan24 python=3.10
+RUN /opt/miniconda3/bin/conda install -yp /wan24 \
     agm-ws-2023::proxddp \
     agm-ws-2023::proxnlp \
     agm-ws-2023::crocoddyl \
