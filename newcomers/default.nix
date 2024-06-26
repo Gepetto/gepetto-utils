@@ -1,7 +1,7 @@
 {
   lib,
   ldap3,
-  buildPythonApplication
+  buildPythonApplication,
 }:
 buildPythonApplication {
   pname = "greet-newcomers";
@@ -26,7 +26,7 @@ buildPythonApplication {
     description = "Greet gepetto newcomers";
     homepage = "https://github.com/gepetto/gepetto-utils/tree/master/newcomers";
     license = lib.licenses.bsd2;
-    maintainers = [lib.maintainers.nim65s ];
+    maintainers = [ lib.maintainers.nim65s ];
     mainProgram = "greet-newcomers";
   };
 }
