@@ -2,6 +2,7 @@
 """
 This script performs a few checkouts on branches on robotpkg, and then tries to compile and test everything
 """
+
 import argparse
 import logging
 import os
