@@ -24,24 +24,35 @@
         "x86_64-darwin"
       ];
       perSystem =
-        { config, pkgs, ... }:
         {
+          config,
+          pkgs,
+          self',
+          ...
+        }:
+        {
+          apps.newcomers = {
+            type = "app";
+            program = self'.packages.newcomers;
+          };
           devShells.default = pkgs.mkShell {
             nativeBuildInputs = [ config.treefmt.build.wrapper ];
-            packages = with pkgs; [
-              (python3.withPackages (
-                p: with p; [
-                  beautifulsoup4
-                  httpx
-                  ldap3
-                  numpy
-                  pandas
-                  requests
-                  tabulate
-                  wand
-                ]
-              ))
-            ];
+            packages = [ self'.packages.python ];
+          };
+          packages = {
+            newcomers = pkgs.python3Packages.callPackage ./newcomers { };
+            python = pkgs.python3.withPackages (
+              p: with p; [
+                beautifulsoup4
+                httpx
+                ldap3
+                numpy
+                pandas
+                requests
+                tabulate
+                wand
+              ]
+            );
           };
           treefmt = {
             projectRootFile = "flake.nix";

@@ -2,17 +2,15 @@
 
 ## Get dependencies
 
-- Get Python 3
-- `pip3 install ldap3` (you might need `sudo`, or *better* `--user`, or *best* a virtualenv)
-- `mkdir -p ~/.cache`
+This project is packaged with a nix flake
 
 ## Go !
 
 - `./greet_newcomers.py`
 
-On the first time, it will construct a database of the guys already here.
+On the first time, it will construct a database of the members already here.
 
-After that, on each launch, it will find the new guys, and send them a greeting mail.
+After that, on each launch, it will find the newcomers, and send them a greeting mail.
 The template of this mail is in `template.txt`.
 
 ## Cron job
@@ -20,5 +18,5 @@ The template of this mail is in `template.txt`.
 To run this script everyday at 5 AM:
 
 ```bash
-(crontab -l; echo "0 5 * * * $(which python) $(pwd)/greet_newcomers.py") | crontab -
+(crontab -l; echo "0 5 * * * cd $(pwd); nix run .#newcomers") | crontab -
 ```

@@ -3,13 +3,14 @@
 import shelve
 from email.mime.text import MIMEText
 from getpass import getuser
-from smtplib import SMTP
+from os import environ
 from pathlib import Path
+from smtplib import SMTP
 
 from ldap3 import Connection
 
 HERE = Path(__file__).resolve().parent
-SHELF = str(HERE / ".cache")
+SHELF = Path(environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "greet-newcomers"
 
 
 def get_gepetto():
@@ -53,7 +54,13 @@ def greet(to, sender):
     if "@" not in to:
         to = "%s@laas.fr" % to
 
-    with (HERE / "template.txt").open() as f:
+    template = HERE / "template.txt"
+    if not template.exists():
+        template = HERE.parent / "share" / "greet-newcomers" / "template.txt"
+    if not template.exists():
+        err = f"can't find template.txt around {HERE}"
+        raise RuntimeError(err)
+    with template.open() as f:
         msg = MIMEText(f.read())
 
     msg["Subject"] = "Welcome in Gepetto !"
@@ -86,9 +93,9 @@ if __name__ == "__main__":
     # Retrieve the login of the current user, who must already be a member
     me = whoami(gepetto)
 
-    for guy in gepetto_ldap:
-        if guy not in gepetto:
-            greet(guy, me)
+    for member in gepetto_ldap:
+        if member not in gepetto:
+            greet(member, me)
 
     # Save the new list
     with shelve.open(SHELF) as shelf:
