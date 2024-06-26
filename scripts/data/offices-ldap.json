@@ -25,11 +25,19 @@
       "Arthur"
     ],
     [
+      "Harkati",
+      "Ilias"
+    ],
+    [
       "Pomarat",
       "Zoé"
     ]
   ],
   "B04": [
+    [
+      "Chalabi",
+      "Kahina"
+    ],
     [
       "Sabbah",
       "Maxime"
@@ -59,10 +67,6 @@
       "Thomas"
     ],
     [
-      "Leziart",
-      "Pierre-Alexandre"
-    ],
-    [
       "Martinez-Fouché",
       "Théo"
     ],
@@ -90,6 +94,22 @@
     ]
   ],
   "B114": [
+    [
+      "Albrecht",
+      "Niels"
+    ],
+    [
+      "Barthe",
+      "Loic"
+    ],
+    [
+      "Bories",
+      "Maxime"
+    ],
+    [
+      "Bousquet",
+      "Thomas"
+    ],
     [
       "Jeannot",
       "Thibault"
@@ -135,6 +155,12 @@
     [
       "Mansard",
       "Nicolas"
+    ]
+  ],
+  "G57SalleCAO": [
+    [
+      "Gnanguessim",
+      "Diskouna"
     ]
   ]
 }
