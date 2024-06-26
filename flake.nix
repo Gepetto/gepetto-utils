@@ -26,7 +26,22 @@
       perSystem =
         { config, pkgs, ... }:
         {
-          devShells.default = pkgs.mkShell { nativeBuildInputs = [ config.treefmt.build.wrapper ]; };
+          devShells.default = pkgs.mkShell {
+            nativeBuildInputs = [ config.treefmt.build.wrapper ];
+            packages = with pkgs; [
+              (python3.withPackages (
+                p: with p; [
+                  beautifulsoup4
+                  ldap3
+                  numpy
+                  pandas
+                  requests
+                  tabulate
+                  wand
+                ]
+              ))
+            ];
+          };
           treefmt = {
             projectRootFile = "flake.nix";
             programs = {
