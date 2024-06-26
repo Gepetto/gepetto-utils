@@ -32,6 +32,7 @@
               (python3.withPackages (
                 p: with p; [
                   beautifulsoup4
+                  httpx
                   ldap3
                   numpy
                   pandas
