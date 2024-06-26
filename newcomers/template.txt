@@ -1,6 +1,6 @@
 Welcome in Gepetto !
 
-Please, join us here:
+If this is not already done, please, join us here:
 https://im.laas.fr/#/room/#gepetto:laas.fr
 You can log in with your LAAS credentials.
 
