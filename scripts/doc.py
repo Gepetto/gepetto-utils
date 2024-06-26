@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from io import BytesIO
-from os import environ
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -12,7 +11,7 @@ GITLAB = "https://gitlab.laas.fr"
 RAINBOARD = "https://rainboard.laas.fr"
 INDEX = DOC / "index.html"
 HEAD = DOC / "index.head.html"
-TOKEN = environ["GITLAB_TOKEN"]
+TOKEN = (Path(__file__).parent / ".gitlab-token").read_text().strip()
 
 if __name__ == "__main__":
     with INDEX.open("w") as f, HEAD.open() as head:
