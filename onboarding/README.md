@@ -1,4 +1,4 @@
-# Greet Newcomers
+# Onboarding
 
 ## Get dependencies
 
@@ -6,7 +6,7 @@ This project is packaged with a nix flake
 
 ## Go !
 
-- `./greet_newcomers.py`
+- `./onboarding.py`
 
 On the first time, it will construct a database of the members already here.
 
@@ -18,5 +18,5 @@ The template of this mail is in `template.txt`.
 To run this script everyday at 5 AM:
 
 ```bash
-(crontab -l; echo "0 5 * * * cd $(pwd); nix run .#newcomers") | crontab -
+(crontab -l; echo "0 5 * * * cd $(pwd); nix run .#onboarding") | crontab -
 ```

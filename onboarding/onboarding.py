@@ -10,7 +10,7 @@ from smtplib import SMTP
 from ldap3 import Connection
 
 HERE = Path(__file__).resolve().parent
-SHELF = Path(environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "greet-newcomers"
+SHELF = Path(environ.get("XDG_CACHE_HOME", Path.home() / ".cache")) / "onboarding"
 
 
 def get_gepetto():
@@ -56,7 +56,7 @@ def greet(to, sender):
 
     template = HERE / "template.txt"
     if not template.exists():
-        template = HERE.parent / "share" / "greet-newcomers" / "template.txt"
+        template = HERE.parent / "share" / "onboarding" / "template.txt"
     if not template.exists():
         err = f"can't find template.txt around {HERE}"
         raise RuntimeError(err)

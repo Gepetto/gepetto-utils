@@ -4,7 +4,7 @@ import getpass
 
 from matrix_client.client import MatrixClient
 
-from greet_newcomers import get_gepetto
+from onboarding import get_gepetto
 
 HOME = "https://matrix.laas.fr"
 ROOM = "#gepetto:laas.fr"

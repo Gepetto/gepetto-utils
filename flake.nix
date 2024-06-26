@@ -31,16 +31,16 @@
           ...
         }:
         {
-          apps.newcomers = {
+          apps.onboarding = {
             type = "app";
-            program = self'.packages.newcomers;
+            program = self'.packages.onboarding;
           };
           devShells.default = pkgs.mkShell {
             nativeBuildInputs = [ config.treefmt.build.wrapper ];
             packages = [ self'.packages.python ];
           };
           packages = {
-            newcomers = pkgs.python3Packages.callPackage ./newcomers { };
+            onboarding = pkgs.python3Packages.callPackage ./onboarding { };
             python = pkgs.python3.withPackages (
               p: with p; [
                 beautifulsoup4

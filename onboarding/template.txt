@@ -17,5 +17,5 @@ You will find information about:
 See you soon !
 
 --
-This is an automatic email from https://github.com/gepetto/gepetto-utils/tree/master/newcomers
+This is an automatic email from https://github.com/gepetto/gepetto-utils/tree/master/onboarding
 Feel free to answer to it if you have any question !
