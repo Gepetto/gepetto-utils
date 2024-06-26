@@ -1,6 +1,6 @@
 #!/opt/_internal/tools/bin/python
 """
-Patch auditwheel whitelist: allow reuse of shared objects from our other wheels, 
+Patch auditwheel whitelist: allow reuse of shared objects from our other wheels,
 and generate a string for a RPATH update.
 
 Folks at pypa won't allow that in their codebase, as it's ugly, but they don't forbid us to do so:
