@@ -49,7 +49,9 @@ def filter(**filters) -> str:
     return "".join(f"({k}={v})" for k, v in filters.items())
 
 
-def machines_ldap(utilisateur="", responsable="", room="", machine="", **kwargs):
+def machines_ldap(
+    utilisateur="", responsable="", room="", machine="", vlan=False, **kwargs
+):
     """Get a dict of Gepettists machines from LDAP."""
     filters = FILTERS
     if machine:
@@ -67,12 +69,23 @@ def machines_ldap(utilisateur="", responsable="", room="", machine="", **kwargs)
         attributes=ATTRIBUTES,
     )
 
-    return {
+    ret = {
         str(entry.cn): {
             short(k): parse(k, v) for k, v in entry.entry_attributes_as_dict.items()
         }
         for entry in CONN.entries
     }
+
+    if vlan:
+        filters = "".join(f"(cn={k})" for k in ret.keys())
+        attributes = ["cn", "laas-vlan", "laas-vlan-name"]
+        CONN.search("ou=hosts,dc=laas,dc=fr", f"(|{filters})", attributes=attributes)
+
+        for entry in CONN.entries:
+            cn, vlan, name = (str(entry[k]) for k in attributes)
+            ret[cn]["vlan"] = f"{vlan}: {name}"
+
+    return ret
 
 
 def users_ldap():
@@ -98,6 +111,7 @@ def machines_display(data, sort_by="datePeremption"):
 def get_parser() -> ArgumentParser:
     """Configure argparse."""
     parser = ArgumentParser(description=__doc__)
+    parser.add_argument("-V", "--vlan", action="store_true")
 
     # Filtering
     parser.add_argument("-m", "--machine")
