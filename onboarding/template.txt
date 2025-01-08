@@ -4,15 +4,8 @@ If this is not already done, please, join us here:
 https://im.laas.fr/#/room/#gepetto:laas.fr
 You can log in with your LAAS credentials.
 
-
 Here's a also a useful link to the The Gepetto wiki:
 https://wiki.laas.fr/gepetto/Welcome
-
-You will find information about:
-- https://im.laas.fr/#/room/#gepetto:laas.fr - our instant messaging tool
-- the mailing-list, gepetto-students@laas.fr
-- the team software and hardware guidelines
-- etc.
 
 See you soon !
 
