@@ -2,7 +2,7 @@
 
 # This script searches all the .so files in the current directory.
 # The first arg is a string contained in the dependencies of the library you are looking for.
-# The second arg is a string contained in the dependencies that you want to reject. 
+# The second arg is a string contained in the dependencies that you want to reject.
 # The script will display the names of the .so files which meet these criteria.
 # Ex: searchLib.sh my_lib version_to_avoid
 
@@ -21,4 +21,3 @@ do
 	echo $v
     fi
 done
-
