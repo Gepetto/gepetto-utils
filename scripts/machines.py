@@ -60,13 +60,13 @@ def machines_ldap(
     """Get a dict of Gepettists machines from LDAP."""
     filters = FILTERS
     if machine:
-        filters["cn"] = machine
+        filters["cn"] = [machine]
     if utilisateur:
-        filters["laas-mach-utilisateur"] = utilisateur
+        filters["laas-mach-utilisateur"] = [utilisateur]
     if responsable:
-        filters["laas-mach-responsable"] = responsable
+        filters["laas-mach-responsable"] = [responsable]
     if room:
-        filters["roomNumber"] = room
+        filters["roomNumber"] = [room]
 
     CONN.search(
         "ou=machines,dc=laas,dc=fr",
