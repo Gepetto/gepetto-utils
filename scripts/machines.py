@@ -23,8 +23,9 @@ ATTRIBUTES = [
     "roomNumber",
 ]
 FILTERS = {
-    "laas-mach-group": "gepetto",
-    "laas-mach-type": "PC",
+    "laas-mach-group": ["gepetto"],
+    "laas-mach-type": ["PC"],
+    "laas-mach-origineAchat": ["LAAS", "autre"],  # exclude perso
 }
 
 
@@ -46,7 +47,11 @@ def parse(k, v):
 
 def filter(**filters) -> str:
     """format some filters for LDAP query."""
-    return "".join(f"({k}={v})" for k, v in filters.items())
+
+    def filter_key(k, vs):
+        return "(|" + "".join(f"({k}={v})" for v in vs) + ")"
+
+    return "(&" + "".join(filter_key(k, vs) for k, vs in filters.items()) + ")"
 
 
 def machines_ldap(
@@ -65,7 +70,7 @@ def machines_ldap(
 
     CONN.search(
         "ou=machines,dc=laas,dc=fr",
-        f"(&{filter(**filters)})",
+        filter(**filters),
         attributes=ATTRIBUTES,
     )
 
