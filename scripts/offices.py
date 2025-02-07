@@ -29,11 +29,13 @@ MAP_POSITIONS = [
     ("B18", 460, 420, 650, 598, -350),
     ("B17", 460, 608, 650, 785, -350),
     ("B16", 460, 793, 650, 966, -350),
+    ("B11", 1410, 250, 1670, 441, 400),
     ("B10", 1410, 450, 1670, 691, 400),
     ("B08", 1410, 700, 1670, 925, 400),
     ("B06", 1410, 932, 1670, 1161, 400),
     ("B04", 1410, 1453, 1670, 1647, 400),
     ("B03", 1410, 1656, 1670, 1834, 400),
+    ("B02", 1410, 1843, 1670, 2012, 400),
     ("B01", 1410, 2021, 1670, 2202, 400),
 ]
 
@@ -97,14 +99,14 @@ class Offices:
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
-    "B04": {
-        ("Vincent", "Bonnet"),
+    "B11": {
+        ("Fadi", "Gebrayel"),
     },
-    "B10": {
-        ("Guilhem", "Saurel"),
+    "B17": {
+        ("Aurore", "Bonnet-Lebrun"),
     },
-    "Exterieur": {
-        ("Ariane", "Lalles"),
+    "B18": {
+        ("Vianney", "Monnier"),
     },
 }
 WRONG_OFFICE = {
@@ -112,13 +114,7 @@ WRONG_OFFICE = {
 }
 # Fix unicode from LDAP data…
 ALIAS = {
-    "B08": [
-        (
-            {Gepettist("Leziart", "Pierre-Alexandre")},
-            {Gepettist("Léziart", "Pierre-Alexandre")},
-        )
-    ],
-    "B17": [({Gepettist("Taix", "Michel")}, {Gepettist("Taïx", "Michel")})],
+    "B16": [({Gepettist("Taix", "Michel")}, {Gepettist("Taïx", "Michel")})],
     "B19": [({Gepettist("Soueres", "Philippe")}, {Gepettist("Souères", "Philippe")})],
 }
 
@@ -166,7 +162,9 @@ def offices_ldap():
     conn = Connection("ldap.laas.fr", auto_bind=True)
     conn.search(
         "dc=laas,dc=fr",
-        "(laas-mainGroup=gepetto)",
+        "(&(|"
+        + "".join(f"(laas-mainGroup={g})" for g in ("gepetto", "idea", "i2c"))
+        + ")(roomNumber=B*))",
         attributes=["sn", "givenName", "roomNumber", "st"],
     )
     offices = Offices()

@@ -1,22 +1,22 @@
 {
-  "Algeco4": [
-    [
-      "Lalles",
-      "Ariane"
-    ]
-  ],
   "B01": [
     [
-      "Baudu",
-      "Dorian"
+      "Martinez-Fouché",
+      "Théo"
     ],
     [
-      "Nguyen",
-      "Dinh Vinh Thanh"
+      "Roux",
+      "Constant"
+    ]
+  ],
+  "B02": [
+    [
+      "Flayols",
+      "Thomas"
     ],
     [
-      "Wojciechowski",
-      "Krzysztof"
+      "Manhes",
+      "Jérôme"
     ]
   ],
   "B03": [
@@ -31,9 +31,17 @@
     [
       "Pomarat",
       "Zoé"
+    ],
+    [
+      "Wojciechowski",
+      "Krzysztof"
     ]
   ],
   "B04": [
+    [
+      "Bousquet",
+      "Thomas"
+    ],
     [
       "Chalabi",
       "Kahina"
@@ -57,18 +65,22 @@
       "Sonia-Laure"
     ],
     [
+      "Lalles",
+      "Ariane"
+    ],
+    [
       "Perrot",
       "Côme"
     ]
   ],
   "B08": [
     [
-      "Flayols",
-      "Thomas"
+      "Mirabel",
+      "Joseph"
     ],
     [
-      "Martinez-Fouché",
-      "Théo"
+      "Stepien",
+      "Maciej"
     ],
     [
       "Subburaman",
@@ -77,63 +89,47 @@
   ],
   "B10": [
     [
+      "Bernat",
+      "Loan"
+    ],
+    [
       "Chane-Sane",
       "Elliot"
+    ],
+    [
+      "D'Haene",
+      "Mathis"
     ],
     [
       "Fernbach",
       "Pierre"
     ],
     [
-      "Lasguignes",
-      "Thibaud"
-    ],
-    [
-      "Marsan",
-      "Thibault"
+      "Saurel",
+      "Guilhem"
     ]
   ],
   "B114": [
-    [
-      "Albrecht",
-      "Niels"
-    ],
-    [
-      "Barthe",
-      "Loic"
-    ],
-    [
-      "Bories",
-      "Maxime"
-    ],
-    [
-      "Bousquet",
-      "Thomas"
-    ],
-    [
-      "Jeannot",
-      "Thibault"
-    ],
     [
       "Lutz",
       "Victor"
     ],
     [
-      "Parent",
-      "Laure"
+      "Tirel",
+      "Laurine"
     ]
   ],
   "B16": [
     [
       "Lamiraux",
       "Florent"
-    ]
-  ],
-  "B17": [
+    ],
     [
       "Taix",
       "Michel"
-    ],
+    ]
+  ],
+  "B17": [
     [
       "Watier",
       "Bruno"
@@ -157,10 +153,22 @@
       "Nicolas"
     ]
   ],
-  "G57SalleCAO": [
+  "B24": [
     [
-      "Gnanguessim",
-      "Diskouna"
+      "Dollat",
+      "Xavier"
+    ]
+  ],
+  "B29": [
+    [
+      "Corbin",
+      "Thony"
+    ]
+  ],
+  "B30": [
+    [
+      "Medioni",
+      "Hugo"
     ]
   ]
 }
