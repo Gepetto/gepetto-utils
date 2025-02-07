@@ -27,6 +27,7 @@ FILTERS = {
     "laas-mach-type": ["PC"],
     "laas-mach-origineAchat": ["LAAS", "autre"],  # exclude perso
 }
+STORAGE_ROOMS = ["B10", "B12"]
 
 
 def short(attr: str) -> str:
@@ -146,11 +147,14 @@ if __name__ == "__main__":
         users_data = users_ldap()
         for k, v in machines_data.items():
             if not v["utilisateur"] or v["utilisateur"] not in users_data:
-                print(f"{k}: wrong user {v['utilisateur']}")
+                print(f"{k}: wrong user '{v['utilisateur']}'")
                 continue
             user = users_data[v["utilisateur"]]
-            if user["room"] != v["room"]:
-                print(f"{k}: wrong user's room {user['room']} != {v['room']}")
+            if user["room"] != v["room"] and v["room"] not in STORAGE_ROOMS:
+                print(
+                    f"{k}: wrong user's ({user['uid']}) room "
+                    f"'{user['room']}' != '{v['room']}'"
+                )
             if user["st"] in ["JAMAIS", "NON-PERTINENT"]:
                 continue
             d, m, y = (int(i) for i in user["st"].split("/"))
