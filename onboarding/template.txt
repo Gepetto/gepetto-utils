@@ -4,11 +4,17 @@ If this is not already done, please, join us here:
 https://im.laas.fr/#/room/#gepetto:laas.fr
 You can log in with your LAAS credentials.
 
+You also need to update you room / phone number here:
+https://sysadmin.laas.fr/securise/sysadmin/form_coordonnees.php
+I'm available to help for this.
+
 Here's a also a useful link to the The Gepetto wiki:
 https://wiki.laas.fr/gepetto/Welcome
 
 See you soon !
 
+
+Guilhem
 --
 This is an automatic email from https://github.com/gepetto/gepetto-utils/tree/master/onboarding
 Feel free to answer to it if you have any question !
