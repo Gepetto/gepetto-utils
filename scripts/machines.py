@@ -108,10 +108,20 @@ def users_ldap():
     }
 
 
-def machines_display(data, sort_by="datePeremption"):
+def machines_display(data, output_format, sort_by="datePeremption"):
     """Pandas & Tabulate magic to display machines data."""
-    df = pd.DataFrame(data).T.sort_values(by=sort_by)
-    print(tabulate(df.drop("cn", axis=1), headers="keys"))
+    df = pd.DataFrame(data).T.sort_values(by=sort_by).drop("cn", axis=1)
+    match output_format:
+        case "csv":
+            print(df.to_csv())
+        case "df":
+            print(pd.DataFrame(data))
+        case "dict":
+            print(df.to_dict())
+        case "json":
+            print(df.to_json())
+        case "table":
+            print(tabulate(df, headers="keys"))
 
 
 def get_parser() -> ArgumentParser:
@@ -124,6 +134,12 @@ def get_parser() -> ArgumentParser:
     parser.add_argument("-R", "--responsable")
     parser.add_argument("-u", "--utilisateur")
     parser.add_argument("-r", "--room")
+    parser.add_argument(
+        "-f",
+        "--output-format",
+        default="table",
+        choices=["csv", "df", "dict", "json", "table"],
+    )
 
     # Sorting
     parser.add_argument(
@@ -142,7 +158,7 @@ if __name__ == "__main__":
     if not machines_data:
         print("nothing was found.")
     else:
-        machines_display(machines_data, args.sort_by)
+        machines_display(machines_data, args.output_format, args.sort_by)
         print()
         users_data = users_ldap()
         for k, v in machines_data.items():
