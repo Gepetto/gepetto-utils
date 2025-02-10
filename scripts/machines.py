@@ -27,7 +27,7 @@ FILTERS = {
     "laas-mach-type": ["PC"],
     "laas-mach-origineAchat": ["LAAS", "autre"],  # exclude perso
 }
-STORAGE_ROOMS = ["B10", "B12"]
+ALLOWED_ROOMS = ["B10", "B12", "B15"]
 
 
 def short(attr: str) -> str:
@@ -150,7 +150,7 @@ if __name__ == "__main__":
                 print(f"{k}: wrong user '{v['utilisateur']}'")
                 continue
             user = users_data[v["utilisateur"]]
-            if user["room"] != v["room"] and v["room"] not in STORAGE_ROOMS:
+            if user["room"] != v["room"] and v["room"] not in ALLOWED_ROOMS:
                 print(
                     f"{k}: wrong user's ({user['uid']}) room "
                     f"'{user['room']}' != '{v['room']}'"
