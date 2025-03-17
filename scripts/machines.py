@@ -8,6 +8,7 @@ import pandas as pd
 from ldap3 import Connection
 from tabulate import tabulate
 
+TODAY = date.today()
 CONN = Connection("ldap.laas.fr", auto_bind=True)
 ATTRIBUTES = [
     "cn",
@@ -27,7 +28,7 @@ FILTERS = {
     "laas-mach-type": ["PC"],
     "laas-mach-origineAchat": ["LAAS", "autre"],  # exclude perso
 }
-ALLOWED_ROOMS = ["B10", "B12", "B15"]
+ALLOWED_ROOMS = ["B10", "B12", "B15", "B114"]
 
 
 def short(attr: str) -> str:
@@ -180,3 +181,5 @@ if __name__ == "__main__":
                     f"{k}: wrong peremption for {user['uid']}: "
                     f"{v['datePeremption']:%d/%m/%Y} > {st:%d/%m/%Y}"
                 )
+            if v["datePeremption"] < TODAY:
+                print(f"{k}: obsolete data:  {v['datePeremption']:%d/%m/%Y}")
