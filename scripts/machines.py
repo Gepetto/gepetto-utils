@@ -28,7 +28,7 @@ FILTERS = {
     "laas-mach-type": ["PC"],
     "laas-mach-origineAchat": ["LAAS", "autre"],  # exclude perso
 }
-ALLOWED_ROOMS = ["B10", "B12", "B15", "B114"]
+ALLOWED_ROOMS = ["A148", "B10", "B12", "B15", "B114"]
 
 
 def short(attr: str) -> str:
