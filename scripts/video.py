@@ -31,6 +31,14 @@ def valid_file(option):
     return str(option)
 
 
+def remove_parentheses(string):
+    while string.find("(") != -1:
+        open_parenthese_idx = string.find("(")
+        close_parenthese_idx = string.find(")")
+        string = string[:open_parenthese_idx] + string[close_parenthese_idx + 1 :]
+    return string
+
+
 parser = argparse.ArgumentParser(
     description="Append a title slide to a video. Optionnaly cut it and crop it"
 )
@@ -103,6 +111,7 @@ if __name__ == "__main__":
         run(["ffmpeg", "-i", options.rush], stderr=PIPE).stderr.decode().split("\n")
     ):
         if "Stream" in line and "Video" in line:
+            line = remove_parentheses(line)
             video_parameters = [s.strip() for s in line.split(",")]
         if "Stream" in line and "Audio" in line:
             audio_parameters = [s.strip() for s in line.split(",")]
@@ -126,7 +135,7 @@ if __name__ == "__main__":
             print(f"mv {cutted} {cropped}", file=f)
         print(
             f"ffmpeg -loop 1 -i {path}_title.png -f lavfi -i anullsrc=channel_layout=stereo:sample_rate={sr} "
-            f"-shortest -strict -2 -c:v {cv} -t 5 -vf fps={fps},format={fmt} -map 0:v -map 1:a {path}_title.mp4",
+            f'-shortest -strict -2 -c:v {cv} -t 5 -vf fps={fps},format={fmt},"pad=ceil(iw/2)*2:ceil(ih/2)*2" -map 0:v -map 1:a {path}_title.mp4',
             file=f,
         )
         for part in ["title", "cropped"]:
