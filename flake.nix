@@ -2,15 +2,10 @@
   description = "Set of tools for the Gepetto Team";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
-    };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    laas-cnrs-typst-templates.url = "https://gitlab.laas.fr/gsaurel/laas-cnrs-typst-templates/-/archive/main/laas-cnrs-typst-templates-main.tar.gz";
+    flake-parts.follows = "laas-cnrs-typst-templates/flake-parts";
+    nixpkgs.follows = "laas-cnrs-typst-templates/nixpkgs";
+    treefmt-nix.follows = "laas-cnrs-typst-templates/treefmt-nix";
   };
 
   outputs =
@@ -26,6 +21,7 @@
       perSystem =
         {
           config,
+          inputs',
           pkgs,
           self',
           ...
@@ -35,9 +31,12 @@
             type = "app";
             program = self'.packages.onboarding;
           };
-          devShells.default = pkgs.mkShell {
+          devShells.default = pkgs.mkShellNoCC {
             nativeBuildInputs = [ config.treefmt.build.wrapper ];
-            packages = [ self'.packages.python ];
+            packages = [
+              self'.packages.python
+              self'.packages.typst
+            ];
           };
           packages = {
             onboarding = pkgs.python3Packages.callPackage ./onboarding { };
@@ -53,6 +52,7 @@
                 wand
               ]
             );
+            typst = pkgs.typst.withPackages (_p: [ inputs'.laas-cnrs-typst-templates.packages.laas-cnrs-page ]);
           };
           treefmt = {
             projectRootFile = "flake.nix";

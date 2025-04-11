@@ -4,6 +4,7 @@
 import logging
 from argparse import ArgumentParser
 from collections import defaultdict
+from subprocess import check_call
 from datetime import date
 from json import dumps, loads
 from pathlib import Path
@@ -59,7 +60,7 @@ class Offices:
 
     def __str__(self):
         return "\n".join(
-            f'{room:5}: {", ".join(str(m) for m in members)}'
+            f"{room:5}: {', '.join(str(m) for m in members)}"
             for room, members in self.sorted().items()
         )
 
@@ -99,6 +100,9 @@ class Offices:
 
 # Stuff that is wrong in LDAP… We should fix that there
 WRONG_OFFICE = {
+    "B10": {
+        ("Arthur", "Valiente"),
+    },
     "B11": {
         ("Fadi", "Gebrayel"),
     },
@@ -107,6 +111,11 @@ WRONG_OFFICE = {
     },
     "B18": {
         ("Vianney", "Monnier"),
+    },
+    "B114": {
+        ("Loan", "Bernat"),
+        ("Mathis", "D'Haene"),
+        ("Anastasija", "Rakic"),
     },
 }
 WRONG_OFFICE = {
@@ -117,15 +126,33 @@ ALIAS = {
     "B16": [({Gepettist("Taix", "Michel")}, {Gepettist("Taïx", "Michel")})],
     "B19": [({Gepettist("Soueres", "Philippe")}, {Gepettist("Souères", "Philippe")})],
 }
+TALL_LABELS = ["B06", "B08", "B10", "B11"]
+
+
+def typst(office, members):
+    """Generate the label for one office."""
+    if not members:
+        return
+    tall = office in TALL_LABELS
+    here = Path(__file__).parent
+    typ = here / "labels" / f"{office}.typ"
+    with typ.open("w") as f:
+        print('#import "@local/laas-cnrs-label:0.1.0": *', file=f)
+        print(f"#show: doc => laas-label(doc, tall: {str(tall).lower()})", file=f)
+        for m in sorted(members):
+            print(m, file=f)
+            print(file=f)
+    check_call(["typst", "compile", typ])
 
 
 def door_label(members, logo=True):
     """Generate the label for one office."""
     if not members:
         return
-    with Image(
-        width=WIDTH, height=HEIGHT, background=Color("white")
-    ) as img, Drawing() as draw:
+    with (
+        Image(width=WIDTH, height=HEIGHT, background=Color("white")) as img,
+        Drawing() as draw,
+    ):
         if logo:
             with Image(filename=LOGO) as li:
                 li.transform(resize=f"{WIDTH}x{HEIGHT}")
@@ -202,9 +229,10 @@ def fix_wrong_offices(offices):
 
 def labels(offices):
     """Generate an A4 papier with labels for the doors of Gepetto offices."""
-    with Image(
-        width=int(21 * DPCM), height=int(29.7 * DPCM)
-    ) as page, Drawing() as draw:
+    with (
+        Image(width=int(21 * DPCM), height=int(29.7 * DPCM)) as page,
+        Drawing() as draw,
+    ):
         for i, (office, members) in enumerate(offices.items()):
             if not members or office in NOT_OFFICES:
                 continue
@@ -250,7 +278,12 @@ if __name__ == "__main__":
         "--fixed", action="store_true", help="fix LDAP data from embeded infos"
     )
     parser.add_argument("--show", action="store_true", help="show data")
-    parser.add_argument("--labels", action="store_true", help="generate door labels")
+    parser.add_argument(
+        "--labels", action="store_true", help="generate door labels (old version)"
+    )
+    parser.add_argument(
+        "--typst", action="store_true", help="generate door labels (new version)"
+    )
     parser.add_argument("--map", action="store_true", help="generate offices map")
     parser.add_argument("-v", "--verbose", action="count", default=0)
 
@@ -276,8 +309,14 @@ if __name__ == "__main__":
         logging.info(" showing data")
         print(offices)
     if args.labels:
-        logging.info(" generating door labels")
+        logging.info(" generating door labels (old version)")
         labels(offices)
+    if args.typst:
+        logging.info(" generating door labels (new version)")
+        for office, members in offices.items():
+            if not members or office in NOT_OFFICES:
+                continue
+            typst(office, members)
     if args.map:
         logging.info(" generating map")
         maps(offices, args.fixed)
