@@ -124,7 +124,7 @@ def machines_display(data, output_format, sort_by="datePeremption"):
         case "dict":
             print(df.to_dict())
         case "json":
-            print(df.to_json())
+            print(df.T.to_json())
         case "table":
             print(tabulate(df, headers="keys"))
 
