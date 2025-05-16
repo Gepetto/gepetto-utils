@@ -2,10 +2,20 @@
   description = "Set of tools for the Gepetto Team";
 
   inputs = {
-    laas-cnrs-typst-templates.url = "https://gitlab.laas.fr/gsaurel/laas-cnrs-typst-templates/-/archive/main/laas-cnrs-typst-templates-main.tar.gz";
-    flake-parts.follows = "laas-cnrs-typst-templates/flake-parts";
-    nixpkgs.follows = "laas-cnrs-typst-templates/nixpkgs";
-    treefmt-nix.follows = "laas-cnrs-typst-templates/treefmt-nix";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+        };
+      laas-cnrs-typst-templates = {
+        url = "https://gitlab.laas.fr/gsaurel/laas-cnrs-typst-templates/-/archive/main/laas-cnrs-typst-templates-main.tar.gz";
+        inputs = {
+          flake-parts.follows = "flake-parts";
+          nixpkgs.follows = "nixpkgs";
+          treefmt-nix.follows = "treefmt-nix";
+      };
+    };
   };
 
   outputs =
@@ -55,7 +65,6 @@
             typst = pkgs.typst.withPackages (_p: [ inputs'.laas-cnrs-typst-templates.packages.laas-cnrs-page ]);
           };
           treefmt = {
-            projectRootFile = "flake.nix";
             programs = {
               deadnix.enable = true;
               nixfmt-rfc-style.enable = true;
