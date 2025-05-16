@@ -3,6 +3,8 @@
 
 from argparse import ArgumentParser
 from datetime import date
+from logging import basicConfig, getLogger
+from os import environ
 
 import pandas as pd
 from ldap3 import Connection
@@ -29,6 +31,8 @@ FILTERS = {
     "laas-mach-origineAchat": ["LAAS", "autre"],  # exclude perso
 }
 ALLOWED_ROOMS = ["A148", "B10", "B12", "B15", "B114"]
+
+logger = getLogger("machines")
 
 
 def short(attr: str) -> str:
@@ -142,6 +146,24 @@ def get_parser() -> ArgumentParser:
         choices=["csv", "df", "dict", "json", "table"],
     )
 
+    # Logging
+
+    parser.add_argument(
+        "-q",
+        "--quiet",
+        action="count",
+        default=int(environ.get("QUIET", 0)),
+        help="decrement verbosity level",
+    )
+
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="count",
+        default=int(environ.get("VERBOSITY", 0)),
+        help="increment verbosity level",
+    )
+
     # Sorting
     parser.add_argument(
         "-s",
@@ -155,6 +177,7 @@ def get_parser() -> ArgumentParser:
 
 if __name__ == "__main__":
     args = get_parser().parse_args()
+    basicConfig(level=30 - 10 * args.verbose + 10 * args.quiet)
     machines_data = machines_ldap(**vars(args))
     if not machines_data:
         print("nothing was found.")
@@ -164,11 +187,11 @@ if __name__ == "__main__":
         users_data = users_ldap()
         for k, v in machines_data.items():
             if not v["utilisateur"] or v["utilisateur"] not in users_data:
-                print(f"{k}: wrong user '{v['utilisateur']}'")
+                logger.warning(f"{k}: wrong user '{v['utilisateur']}'")
                 continue
             user = users_data[v["utilisateur"]]
             if user["room"] != v["room"] and v["room"] not in ALLOWED_ROOMS:
-                print(
+                logger.warning(
                     f"{k}: wrong user's ({user['uid']}) room "
                     f"'{user['room']}' != '{v['room']}'"
                 )
@@ -177,9 +200,9 @@ if __name__ == "__main__":
             d, m, y = (int(i) for i in user["st"].split("/"))
             st = date(y, m, d)
             if v["datePeremption"] > st:
-                print(
+                logger.warning(
                     f"{k}: wrong peremption for {user['uid']}: "
                     f"{v['datePeremption']:%d/%m/%Y} > {st:%d/%m/%Y}"
                 )
             if v["datePeremption"] < TODAY:
-                print(f"{k}: obsolete data:  {v['datePeremption']:%d/%m/%Y}")
+                logger.warning(f"{k}: obsolete data:  {v['datePeremption']:%d/%m/%Y}")
