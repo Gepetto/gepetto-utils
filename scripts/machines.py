@@ -2,9 +2,11 @@
 """Utils to manage Gepetto computers"""
 
 from argparse import ArgumentParser
-from datetime import date
+from datetime import date, datetime
+from json import load
 from logging import basicConfig, getLogger
 from os import environ
+from pathlib import Path
 
 import pandas as pd
 from ldap3 import Connection
@@ -87,6 +89,10 @@ def machines_ldap(
         for entry in CONN.entries
     }
 
+    inv_to_cn = {
+        str(entry["laas-mach-inventaire"]): str(entry.cn) for entry in CONN.entries
+    }
+
     if vlan:
         filters = "".join(f"(cn={k})" for k in ret.keys())
         attributes = ["cn", "laas-vlan", "laas-vlan-name"]
@@ -95,6 +101,10 @@ def machines_ldap(
         for entry in CONN.entries:
             cn, vlan, name = (str(entry[k]) for k in attributes)
             ret[cn]["vlan"] = f"{vlan}: {name}"
+
+    with Path("data/entree.json").open() as f:
+        for k, v in load(f).items():
+            ret[inv_to_cn[k]]["date-entree"] = datetime.strptime(v, "%Y-%m-%d").date()
 
     return ret
 
@@ -168,7 +178,7 @@ def get_parser() -> ArgumentParser:
     parser.add_argument(
         "-s",
         "--sort_by",
-        choices=[short(a) for a in ATTRIBUTES],
+        choices=[short(a) for a in ATTRIBUTES] + ["date-entree"],
         default="datePeremption",
     )
 
